@@ -1,0 +1,15 @@
+<resources>
+    <color name="accent_color">#94FF28</color>
+    <color name="bg_color">#141414</color>
+    <color name="main_color">#FCFCFC</color>
+    <color name="danger_color">#EE3737</color>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:textColor">@color/main_color</item>
+        <item name="android:windowBackground">@color/bg_color</item>
+        <item name="android:colorBackground">@color/bg_color</item>
+    </style>
+
+</resources>
