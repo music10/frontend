@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta } from '@storybook/react/types-6-0';
+import { Meta, Story } from '@storybook/react/types-6-0';
 import { ErrorMessage } from './ErrorMessage';
 
 export default {
@@ -7,8 +7,6 @@ export default {
   component: ErrorMessage,
 } as Meta;
 
-const Template = () => (
-  <ErrorMessage>Ошибка: Нет соединения с сетью</ErrorMessage>
+export const Default: Story = (args) => (
+  <ErrorMessage {...args}>Ошибка: Нет соединения с сетью</ErrorMessage>
 );
-
-export const Default = Template.bind({});

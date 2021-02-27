@@ -22,13 +22,12 @@ export class WS {
   private socket: typeof Socket;
 
   constructor() {
-    console.log('construct ws', WS_HOST);
     this.socket = io(`${WS_HOST}/game`, {
       transports: ['websocket'],
     });
   }
 
-  setPlaylist = (playlistId: number) =>
+  setPlaylist = (playlistId: string) =>
     this.socket.emit('setPlaylist', playlistId);
 
   next = async () => this.socket.emit('next');

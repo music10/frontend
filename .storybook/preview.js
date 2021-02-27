@@ -1,5 +1,5 @@
-import { ThemeProvider } from "@emotion/react";
-import { theme } from "../src/themes";
+import React from "react";
+import { AppWrapper, ContextProvider } from "../src/components";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -10,8 +10,10 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
-    <ThemeProvider theme={theme}>
-      <Story />
-    </ThemeProvider>
+    <AppWrapper>
+      <ContextProvider>
+        <Story />
+      </ContextProvider>
+    </AppWrapper>
   ),
 ];

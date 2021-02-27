@@ -1,4 +1,5 @@
 export interface IPlaylist {
-  id: number;
+  id: string;
   name: string;
+  cover: string;
 }

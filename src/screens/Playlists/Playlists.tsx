@@ -1,23 +1,40 @@
-import React, { useState } from 'react';
-import { useTheme } from '@emotion/react';
+import React, { useContext } from 'react';
+import { useQuery } from 'react-query';
 
-import { Input } from '../../components';
-import { PlaylistsLayout } from './PlaylistsLayout';
-import { PlaylistsList } from './PlaylistsList';
+import styled from '@emotion/native';
+
+import { Link, Search, PlaylistList } from '../../components';
+import { ROUTES } from '../../Routes';
+import { ApiContext } from '../../contexts';
+import { IPlaylist } from '../../interfaces';
+
+const PlaylistsLayout = styled.View`
+  display: flex;
+  flex-direction: column;
+  padding: 80px 0 16px;
+  justify-content: space-between;
+  height: 100vh;
+`;
+
+const ListLayout = styled.ScrollView`
+  margin-top: 32px;
+`;
 
 export const Playlists: React.FC = () => {
-  const [query, setQuery] = useState('');
-  const theme = useTheme();
+  const api = useContext(ApiContext);
+  const request = useQuery<IPlaylist[], Error>(
+    'getCherryPickPlaylists',
+    api.getCherryPickPlaylists,
+  );
 
   return (
     <PlaylistsLayout>
-      <Input
-        placeholderTextColor={theme.colors.main}
-        placeholder="Найдите любимый жанр"
-        value={query}
-        onChangeText={(text) => setQuery(text)}
-      />
-      <PlaylistsList query={query} />
+      <Link to={ROUTES.Search}>
+        <Search />
+      </Link>
+      <ListLayout>
+        <PlaylistList {...request} />
+      </ListLayout>
     </PlaylistsLayout>
   );
 };

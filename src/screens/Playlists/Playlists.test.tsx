@@ -1,14 +1,8 @@
 import React from 'react';
-import { act, fireEvent, render } from '@testing-library/react-native';
-import {
-  Api,
-  WS,
-  GameContext,
-  GameScreen,
-  PLAYLISTS_MOCK,
-  NetworkContextProvider,
-} from '@music10/ui-common';
-
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { PLAYLISTS_MOCK } from '../../mocks';
+import { Api, WS } from '../../utils';
+import { AppWrapper, ContextProvider } from '../../components';
 import { Playlists } from './Playlists';
 
 describe('Playlists', () => {
@@ -17,53 +11,22 @@ describe('Playlists', () => {
 
   beforeEach(async () => {
     jest
-      .spyOn(api, 'getPlaylists')
+      .spyOn(api, 'getCherryPickPlaylists')
       .mockImplementation(async () => PLAYLISTS_MOCK);
-    jest.spyOn(ws, 'setPlaylist');
   });
 
   it('Should render', async () => {
-    act(async () => {
-      const screen = render(
-        <NetworkContextProvider api={api} ws={ws}>
+    const { getAllByRole } = render(
+      <AppWrapper>
+        <ContextProvider api={api} ws={ws}>
           <Playlists />
-        </NetworkContextProvider>,
-      );
+        </ContextProvider>
+      </AppWrapper>,
+    );
 
-      expect(api.getPlaylists).toHaveBeenCalled();
-      expect(screen.getAllByRole('button')).toHaveLength(17);
-      expect(screen.getAllByRole('button')[0]).toContain('Русский рэп');
-    });
-  });
-
-  it('Should select playlist', async () => {
-    const setScreen = jest.fn();
-    const setResult = jest.fn();
-    const setGameState = jest.fn();
-    act(async () => {
-      const screen = render(
-        <NetworkContextProvider api={api} ws={ws}>
-          <GameContext.Provider
-            value={{
-              screen: GameScreen.PLAYLIST,
-              setScreen,
-              result: { progress: [], isEnd: false },
-              setResult,
-              gameState: { isSelectTrack: false, playlistName: '' },
-              setGameState,
-            }}
-          >
-            <Playlists />
-          </GameContext.Provider>
-        </NetworkContextProvider>,
-      );
-
-      await fireEvent.press(screen.getAllByRole('button')[0]);
-      expect(setScreen).toHaveBeenCalled();
-      expect(setScreen).toBeCalledTimes(1);
-      expect(setScreen).toBeCalledWith(GameScreen.GAME);
-      expect(ws.setPlaylist).toBeCalledTimes(1);
-      expect(ws.setPlaylist).toBeCalledWith(PLAYLISTS_MOCK[0].id);
-    });
+    expect(api.getCherryPickPlaylists).toHaveBeenCalled();
+    await waitFor(() => getAllByRole('button'));
+    expect(getAllByRole('button')).toHaveLength(17);
+    expect(getAllByRole('button')[0]).toContain('Русский рэп');
   });
 });

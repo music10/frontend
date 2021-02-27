@@ -1,9 +1,14 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import { AppWrapper } from './components';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/Выберите плейлист/i);
+test('render App component', () => {
+  render(
+    <AppWrapper>
+      <App />
+    </AppWrapper>,
+  );
+  const linkElement = screen.getByText(/Играть/i);
   expect(linkElement).toBeInTheDocument();
 });

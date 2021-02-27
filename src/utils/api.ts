@@ -12,9 +12,17 @@ export class Api implements IApi {
     });
   }
 
-  getPlaylists = (query?: string) =>
+  getCherryPickPlaylists = () =>
+    this.axiosInstance.get('playlists/cherry-pick').then(({ data }) => data);
+
+  searchPlaylists = (query?: string) =>
     this.axiosInstance
       .get(`playlists${query ? `?query=${query}` : ''}`)
+      .then(({ data }) => data);
+
+  searchPlaylistsByArtist = (query?: string) =>
+    this.axiosInstance
+      .get(`playlists/artist${query ? `?query=${query}` : ''}`)
       .then(({ data }) => data);
 
   getShareImage = (playlist: string, guess: number, all: number) =>
