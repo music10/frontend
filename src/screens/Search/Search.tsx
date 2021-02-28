@@ -10,7 +10,7 @@ import { Link, SearchField, NotFound, PlaylistList } from '../../components';
 import { RewindIcon } from '../../components/icons';
 import { ApiContext } from '../../contexts';
 import { IPlaylist } from '../../interfaces';
-import { ROUTES } from '../../Routes';
+import { ROUTES } from '../../routes/Routes.types';
 
 const SearchLayout = styled.View`
   display: flex;

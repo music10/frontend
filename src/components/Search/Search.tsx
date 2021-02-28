@@ -8,15 +8,16 @@ import { VariantProps } from '../Variant.types';
 import { useVariant, VariantComponent } from '../../hooks';
 
 const StyledSearch = styled.View<VariantProps & PressableProps>(
-  ({ focusable, variant, theme }) => `
+  ({ variant, theme }) => `
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 17px 16px;
   border: 2px solid ${
-    focusable || variant === 'focused' ? theme.colors.main : 'transparent'
+    variant === 'focused' ? theme.colors.main : 'transparent'
   };
-  border-radius: 0;`,
+  border-radius: 0;
+  `,
 );
 
 const StyledText = styled.Text<VariantProps & TextProps>(

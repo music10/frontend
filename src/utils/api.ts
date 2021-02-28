@@ -25,8 +25,8 @@ export class Api implements IApi {
       .get(`playlists/artist${query ? `?query=${query}` : ''}`)
       .then(({ data }) => data);
 
-  getShareImage = (playlist: string, guess: number, all: number) =>
+  getShareImage = (playlistId: string, guess: number) =>
     this.axiosInstance
-      .get('share', { params: { playlist, guess, all } })
+      .get('share', { params: { playlistId, guess } })
       .then(({ data }) => data);
 }

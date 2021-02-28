@@ -1,12 +1,13 @@
 import React, { FC } from 'react';
 import styled from '@emotion/native';
 import { useTheme } from '@emotion/react';
-import { Link, LinkProps } from '../Link';
+
+import { PressableProps } from 'react-native';
 import { VariantProps } from '../Variant.types';
 import { IconProps } from '../icons/Icon.props';
 import { useVariant, VariantComponent } from '../../hooks';
 
-interface Props extends VariantProps, LinkProps {
+interface Props extends VariantProps, PressableProps {
   text: string;
   icon: React.FC<IconProps>;
   primary?: boolean;
@@ -57,19 +58,17 @@ export const MenuItem: FC<Props> = ({
   const { variant, setVariant } = useVariant(defaultVariant);
 
   return (
-    <Link {...props}>
-      <VariantComponent setVariant={setVariant}>
-        <StyledItem primary={primary} variant={variant} {...props}>
-          <Icon
-            fill={primary ? theme.colors.bg : theme.colors.main}
-            height={24}
-            width={24}
-          />
-          <StyledText primary={primary} variant={variant}>
-            {text}
-          </StyledText>
-        </StyledItem>
-      </VariantComponent>
-    </Link>
+    <VariantComponent setVariant={setVariant} {...props}>
+      <StyledItem primary={primary} variant={variant}>
+        <Icon
+          fill={primary ? theme.colors.bg : theme.colors.main}
+          height={24}
+          width={24}
+        />
+        <StyledText primary={primary} variant={variant}>
+          {text}
+        </StyledText>
+      </StyledItem>
+    </VariantComponent>
   );
 };

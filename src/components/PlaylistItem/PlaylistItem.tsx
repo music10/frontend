@@ -1,10 +1,10 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { Image } from 'react-native';
 import styled from '@emotion/native';
 import { Link } from '../Link';
 import { VariantProps } from '../Variant.types';
 import { useVariant, VariantComponent } from '../../hooks';
-import { ROUTES } from '../../Routes';
+import { ROUTES } from '../../routes/Routes.types';
 
 interface Props extends VariantProps {
   id: string;

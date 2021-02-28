@@ -14,7 +14,7 @@ export interface IWsAnswerNext {
 }
 
 export interface IWsAnswerChoose {
-  correct: number;
+  correct: string;
   result: IResult;
 }
 
@@ -27,7 +27,7 @@ export class WS {
     });
   }
 
-  setPlaylist = (playlistId: string) =>
+  setPlaylist = async (playlistId: string) =>
     this.socket.emit('setPlaylist', playlistId);
 
   next = async () => this.socket.emit('next');

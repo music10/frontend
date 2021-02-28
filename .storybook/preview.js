@@ -11,9 +11,9 @@ export const parameters = {
 export const decorators = [
   (Story) => (
     <AppWrapper>
-      <ContextProvider>
-        <Story />
-      </ContextProvider>
+        <ContextProvider>
+          <Story />
+        </ContextProvider>
     </AppWrapper>
   ),
 ];

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import { PlayIcon } from '../icons';
 import { MenuItem } from './MenuItem';
@@ -8,35 +9,14 @@ export default {
 } as Meta;
 
 export const Default: Story = (args) => (
-  <MenuItem icon={PlayIcon} to="" primary text="Text" {...args} />
+  <MenuItem icon={PlayIcon} primary text="Text" {...args} />
 );
 export const Hover: Story = (args) => (
-  <MenuItem
-    icon={PlayIcon}
-    to=""
-    primary
-    text="Text"
-    variant="hover"
-    {...args}
-  />
+  <MenuItem icon={PlayIcon} primary text="Text" variant="hover" {...args} />
 );
 export const Active: Story = (args) => (
-  <MenuItem
-    icon={PlayIcon}
-    to=""
-    primary
-    text="Text"
-    variant="active"
-    {...args}
-  />
+  <MenuItem icon={PlayIcon} primary text="Text" variant="active" {...args} />
 );
 export const Focus: Story = (args) => (
-  <MenuItem
-    icon={PlayIcon}
-    to=""
-    primary
-    text="Text"
-    variant="focused"
-    {...args}
-  />
+  <MenuItem icon={PlayIcon} primary text="Text" variant="focused" {...args} />
 );

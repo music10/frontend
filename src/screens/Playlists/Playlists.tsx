@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import styled from '@emotion/native';
 
 import { Link, Search, PlaylistList } from '../../components';
-import { ROUTES } from '../../Routes';
+import { ROUTES } from '../../routes/Routes.types';
 import { ApiContext } from '../../contexts';
 import { IPlaylist } from '../../interfaces';
 
@@ -13,7 +13,7 @@ const PlaylistsLayout = styled.View`
   flex-direction: column;
   padding: 80px 0 16px;
   justify-content: space-between;
-  height: 100vh;
+  height: 100%;
 `;
 
 const ListLayout = styled.ScrollView`

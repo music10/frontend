@@ -1,3 +1,5 @@
+export * from './Game';
 export * from './Playlists';
-export * from './Start/Start';
-export * from './Search/Search';
+export * from './Result';
+export * from './Search';
+export * from './Start';

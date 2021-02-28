@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import styled from '@emotion/native';
 import { useTranslation } from 'react-i18next';
 
-import { NoArtists, NoPlaylists } from '../pictures';
+import { NoArtists, NoPlaylists } from '../icons';
 
 interface Props {
   byArtist?: boolean;

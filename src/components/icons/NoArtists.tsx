@@ -1,5 +1,5 @@
+import React, { FC } from 'react';
 import { Circle, G, Path, Rect, Svg } from 'react-native-svg';
-import { FC } from 'react';
 import { useTheme } from '@emotion/react';
 import { IconProps } from './Icon.props';
 

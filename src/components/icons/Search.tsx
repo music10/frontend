@@ -1,5 +1,5 @@
+import React, { FC } from 'react';
 import { Path, Svg } from 'react-native-svg';
-import { FC } from 'react';
 import { IconProps } from './Icon.props';
 
 export const SearchIcon: FC<IconProps> = ({ fill, ...props }) => (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { render, waitFor } from '@testing-library/react-native';
 import { PLAYLISTS_MOCK } from '../../mocks';
 import { Api, WS } from '../../utils';
 import { AppWrapper, ContextProvider } from '../../components';

@@ -1,7 +1,9 @@
 {
-  "SearchInSpotify": "Search in Spotify",
+  "SearchInSpotify": "Search on Spotify",
   "Play": "Play",
   "FindByArtist": "Find by artist",
   "NotFound": "Not Found",
-  "NotFoundSubtext": "среди публичных плейлистов, где больше 50 песен"
+  "NotFoundSubtext": "среди публичных плейлистов, где больше 50 песен",
+  "ToPlaylists": "To playlists",
+  "Share": "Share result"
 }

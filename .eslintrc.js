@@ -4,11 +4,9 @@ module.exports = {
     project: "tsconfig.json",
     sourceType: "module",
   },
-  plugins: ["@typescript-eslint/eslint-plugin", "@emotion", "import"],
+  plugins: ["@typescript-eslint/eslint-plugin","prettier", "@emotion", "react-hooks", "import"],
   extends: [
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended",
+    "@react-native-community",
   ],
   root: true,
   env: {
