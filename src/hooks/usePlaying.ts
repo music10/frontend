@@ -5,13 +5,16 @@ import { usePlayingType } from './usePlaying.types';
 
 export const usePlaying: usePlayingType = (mp3, setMp3Loading) => {
   const currentAppState = useAppState();
-  const [play, pause, stop, { loading, isPlaying }] = useSound(mp3, {
-    soundEnabled: currentAppState === 'active',
-  });
+  const [play, pause, stop, { loading, isPlaying, duration, sound }] = useSound(
+    mp3,
+    {
+      soundEnabled: currentAppState === 'active',
+    },
+  );
 
   useEffect(() => {
     setMp3Loading(loading);
   }, [loading, setMp3Loading]);
 
-  return { play, pause, stop, isPlaying };
+  return { play, pause, stop, loading, isPlaying, duration, sound };
 };

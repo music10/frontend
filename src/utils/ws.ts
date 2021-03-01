@@ -1,6 +1,6 @@
 import io, { Socket } from 'socket.io-client';
 
-import { ITrack } from '../interfaces';
+import { IPlaylist, ITrack } from '../interfaces';
 import { WS_HOST } from './variables';
 
 export interface IResult {
@@ -11,6 +11,12 @@ export interface IResult {
 export interface IWsAnswerNext {
   mp3: string;
   tracks: ITrack[];
+}
+
+export interface IWsAnswerResult {
+  playlist: IPlaylist;
+  guessed: number;
+  text: string;
 }
 
 export interface IWsAnswerChoose {
@@ -33,6 +39,8 @@ export class WS {
   next = async () => this.socket.emit('next');
 
   choose = async (trackId: number) => this.socket.emit('choose', trackId);
+
+  getResult = async () => this.socket.emit('getResult');
 
   reconnect = async () => {
     await this.socket.disconnect();

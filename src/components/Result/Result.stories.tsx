@@ -8,4 +8,6 @@ export default {
   component: Result,
 } as Meta;
 
-export const Default: Story = (args) => <Result guess={6} all={10} {...args} />;
+export const Default: Story = (args) => (
+  <Result guess={6} text={'подпеваю,\nно не всё'} {...args} />
+);

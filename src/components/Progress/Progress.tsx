@@ -5,11 +5,12 @@ import { useTheme } from '@emotion/react';
 
 interface Props {
   state: 'start' | 'stop';
+  callback?: Animated.EndCallback;
 }
 const StyledProgress = styled.View`
-  height: 14px;
+  height: 6px;
 `;
-export const Progress: FC<Props> = ({ state }) => {
+export const Progress: FC<Props> = ({ state, callback }) => {
   const theme = useTheme();
   const animationValue = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
   const animation = useMemo(
@@ -24,14 +25,18 @@ export const Progress: FC<Props> = ({ state }) => {
   );
 
   useEffect(() => {
-    animation[state]();
-  }, [animation, state]);
+    if (state === 'start') {
+      animation.start(callback);
+    } else {
+      animation.stop();
+    }
+  }, [animation, callback, state]);
 
   return (
     <StyledProgress>
       <Animated.View
         style={{
-          height: 14,
+          height: 6,
           backgroundColor: theme.colors.main50,
           width: animationValue.interpolate({
             inputRange: [0, 1],
