@@ -11,8 +11,7 @@ import styled from '@emotion/native';
 import { WsContext } from '../../contexts';
 import { IWsAnswerChoose, IWsAnswerNext, TRACKS_PER_ROUND } from '../../utils';
 import { ITrack } from '../../interfaces';
-import { Loader } from '../../components';
-import { Track } from '../../components/Track';
+import { Loader, Track, Progress } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import { Music } from './Music/Music';
 
@@ -42,6 +41,7 @@ export const Game = () => {
   const [tracks, setTracks] = useState<ITrack[]>([]);
   const [mp3, setMp3] = useState('');
   const [isMp3Loading, setMp3Loading] = useState(false);
+  const [isPlaying, setPlaying] = useState(false);
   const [selected, setSelected] = useState('');
   const [correct, setCorrect] = useState('');
   const number = useRef(0);
@@ -128,6 +128,9 @@ export const Game = () => {
             />
           ))}
         </TracksLayout>
+      )}
+      {!isMp3Loading && (
+        <Progress state={isPlaying ? 'start' : 'stop'} key={mp3} />
       )}
     </>
   );

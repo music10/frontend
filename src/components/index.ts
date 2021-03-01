@@ -6,6 +6,8 @@ export * from './Result';
 
 export * from './Link';
 export * from './Search';
+export * from './Progress';
+export * from './Track';
 export * from './SearchField';
 export * from './MenuItem';
 export * from './NotFound';

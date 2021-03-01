@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from '@emotion/native';
-import { MenuItem, Logo, Link } from '../../components';
+import { Link, Logo, MenuItem } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import { PlayIcon } from '../../components/icons';
 
