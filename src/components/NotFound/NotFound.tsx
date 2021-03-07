@@ -3,6 +3,7 @@ import styled from '@emotion/native';
 import { useTranslation } from 'react-i18next';
 
 import { NoArtists, NoPlaylists } from '../icons';
+import { Text } from '../Text';
 
 interface Props {
   byArtist?: boolean;
@@ -16,12 +17,12 @@ const NotFoundLayout = styled.View`
   text-align: center;
 `;
 
-const StyledText = styled.Text`
+const StyledText = styled(Text)`
   color: ${({ theme }) => theme.colors.main};
   font-size: 16px;
   font-weight: 600;
 `;
-const StyledSubText = styled.Text`
+const StyledSubText = styled(Text)`
   margin-top: 8px;
   color: ${({ theme }) => theme.colors.main50};
   font-size: 14px;

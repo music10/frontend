@@ -2,8 +2,9 @@ import React, { FC } from 'react';
 import styled from '@emotion/native';
 import { TextProps } from 'react-native';
 import { TRACKS_PER_ROUND } from '../../utils';
+import { Text } from '../Text';
 
-const StyledCounter = styled.Text`
+const StyledCounter = styled(Text)`
   font-size: 16px;
   font-weight: 500;
   padding: 16px;

@@ -1,17 +1,21 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useCallback, useContext } from 'react';
+// @ts-ignore
+import { usePageVisibility } from 'react-page-visibility';
 
 import { Progress } from '../../../components';
 import { MusicContext } from '../../../contexts';
 
 export const Progressbar: FC = () => {
-  const { isPlaying, stop, setAllowPlay } = useContext(MusicContext);
-  //
-  // const visibilityHandler = useCallback(
-  //   (visible: boolean) => (visible ? play() : pause()),
-  //   [play, pause],
-  // );
+  const { isPlaying, play, pause, stop, setAllowPlay } = useContext(
+    MusicContext,
+  );
 
-  // usePageVisibility(visibilityHandler);
+  const visibilityHandler = useCallback(
+    (visible: boolean) => (visible ? play() : pause()),
+    [play, pause],
+  );
+
+  usePageVisibility(visibilityHandler);
 
   return (
     <Progress

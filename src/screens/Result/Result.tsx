@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Alert, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
+
 import styled from '@emotion/native';
 
 import {
@@ -68,13 +69,9 @@ export const Result = () => {
       <ResultLayout>
         <ResultComponent guess={result.guessed} text={result.text} />
       </ResultLayout>
-      <Link
-        to={ROUTES.Playlists}
-        primary
-        component={MenuItem}
-        icon={ReplayIcon}
-        text={t('ToPlaylists')}
-      />
+      <Link to={ROUTES.Playlists}>
+        <MenuItem primary icon={ReplayIcon} text={t('ToPlaylists')} />
+      </Link>
       {Platform.OS === 'web' ? (
         !!navigator.share && (
           <MenuItem icon={ShareIcon} text={t('Share')} onPress={share} />
