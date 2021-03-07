@@ -34,11 +34,11 @@ export const Search: FC<PressableProps> = (props) => {
           />
           <Text
             style={css`
-              color: ${!(focused || hovered || pressed)
-                ? theme.colors.main50
+              color: ${focused || hovered
+                ? theme.colors.main80
                 : pressed
                 ? theme.colors.main20
-                : theme.colors.main80};
+                : theme.colors.main50};
               margin-left: 16px;
               font-size: 24px;
             `}

@@ -11,6 +11,7 @@ export const AppWrapper: React.FC = ({ children }) => {
         styles={{
           body: { background: theme.colors.bg, margin: 'auto', maxWidth: 640 },
           '#root': { display: 'flex', flexDirection: 'column' },
+          ':focus': { outline: 'none' },
         }}
       />
       <BrowserRouter>{children}</BrowserRouter>

@@ -14,18 +14,22 @@ export const Progressbar: FC = () => {
     (visible: boolean) => (visible ? play() : pause()),
     [play, pause],
   );
-
   usePageVisibility(visibilityHandler);
+
+  const endAnimationCallback = useCallback(
+    (result) => {
+      if (result.finished) {
+        stop();
+        setAllowPlay(false);
+      }
+    },
+    [setAllowPlay, stop],
+  );
 
   return (
     <Progress
       state={isPlaying ? 'start' : 'stop'}
-      callback={(result) => {
-        if (result.finished) {
-          stop();
-          setAllowPlay(false);
-        }
-      }}
+      callback={endAnimationCallback}
     />
   );
 };

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import styled from '@emotion/native';
 
+import { useHistory } from 'react-router';
 import {
   Link,
   Result as ResultComponent,
@@ -31,6 +32,7 @@ const ResultLayout = styled.View`
 
 export const Result = () => {
   const { t } = useTranslation();
+  const history = useHistory();
   const api = useContext(ApiContext);
   const ws = useContext(WsContext);
   const [result, setResult] = useState<IWsAnswerResult>({} as IWsAnswerResult);
@@ -38,21 +40,23 @@ export const Result = () => {
   const shareFunction = useShare();
 
   const getResults = useCallback(async () => {
-    (await ws.getResult()).once('result', setResult);
-  }, [ws]);
+    (await ws.getResult())
+      .once('result', setResult)
+      .once('exception', () => history.replace(ROUTES.Start));
+  }, [history, ws]);
 
   const loadShareImage = useCallback(async () => {
     const playlistId = result.playlist?.id;
     const guess = result.guessed;
-    setShareData(await api.getShareImage(playlistId, guess));
-  }, [api, result.guessed, result.playlist?.id]);
+    if (playlistId) {
+      setShareData(await api.getShareImage(playlistId, guess));
+    }
+  }, [api, result]);
 
   const share = useCallback(() => {
-    shareFunction(shareData)
-      .then((res) => Alert.alert(JSON.stringify(res)))
-      .catch((err: Record<string, unknown>) => {
-        err && Alert.alert(JSON.stringify(err));
-      });
+    shareFunction(shareData).catch((err: Record<string, unknown>) => {
+      err && Alert.alert(JSON.stringify(err));
+    });
   }, [shareData, shareFunction]);
 
   useEffect(() => {
@@ -61,7 +65,7 @@ export const Result = () => {
 
   useEffect(() => {
     loadShareImage();
-  }, [loadShareImage]);
+  }, [loadShareImage, result]);
 
   return (
     <StartLayout>
@@ -69,14 +73,14 @@ export const Result = () => {
       <ResultLayout>
         <ResultComponent guess={result.guessed} text={result.text} />
       </ResultLayout>
-      <Link to={ROUTES.Playlists}>
-        <MenuItem primary icon={ReplayIcon} text={t('ToPlaylists')} />
-      </Link>
-      {Platform.OS === 'web' ? (
-        !!navigator.share && (
-          <MenuItem icon={ShareIcon} text={t('Share')} onPress={share} />
-        )
-      ) : (
+      <Link
+        to={ROUTES.Playlists}
+        component={MenuItem}
+        primary
+        icon={ReplayIcon}
+        text={t('ToPlaylists')}
+      />
+      {Platform.OS !== 'web' && (
         <MenuItem icon={ShareIcon} text={t('Share')} onPress={share} />
       )}
     </StartLayout>

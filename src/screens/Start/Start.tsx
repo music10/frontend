@@ -26,9 +26,13 @@ export const Start = () => {
       <LogoLayout>
         <Logo />
       </LogoLayout>
-      <Link to={ROUTES.Playlists}>
-        <MenuItem primary icon={PlayIcon} text={t('Play')} />
-      </Link>
+      <Link
+        to={ROUTES.Playlists}
+        component={MenuItem}
+        primary
+        icon={PlayIcon}
+        text={t('Play')}
+      />
     </StartLayout>
   );
 };

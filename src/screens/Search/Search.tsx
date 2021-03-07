@@ -87,7 +87,7 @@ export const Search: FC = () => {
               to={ROUTES.Playlists}
               component={MenuItem}
               icon={RewindIcon}
-              text="К плейлистам"
+              text={t('ToPlaylists')}
             />
           </>
         ) : (
