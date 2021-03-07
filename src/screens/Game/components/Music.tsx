@@ -1,4 +1,5 @@
-import React, { Dispatch, useEffect } from 'react';
+import React, { Dispatch, useEffect, useState } from 'react';
+
 import { usePlaying } from '../../../hooks';
 import { MusicContext } from '../../../contexts';
 
@@ -9,6 +10,7 @@ export interface Props {
 
 export const Music: React.FC<Props> = ({ mp3, setMp3Loading, children }) => {
   const { play, stop, pause, ...rest } = usePlaying(mp3, setMp3Loading);
+  const [allowPlay, setAllowPlay] = useState(true);
 
   useEffect(() => {
     play();
@@ -18,7 +20,9 @@ export const Music: React.FC<Props> = ({ mp3, setMp3Loading, children }) => {
   }, [play, stop]);
 
   return (
-    <MusicContext.Provider value={{ play, stop, pause, ...rest }}>
+    <MusicContext.Provider
+      value={{ play, stop, pause, allowPlay, setAllowPlay, ...rest }}
+    >
       {children}
     </MusicContext.Provider>
   );

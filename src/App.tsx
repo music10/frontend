@@ -1,14 +1,11 @@
 import React from 'react';
-
 import { AppWrapper, ContextProvider } from './components';
 import Routes from './routes/Routes';
 
-export default function App() {
-  return (
+export default () => (
+  <ContextProvider>
     <AppWrapper>
-      <ContextProvider>
-        <Routes />
-      </ContextProvider>
+      <Routes />
     </AppWrapper>
-  );
-}
+  </ContextProvider>
+);

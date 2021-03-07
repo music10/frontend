@@ -8,5 +8,6 @@ module.exports = {
     "@storybook/addon-docs",
     "@storybook/addon-essentials",
     "@storybook/preset-create-react-app",
+    "@storybook/addon-cssresources"
   ],
 };

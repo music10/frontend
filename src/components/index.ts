@@ -15,4 +15,5 @@ export * from './NotFound';
 export * from './PlaylistItem';
 export * from './PlaylistInfo';
 export * from './PlaylistList';
+export * from './SwitchWithLabel';
 export * from './Logo';

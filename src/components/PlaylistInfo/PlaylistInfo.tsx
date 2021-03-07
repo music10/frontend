@@ -1,6 +1,8 @@
 import { useTheme } from '@emotion/react';
 import React, { FC } from 'react';
 import styled from '@emotion/native';
+import { useTranslation } from 'react-i18next';
+
 import { useVariant, VariantComponent } from '../../hooks';
 import { SchevronRightIcon } from '../icons';
 import { VariantProps } from '../Variant.types';
@@ -42,13 +44,14 @@ const PlaylistName = styled.Text<Partial<Props>>`
 
 export const PlaylistInfo: FC<Props> = ({ variant: defaultVariant, name }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const { variant, setVariant } = useVariant(defaultVariant);
 
   return (
     <VariantComponent setVariant={setVariant}>
       <StyledPlaylistInfo variant={variant}>
         <TitleLayout>
-          <Title variant={variant}>Плейлист</Title>
+          <Title variant={variant}>{t('Playlist')}</Title>
           <SchevronRightIcon
             width={16}
             height={16}

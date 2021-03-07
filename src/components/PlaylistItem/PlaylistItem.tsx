@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
-import { Image } from 'react-native';
+import { Image, Platform } from 'react-native';
 import styled from '@emotion/native';
+import { SvgUri } from 'react-native-svg';
 import { Link } from '../Link';
 import { VariantProps } from '../Variant.types';
 import { useVariant, VariantComponent } from '../../hooks';
 import { ROUTES } from '../../routes/Routes.types';
+import { Text } from '../Text';
 
 interface Props extends VariantProps {
   id: string;
@@ -19,6 +21,7 @@ const StyledItem = styled.View<Partial<Props>>(
   align-items: center;
   border-radius: 4px;
   padding: 8px;
+  margin: 0 8px;
   background-color: ${
     variant === 'hover'
       ? theme.colors.main10
@@ -33,7 +36,7 @@ const StyledItem = styled.View<Partial<Props>>(
   };
 `,
 );
-const StyledText = styled.Text`
+const StyledText = styled(Text)`
   font-weight: 600;
   font-size: 14px;
   margin-left: 24px;
@@ -50,16 +53,35 @@ export const PlaylistItem: FC<Props> = ({
   const { variant, setVariant } = useVariant(defaultFilter);
 
   return (
-    <Link to={`${ROUTES.Game}/${id}`}>
-      <VariantComponent setVariant={setVariant}>
-        <StyledItem variant={variant} {...props} accessibilityRole="button">
+    <Link
+      to={`${ROUTES.Game}/${id}`}
+      component={VariantComponent}
+      setVariant={setVariant}
+    >
+      <StyledItem variant={variant} {...props} accessibilityRole="button">
+        {Platform.OS === 'web' ? (
+          <img
+            alt=""
+            src={cover}
+            height={48}
+            width={48}
+            style={{ borderRadius: 4 }}
+          />
+        ) : /\.svg$/.test(cover) && cover ? (
+          <SvgUri
+            uri={cover}
+            height={48}
+            width={48}
+            style={{ borderRadius: 4 }}
+          />
+        ) : (
           <Image
             source={{ uri: cover, height: 48, width: 48 }}
-            style={{ height: 48, width: 48 }}
+            style={{ height: 48, width: 48, borderRadius: 4 }}
           />
-          <StyledText>{name}</StyledText>
-        </StyledItem>
-      </VariantComponent>
+        )}
+        <StyledText>{name}</StyledText>
+      </StyledItem>
     </Link>
   );
 };

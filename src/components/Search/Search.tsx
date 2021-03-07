@@ -42,8 +42,8 @@ export const Search: FC<VariantProps & ViewProps> = ({
   const { variant, setVariant } = useVariant(defaultVariant);
 
   return (
-    <VariantComponent setVariant={setVariant}>
-      <StyledSearch variant={variant} {...props}>
+    <VariantComponent setVariant={setVariant} {...props}>
+      <StyledSearch variant={variant}>
         <SearchIcon
           fill={
             variant === 'default' ? theme.colors.main50 : theme.colors.main80

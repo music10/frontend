@@ -29,9 +29,7 @@ export const Playlists: React.FC = () => {
 
   return (
     <PlaylistsLayout>
-      <Link to={ROUTES.Search}>
-        <Search />
-      </Link>
+      <Link to={ROUTES.Search} component={Search} />
       <ListLayout>
         <PlaylistList {...request} />
       </ListLayout>

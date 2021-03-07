@@ -1,6 +1,19 @@
+import { Global, useTheme } from '@emotion/react';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 export const AppWrapper: React.FC = ({ children }) => {
-  return <BrowserRouter>{children}</BrowserRouter>;
+  const theme = useTheme();
+
+  return (
+    <>
+      <Global
+        styles={{
+          body: { background: theme.colors.bg, margin: 'auto', maxWidth: 640 },
+          '#root': { display: 'flex', flexDirection: 'column' },
+        }}
+      />
+      <BrowserRouter>{children}</BrowserRouter>
+    </>
+  );
 };

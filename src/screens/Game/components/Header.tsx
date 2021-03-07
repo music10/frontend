@@ -14,17 +14,29 @@ const HeaderLayout = styled.View`
 `;
 
 export const Header: FC = () => {
-  const { isPlaying, play, pause } = useContext(MusicContext);
+  const { isPlaying, play, pause, allowPlay } = useContext(MusicContext);
   const theme = useTheme();
 
   return (
     <HeaderLayout>
       {isPlaying ? (
-        <Pressable onPress={() => pause()}>
+        <Pressable
+          onPress={() => {
+            if (allowPlay) {
+              pause();
+            }
+          }}
+        >
           <PauseIcon fill={theme.colors.main50} />
         </Pressable>
       ) : (
-        <Pressable onPress={() => play()}>
+        <Pressable
+          onPress={() => {
+            if (allowPlay) {
+              play();
+            }
+          }}
+        >
           <PlayIcon fill={theme.colors.main50} />
         </Pressable>
       )}

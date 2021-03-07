@@ -18,7 +18,7 @@ const StyledItem = styled.View<Partial<Props>>(
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 15px 24px 15px ${variant === 'default' ? '24px' : '32px'};
+  padding: 16px 24px 16px ${variant === 'default' ? '24px' : '32px'};
   background-color: ${primary ? theme.colors.accent : theme.colors.bg};
   border: 2px solid ${
     variant === 'focused'

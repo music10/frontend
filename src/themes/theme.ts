@@ -1,4 +1,5 @@
 export const theme = {
+  fontFamily: 'Montserrat, sans-serif',
   colors: {
     accent: '#8dce24',
     accent50: 'rgba(141, 206, 36, .5)',

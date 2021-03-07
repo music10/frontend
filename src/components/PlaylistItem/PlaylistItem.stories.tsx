@@ -9,7 +9,7 @@ export default {
 
 export const Default: Story = (args) => (
   <PlaylistItem
-    cover="https://music.dergunov.net/images/hiphop.png"
+    cover="https://music.dergunov.net/images/hiphop.svg"
     id="playlist"
     name="Русский рэп"
     {...args}
@@ -17,7 +17,7 @@ export const Default: Story = (args) => (
 );
 export const Hover: Story = (args) => (
   <PlaylistItem
-    cover="https://music.dergunov.net/images/hiphop.png"
+    cover="https://music.dergunov.net/images/hiphop.svg"
     id="playlist"
     name="Русский рэп"
     variant="hover"
@@ -26,7 +26,7 @@ export const Hover: Story = (args) => (
 );
 export const Active: Story = (args) => (
   <PlaylistItem
-    cover="https://music.dergunov.net/images/hiphop.png"
+    cover="https://music.dergunov.net/images/hiphop.svg"
     id="playlist"
     name="Русский рэп"
     variant="active"
@@ -35,7 +35,7 @@ export const Active: Story = (args) => (
 );
 export const Focus: Story = (args) => (
   <PlaylistItem
-    cover="https://music.dergunov.net/images/hiphop.png"
+    cover="https://music.dergunov.net/images/hiphop.svg"
     id="playlist"
     name="Русский рэп"
     variant="focused"

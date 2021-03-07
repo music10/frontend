@@ -1,12 +1,19 @@
-import React, { useContext, useState } from 'react';
-import { Switch } from 'react-native';
+import React, { FC, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 
 import styled from '@emotion/native';
 import { useTheme } from '@emotion/react';
 
-import { Link, SearchField, NotFound, PlaylistList } from '../../components';
+import { View } from 'react-native';
+import {
+  Link,
+  MenuItem,
+  NotFound,
+  PlaylistList,
+  SearchField,
+  SwitchWithLabel,
+} from '../../components';
 import { RewindIcon } from '../../components/icons';
 import { ApiContext } from '../../contexts';
 import { IPlaylist } from '../../interfaces';
@@ -23,23 +30,13 @@ const BackLayout = styled.View`
 `;
 const SearchFieldLayout = styled.View`
   margin-left: 16px;
-  flex-grow: 1;
+  flex: 1 1 auto;
 `;
 const ByArtistLayout = styled.View`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 8px;
   padding: 16px 8px;
 `;
 
-const ByArtist = styled.Text`
-  color: ${({ theme }) => theme.colors.main};
-  font-size: 14px;
-`;
-
-export const Search = () => {
+export const Search: FC = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const api = useContext(ApiContext);
@@ -63,29 +60,40 @@ export const Search = () => {
           </Link>
         </BackLayout>
         <SearchFieldLayout>
-          <SearchField onChangeText={setQuery} />
+          <SearchField
+            onChangeText={setQuery}
+            autoFocus
+            spellCheck={false}
+            placeholderTextColor={theme.colors.main50}
+          />
         </SearchFieldLayout>
       </SearchLayout>
       <ByArtistLayout>
-        <ByArtist>{t('FindByArtist')}</ByArtist>
-        <Switch
-          trackColor={{
-            false: theme.colors.main50,
-            true: theme.colors.accent50,
-          }}
-          thumbColor={byArtist ? theme.colors.accent : theme.colors.main}
+        <SwitchWithLabel
+          text={t('FindByArtist')}
           value={byArtist}
-          onValueChange={setByArtist}
+          setValue={setByArtist}
         />
       </ByArtistLayout>
-      {query && (
-        <>
+      {query ? (
+        request.isSuccess && !request.data?.length ? (
+          <>
+            <View
+              style={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}
+            >
+              <NotFound byArtist={byArtist} />
+            </View>
+            <Link
+              to={ROUTES.Playlists}
+              component={MenuItem}
+              icon={RewindIcon}
+              text="К плейлистам"
+            />
+          </>
+        ) : (
           <PlaylistList {...request} />
-          {request.isSuccess && !request.data?.length && (
-            <NotFound byArtist={byArtist} />
-          )}
-        </>
-      )}
+        )
+      ) : null}
     </>
   );
 };

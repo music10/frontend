@@ -1,9 +1,10 @@
 {
-  "SearchInSpotify": "Search on Spotify",
-  "Play": "Play",
-  "FindByArtist": "Find by artist",
   "NotFound": "Not Found",
   "NotFoundSubtext": "среди публичных плейлистов, где больше 50 песен",
+  "Playlist": "Playlist",
+  "SearchInSpotify": "Search on Spotify",
   "ToPlaylists": "To playlists",
-  "Share": "Share result"
+  "Share": "Share result",
+  "FindByArtist": "Find by artist",
+  "Play": "Play"
 }

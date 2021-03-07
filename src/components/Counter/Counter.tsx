@@ -6,7 +6,7 @@ import { TRACKS_PER_ROUND } from '../../utils';
 const StyledCounter = styled.Text`
   font-size: 16px;
   font-weight: 500;
-  padding: 14px 16px;
+  padding: 16px;
   margin-bottom: 24px;
   text-align: center;
   color: ${({ theme }) => theme.colors.main};

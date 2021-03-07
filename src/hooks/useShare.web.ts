@@ -1,2 +1,3 @@
 export const useShare = () => async (data: string) =>
-  navigator.share({ url: data });
+  // @ts-ignore
+  navigator.share({ title: data, text: data, url: data });

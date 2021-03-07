@@ -2,6 +2,7 @@ import '@emotion/react';
 
 declare module '@emotion/react' {
   export interface Theme {
+    fontFamily: string;
     colors: {
       accent: string;
       accent50: string;

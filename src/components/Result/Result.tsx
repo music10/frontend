@@ -18,8 +18,7 @@ const StyledTotal = styled.Text`
   font-size: 64px;
   line-height: 78px;
   text-align: center;
-  color: ${({ theme }) => theme.colors.bg};
-  text-shadow: 0 0 2px ${({ theme }) => theme.colors.accent};
+  color: ${({ theme }) => theme.colors.accent};
 `;
 
 const StyledText = styled.Text`
