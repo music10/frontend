@@ -4,6 +4,7 @@ export * from './ErrorMessage';
 export * from './Loader';
 export * from './Result';
 
+export * from './Button';
 export * from './Link';
 export * from './Search';
 export * from './Counter';

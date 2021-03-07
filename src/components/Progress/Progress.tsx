@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
-import { Animated, Easing } from 'react-native';
-import styled from '@emotion/native';
+import { View, Animated, Easing } from 'react-native';
+import { css } from '@emotion/native';
 import { useTheme } from '@emotion/react';
 // @ts-ignore
 import { usePageVisibility } from 'react-page-visibility';
@@ -9,9 +9,7 @@ interface Props {
   state: 'start' | 'stop';
   callback?: Animated.EndCallback;
 }
-const StyledProgress = styled.View`
-  height: 6px;
-`;
+
 export const Progress: FC<Props> = ({ state, callback }) => {
   const theme = useTheme();
   const animationValue = useRef(new Animated.Value(0)).current;
@@ -26,8 +24,14 @@ export const Progress: FC<Props> = ({ state, callback }) => {
       }),
     [animationValue],
   );
+  useEffect(() => animation.start(), [animation]);
 
-  const stopAnimation = useCallback(() => animation.stop(), [animation]);
+  const stopAnimation = useCallback(
+    (visible: boolean) => {
+      visible && animation.reset();
+    },
+    [animation],
+  );
   usePageVisibility(stopAnimation);
 
   useEffect(() => {
@@ -38,8 +42,18 @@ export const Progress: FC<Props> = ({ state, callback }) => {
     }
   }, [animation, callback, state]);
 
+  console.log(
+    animationValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0%', '100%'],
+    }),
+  );
   return (
-    <StyledProgress>
+    <View
+      style={css`
+        height: 6px;
+      `}
+    >
       <Animated.View
         style={{
           height: 6,
@@ -50,6 +64,6 @@ export const Progress: FC<Props> = ({ state, callback }) => {
           }),
         }}
       />
-    </StyledProgress>
+    </View>
   );
 };

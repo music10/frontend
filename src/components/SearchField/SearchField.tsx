@@ -41,6 +41,7 @@ export const SearchField: FC<TextInputProps> = (props) => {
               color: ${pressed ? theme.colors.main80 : theme.colors.main50};
               margin-left: 16px;
               font-size: 18px;
+              font-family: ${theme.fontFamily};
             `}
             {...props}
           />

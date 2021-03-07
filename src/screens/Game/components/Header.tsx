@@ -1,10 +1,12 @@
 import React, { FC, useContext } from 'react';
-import { Pressable } from 'react-native';
-import styled from '@emotion/native';
+import { InteractionState } from 'react-native';
+
 import { useTheme } from '@emotion/react';
-import { PauseIcon } from '../../../components/icons/Pause';
-import { PlayIcon } from '../../../components/icons';
+import styled from '@emotion/native';
+
 import { MusicContext } from '../../../contexts';
+import { PauseIcon, PlayIcon } from '../../../components/icons';
+import { Button } from '../../../components';
 
 const HeaderLayout = styled.View`
   display: flex;
@@ -19,27 +21,41 @@ export const Header: FC = () => {
 
   return (
     <HeaderLayout>
-      {isPlaying ? (
-        <Pressable
-          onPress={() => {
-            if (allowPlay) {
+      <Button
+        onPress={() => {
+          if (allowPlay) {
+            if (isPlaying) {
               pause();
-            }
-          }}
-        >
-          <PauseIcon fill={theme.colors.main50} />
-        </Pressable>
-      ) : (
-        <Pressable
-          onPress={() => {
-            if (allowPlay) {
+            } else {
               play();
             }
-          }}
-        >
-          <PlayIcon fill={theme.colors.main50} />
-        </Pressable>
-      )}
+          }
+        }}
+      >
+        {({ hovered, focused }: InteractionState) =>
+          isPlaying ? (
+            <PauseIcon
+              fill={
+                focused
+                  ? theme.colors.main
+                  : hovered
+                  ? theme.colors.main80
+                  : theme.colors.main50
+              }
+            />
+          ) : (
+            <PlayIcon
+              fill={
+                focused
+                  ? theme.colors.main
+                  : hovered
+                  ? theme.colors.main80
+                  : theme.colors.main50
+              }
+            />
+          )
+        }
+      </Button>
     </HeaderLayout>
   );
 };

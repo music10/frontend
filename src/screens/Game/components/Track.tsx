@@ -13,12 +13,12 @@ interface Props {
 
 export const Track: FC<Props> = ({ track, selected, correct, choose }) => (
   <View
+    key={track.id + selected + correct}
     style={css`
       margin-bottom: 16px;
     `}
   >
     <TrackItem
-      key={track.id + selected + correct}
       disabled={!!selected && track.id !== selected}
       success={track.id === correct}
       onPress={() => {

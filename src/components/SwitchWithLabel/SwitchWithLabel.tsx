@@ -1,5 +1,5 @@
 import { Switch, SwitchProps } from 'react-native';
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { Dispatch, FC, SetStateAction, useCallback } from 'react';
 import styled from '@emotion/native';
 import { useTheme } from '@emotion/react';
 import { Text } from '../Text';
@@ -30,8 +30,11 @@ export const SwitchWithLabel: FC<Props> = ({
   ...props
 }) => {
   const theme = useTheme();
+  const changeValue = useCallback(() => {
+    setValue(!value);
+  }, [setValue, value]);
   return (
-    <Layout onPress={() => setValue(!value)}>
+    <Layout onPress={changeValue}>
       <Label>{text}</Label>
       <Switch
         trackColor={{
@@ -41,6 +44,7 @@ export const SwitchWithLabel: FC<Props> = ({
         activeThumbColor={value ? theme.colors.accent : theme.colors.main}
         thumbColor={value ? theme.colors.accent : theme.colors.main}
         value={value}
+        onValueChange={changeValue}
         {...props}
       />
     </Layout>

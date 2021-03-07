@@ -51,6 +51,7 @@ export const Game = () => {
         setTracks(tracks);
         setMp3(mp3);
       });
+
       ++number.current;
     } else {
       history.replace(ROUTES.Results);
@@ -58,8 +59,10 @@ export const Game = () => {
   }, [ws, history]);
 
   const setPlaylist = useCallback(async () => {
-    (await ws.setPlaylist(playlistId)).once('playlist', getNextTracks);
-  }, [ws, getNextTracks, playlistId]);
+    (await ws.setPlaylist(playlistId))
+      .once('playlist', getNextTracks)
+      .once('exception', () => history.replace(ROUTES.Start));
+  }, [ws, playlistId, getNextTracks, history]);
 
   const choose = useCallback(
     async (trackId) => {

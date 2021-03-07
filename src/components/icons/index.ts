@@ -1,5 +1,6 @@
 export * from './Search';
 export * from './Play';
+export * from './Pause';
 export * from './Rewind';
 export * from './Replay';
 export * from './Share';
