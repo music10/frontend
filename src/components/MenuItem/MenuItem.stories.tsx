@@ -5,18 +5,12 @@ import { MenuItem } from './MenuItem';
 
 export default {
   component: MenuItem,
-  title: 'Components/MenuItem/Default',
+  title: 'Components/MenuItem',
 } as Meta;
 
 export const Default: Story = (args) => (
   <MenuItem icon={PlayIcon} text="Text" {...args} />
 );
-export const Hover: Story = (args) => (
-  <MenuItem icon={PlayIcon} text="Text" variant="hover" {...args} />
-);
-export const Active: Story = (args) => (
-  <MenuItem icon={PlayIcon} text="Text" variant="active" {...args} />
-);
-export const Focus: Story = (args) => (
-  <MenuItem icon={PlayIcon} text="Text" variant="focused" {...args} />
+export const Primary: Story = (args) => (
+  <MenuItem icon={PlayIcon} primary text="Text" {...args} />
 );

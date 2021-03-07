@@ -1,41 +1,24 @@
 import React, { FC } from 'react';
-import { Image, Platform } from 'react-native';
-import styled from '@emotion/native';
+import {
+  Image,
+  InteractionState,
+  Platform,
+  Pressable,
+  PressableProps,
+} from 'react-native';
+import styled, { css } from '@emotion/native';
 import { SvgUri } from 'react-native-svg';
-import { Link } from '../Link';
-import { VariantProps } from '../Variant.types';
-import { useVariant, VariantComponent } from '../../hooks';
-import { ROUTES } from '../../routes/Routes.types';
+import { useTheme } from '@emotion/react';
 import { Text } from '../Text';
+import { Link } from '../Link';
+import { ROUTES } from '../../routes/Routes.types';
 
-interface Props extends VariantProps {
+interface Props extends PressableProps {
   id: string;
   cover: string;
   name: string;
 }
 
-const StyledItem = styled.View<Partial<Props>>(
-  ({ variant, theme }) => `
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 0 8px;
-  background-color: ${
-    variant === 'hover'
-      ? theme.colors.main10
-      : variant === 'active'
-      ? theme.colors.main5
-      : variant === 'focused'
-      ? theme.colors.main10
-      : 'transparent'
-  };
-  border: 2px solid ${
-    variant === 'focused' ? theme.colors.main : 'transparent'
-  };
-`,
-);
 const StyledText = styled(Text)`
   font-weight: 600;
   font-size: 14px;
@@ -43,45 +26,55 @@ const StyledText = styled(Text)`
   color: ${({ theme }) => theme.colors.main};
 `;
 
-export const PlaylistItem: FC<Props> = ({
-  id,
-  name,
-  cover,
-  variant: defaultFilter,
-  ...props
-}) => {
-  const { variant, setVariant } = useVariant(defaultFilter);
+const borderRadiusStyle = {
+  borderRadius: 4,
+};
+
+export const PlaylistItem: FC<Props> = ({ id, name, cover, ...props }) => {
+  const theme = useTheme();
 
   return (
     <Link
       to={`${ROUTES.Game}/${id}`}
-      component={VariantComponent}
-      setVariant={setVariant}
+      component={Pressable}
+      accessibilityRole="button"
+      style={({ focused, hovered, pressed }: InteractionState) =>
+        css`
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          border-radius: 4px;
+          padding: 8px;
+          margin: 0 8px;
+          background-color: ${hovered
+            ? theme.colors.main10
+            : pressed
+            ? theme.colors.main5
+            : focused
+            ? theme.colors.main10
+            : 'transparent'};
+          border: 2px solid ${focused ? theme.colors.main : 'transparent'};
+        `
+      }
+      {...props}
     >
-      <StyledItem variant={variant} {...props} accessibilityRole="button">
-        {Platform.OS === 'web' ? (
-          <img
-            alt=""
-            src={cover}
-            height={48}
-            width={48}
-            style={{ borderRadius: 4 }}
-          />
-        ) : /\.svg$/.test(cover) && cover ? (
-          <SvgUri
-            uri={cover}
-            height={48}
-            width={48}
-            style={{ borderRadius: 4 }}
-          />
-        ) : (
-          <Image
-            source={{ uri: cover, height: 48, width: 48 }}
-            style={{ height: 48, width: 48, borderRadius: 4 }}
-          />
-        )}
-        <StyledText>{name}</StyledText>
-      </StyledItem>
+      {Platform.OS === 'web' ? (
+        <img
+          alt=""
+          src={cover}
+          height={48}
+          width={48}
+          style={borderRadiusStyle}
+        />
+      ) : /\.svg$/.test(cover) && cover ? (
+        <SvgUri uri={cover} height={48} width={48} style={borderRadiusStyle} />
+      ) : (
+        <Image
+          source={{ uri: cover, height: 48, width: 48 }}
+          style={borderRadiusStyle}
+        />
+      )}
+      <StyledText>{name}</StyledText>
     </Link>
   );
 };

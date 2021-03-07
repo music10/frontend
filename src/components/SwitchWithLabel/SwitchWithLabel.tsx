@@ -2,6 +2,7 @@ import { Switch, SwitchProps } from 'react-native';
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import styled from '@emotion/native';
 import { useTheme } from '@emotion/react';
+import { Text } from '../Text';
 
 interface Props extends SwitchProps {
   text: string;
@@ -17,7 +18,7 @@ const Layout = styled.Pressable`
   margin: 0 8px;
 `;
 
-const Label = styled.Text`
+const Label = styled(Text)`
   color: ${({ theme }) => theme.colors.main};
   font-size: 14px;
 `;
@@ -37,7 +38,6 @@ export const SwitchWithLabel: FC<Props> = ({
           false: theme.colors.main50,
           true: theme.colors.accent50,
         }}
-        // @ts-ignore
         activeThumbColor={value ? theme.colors.accent : theme.colors.main}
         thumbColor={value ? theme.colors.accent : theme.colors.main}
         value={value}

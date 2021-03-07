@@ -14,18 +14,7 @@ const TRACK = {
 };
 
 export const Default: Story = (args) => <Track {...TRACK} {...args} />;
-export const Hover: Story = (args) => (
-  <Track variant="hover" {...TRACK} {...args} />
-);
-export const Active: Story = (args) => (
-  <Track variant="active" {...TRACK} {...args} />
-);
-export const Inactive: Story = (args) => (
-  <Track variant="inactive" {...TRACK} {...args} />
-);
-export const Focus: Story = (args) => (
-  <Track variant="focused" {...TRACK} {...args} />
-);
-export const Success: Story = (args) => (
-  <Track variant="success" {...TRACK} {...args} />
+export const Success: Story = (args) => <Track success {...TRACK} {...args} />;
+export const Disabled: Story = (args) => (
+  <Track disabled {...TRACK} {...args} />
 );

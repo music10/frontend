@@ -1,7 +1,9 @@
-import React, { FC, useEffect, useMemo, useRef } from 'react';
-import styled from '@emotion/native';
+import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Animated, Easing } from 'react-native';
+import styled from '@emotion/native';
 import { useTheme } from '@emotion/react';
+// @ts-ignore
+import { usePageVisibility } from 'react-page-visibility';
 
 interface Props {
   state: 'start' | 'stop';
@@ -12,7 +14,8 @@ const StyledProgress = styled.View`
 `;
 export const Progress: FC<Props> = ({ state, callback }) => {
   const theme = useTheme();
-  const animationValue = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
+  const animationValue = useRef(new Animated.Value(0)).current;
+
   const animation = useMemo(
     () =>
       Animated.timing(animationValue, {
@@ -23,6 +26,9 @@ export const Progress: FC<Props> = ({ state, callback }) => {
       }),
     [animationValue],
   );
+
+  const stopAnimation = useCallback(() => animation.stop(), [animation]);
+  usePageVisibility(stopAnimation);
 
   useEffect(() => {
     if (state === 'start') {

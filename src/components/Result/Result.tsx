@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/native';
+import { Text } from '../Text';
 
 interface Props {
   guess: number;
@@ -12,7 +13,7 @@ const ResultLayout = styled.View`
   align-items: center;
   justify-content: center;
 `;
-const StyledTotal = styled.Text`
+const StyledTotal = styled(Text)`
   font-style: italic;
   font-weight: 800;
   font-size: 64px;
@@ -21,7 +22,7 @@ const StyledTotal = styled.Text`
   color: ${({ theme }) => theme.colors.accent};
 `;
 
-const StyledText = styled.Text`
+const StyledText = styled(Text)`
   font-style: italic;
   font-weight: bold;
   font-size: 24px;
