@@ -13,7 +13,7 @@ import {
 } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import { ReplayIcon, ShareIcon } from '../../components/icons';
-import { ApiContext, WsContext } from '../../contexts';
+import { AmplitudeContext, ApiContext, WsContext } from '../../contexts';
 import { useShare } from '../../hooks';
 import { IWsAnswerResult } from '../../utils';
 
@@ -35,6 +35,7 @@ export const Result = () => {
   const history = useHistory();
   const api = useContext(ApiContext);
   const ws = useContext(WsContext);
+  const amp = useContext(AmplitudeContext);
   const [result, setResult] = useState<IWsAnswerResult>({} as IWsAnswerResult);
   const [shareData, setShareData] = useState('');
   const shareFunction = useShare();
@@ -54,10 +55,15 @@ export const Result = () => {
   }, [api, result]);
 
   const share = useCallback(() => {
+    amp.logEvent('Shared');
     shareFunction(shareData).catch((err: Record<string, unknown>) => {
       err && Alert.alert(JSON.stringify(err));
     });
-  }, [shareData, shareFunction]);
+  }, [amp, shareData, shareFunction]);
+
+  useEffect(() => {
+    amp.logEvent('Results Opened');
+  }, [amp]);
 
   useEffect(() => {
     getResults();
@@ -79,6 +85,9 @@ export const Result = () => {
         primary
         icon={ReplayIcon}
         text={t('ToPlaylists')}
+        onClick={() => {
+          amp.logEvent('Restarted');
+        }}
       />
       {Platform.OS !== 'web' && (
         <MenuItem icon={ShareIcon} text={t('Share')} onPress={share} />

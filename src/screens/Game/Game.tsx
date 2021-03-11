@@ -6,17 +6,17 @@ import React, {
   useState,
 } from 'react';
 import { useHistory, useParams } from 'react-router';
-import styled from '@emotion/native';
+import styled, { css } from '@emotion/native';
 
-import { WsContext } from '../../contexts';
+import { View } from 'react-native';
+import { AmplitudeContext, ApiContext, WsContext } from '../../contexts';
 import { IWsAnswerChoose, IWsAnswerNext, TRACKS_PER_ROUND } from '../../utils';
 import { ITrack } from '../../interfaces';
-import { Counter, Loader } from '../../components';
+import { Counter, Loader, Track } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import { Music } from './components/Music';
 import { Header } from './components/Header';
 import { Progressbar } from './components/Progressbar';
-import { Track } from './components/Track';
 
 const TracksLayout = styled.View`
   display: flex;
@@ -33,19 +33,29 @@ const GameLayout = styled.View`
 
 export const Game = () => {
   const ws = useContext(WsContext);
+  const api = useContext(ApiContext);
+  const amp = useContext(AmplitudeContext);
   const history = useHistory();
   const { playlistId } = useParams<{ playlistId: string }>();
   const [tracks, setTracks] = useState<ITrack[]>([]);
   const [mp3, setMp3] = useState('');
+  const [timer, setTimer] = useState(0);
   const [isMp3Loading, setMp3Loading] = useState(true);
   const [selected, setSelected] = useState('');
   const [correct, setCorrect] = useState('');
   const number = useRef(0);
 
+  useEffect(() => {
+    api
+      .getPlaylistById(playlistId)
+      .then(({ name, id }) => amp.logEvent('Playlist Opened', { name, id }));
+  }, [amp, api, playlistId]);
+
   const getNextTracks = useCallback(async () => {
     if (number.current < TRACKS_PER_ROUND) {
       setSelected('');
       setCorrect('');
+      setTracks([]);
       (await ws.next()).once('nextTracks', ({ tracks, mp3 }: IWsAnswerNext) => {
         setMp3Loading(true);
         setTracks(tracks);
@@ -70,19 +80,22 @@ export const Game = () => {
       (await ws.choose(trackId)).once(
         'chooseResult',
         (answer: IWsAnswerChoose) => {
+          amp.logEvent('Track Chosen', {
+            variants: tracks.map(({ artist, name }) => ({ artist, name })),
+            chosen: tracks.findIndex(({ id }) => id === trackId) + 1,
+            right: tracks.findIndex(({ id }) => id === answer.correct) + 1,
+          });
+          setTimer(+setTimeout(getNextTracks, 1500));
           setCorrect(answer.correct);
-
-          setTimeout(getNextTracks, 1000);
         },
       );
     },
-    [getNextTracks, ws],
+    [amp, getNextTracks, tracks, ws],
   );
 
   useEffect(() => {
     setPlaylist();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setPlaylist]);
 
   return (
     <Music setMp3Loading={setMp3Loading} mp3={mp3}>
@@ -92,15 +105,35 @@ export const Game = () => {
           <Loader />
         ) : (
           <>
-            <TracksLayout>
+            <TracksLayout
+              onClick={() => {
+                if (selected) {
+                  clearTimeout(timer);
+                  getNextTracks();
+                  amp.logEvent('Result Skipped');
+                }
+              }}
+            >
               <Counter current={number.current} />
               {tracks.map((track) => (
-                <Track
-                  selected={selected}
-                  correct={correct}
-                  track={track}
-                  choose={choose}
-                />
+                <View
+                  key={track.id + selected + correct}
+                  style={css`
+                    margin-bottom: 16px;
+                  `}
+                >
+                  <Track
+                    disabled={!!selected}
+                    selected={track.id === selected}
+                    success={track.id === correct}
+                    onPress={() => {
+                      if (!selected) {
+                        choose(track.id);
+                      }
+                    }}
+                    {...track}
+                  />
+                </View>
               ))}
             </TracksLayout>
             <Progressbar key={mp3} />

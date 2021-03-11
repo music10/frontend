@@ -42,12 +42,6 @@ export const Progress: FC<Props> = ({ state, callback }) => {
     }
   }, [animation, callback, state]);
 
-  console.log(
-    animationValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0%', '100%'],
-    }),
-  );
   return (
     <View
       style={css`

@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ThemeProvider } from '@emotion/react';
 import { I18nextProvider } from 'react-i18next';
-import { ApiContext, WsContext } from '../contexts';
-import { Api, WS } from '../utils';
+import { AmplitudeContext, ApiContext, WsContext } from '../contexts';
+import { AmplitudeInstance, Api, WS } from '../utils';
 import { theme } from '../themes';
 import i18n from '../i18n';
 
@@ -17,6 +17,7 @@ export const ContextProvider: React.FC<ContextProviderProps> = ({
   api,
   ws,
 }) => {
+  const amplitudeValue = useMemo(() => AmplitudeInstance, []);
   const apiValue = useMemo(() => api || new Api(), [api]);
   const wsValue = useMemo(() => ws || new WS(), [ws]);
   const queryClient = useMemo(() => new QueryClient(), []);
@@ -26,7 +27,11 @@ export const ContextProvider: React.FC<ContextProviderProps> = ({
       <I18nextProvider i18n={i18n}>
         <QueryClientProvider client={queryClient}>
           <ApiContext.Provider value={apiValue}>
-            <WsContext.Provider value={wsValue}>{children}</WsContext.Provider>
+            <WsContext.Provider value={wsValue}>
+              <AmplitudeContext.Provider value={amplitudeValue}>
+                {children}
+              </AmplitudeContext.Provider>
+            </WsContext.Provider>
           </ApiContext.Provider>
         </QueryClientProvider>
       </I18nextProvider>

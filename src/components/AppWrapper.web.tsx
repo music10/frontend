@@ -9,7 +9,7 @@ export const AppWrapper: React.FC = ({ children }) => {
     <>
       <Global
         styles={{
-          body: { background: theme.colors.bg, margin: 'auto', maxWidth: 640 },
+          body: { background: theme.colors.bg, margin: 'auto', maxWidth: 520 },
           '#root': { display: 'flex', flexDirection: 'column' },
           ':focus': { outline: 'none' },
         }}

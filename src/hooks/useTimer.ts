@@ -1,28 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-interface Props {
-  startFunction: Function;
-  stopFunction: Function;
-  duration: number;
-}
-
-type UseTimer = (args: Props) => void;
-
-export const useTimer: UseTimer = ({
-  startFunction,
-  stopFunction,
-  duration,
-}) => {
-  const [timer, setTimer] = useState(0);
-
+export const useTimer = (callback: Function | null, duration: number) => {
   useEffect(() => {
-    startFunction();
-    setTimer(+setTimeout(stopFunction, duration));
+    // ставим таймер на функцию callback
+    const timer = setTimeout(() => {
+      callback && callback();
+    }, duration);
 
     return () => {
-      stopFunction();
+      // очищаем таймер и вызываем callback
       clearTimeout(timer);
+      callback && callback();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startFunction, stopFunction, duration]);
+  }, [callback, duration]);
 };

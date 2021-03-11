@@ -1,10 +1,12 @@
 import axios, { AxiosInstance } from 'axios';
 
 import { IApi } from '../interfaces/api';
+import { IPlaylist } from '../interfaces';
 import { API_HOST } from './variables';
 
 export class Api implements IApi {
   private axiosInstance: AxiosInstance;
+  private market = 'RU';
 
   constructor() {
     this.axiosInstance = axios.create({
@@ -12,20 +14,25 @@ export class Api implements IApi {
     });
   }
 
-  getCherryPickPlaylists = () =>
+  getCherryPickPlaylists = (): Promise<IPlaylist[]> =>
     this.axiosInstance.get('playlists/cherry-pick').then(({ data }) => data);
 
-  searchPlaylists = (query?: string) =>
+  searchPlaylists = (query?: string): Promise<IPlaylist[]> =>
     this.axiosInstance
-      .get(`playlists${query ? `?query=${query}` : ''}`)
+      .get('playlists', { params: { query, market: this.market } })
       .then(({ data }) => data);
 
-  searchPlaylistsByArtist = (query?: string) =>
+  searchPlaylistsByArtist = (query?: string): Promise<IPlaylist[]> =>
     this.axiosInstance
-      .get(`playlists/artist${query ? `?query=${query}` : ''}`)
+      .get('playlists/artist', { params: { query, market: this.market } })
       .then(({ data }) => data);
 
-  getShareImage = (playlistId: string, guess: number) =>
+  getPlaylistById = (id: string): Promise<IPlaylist> =>
+    this.axiosInstance
+      .get(`playlists/${id}`, { params: { market: this.market } })
+      .then(({ data }) => data);
+
+  getShareImage = (playlistId: string, guess: number): Promise<string> =>
     this.axiosInstance
       .get('share', { params: { playlistId, guess } })
       .then(({ data }) => data);

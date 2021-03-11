@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 
@@ -15,7 +15,7 @@ import {
   SwitchWithLabel,
 } from '../../components';
 import { RewindIcon } from '../../components/icons';
-import { ApiContext } from '../../contexts';
+import { AmplitudeContext, ApiContext } from '../../contexts';
 import { IPlaylist } from '../../interfaces';
 import { ROUTES } from '../../routes/Routes.types';
 
@@ -40,8 +40,17 @@ export const Search: FC = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const api = useContext(ApiContext);
+  const amp = useContext(AmplitudeContext);
   const [query, setQuery] = useState('');
   const [byArtist, setByArtist] = useState(false);
+
+  useEffect(() => {
+    amp.logEvent('Search Opened');
+
+    return () => {
+      amp.logEvent('Search Exited');
+    };
+  }, [amp]);
 
   const request = useQuery<IPlaylist[], Error>(
     ['searchPlaylists', query, byArtist],
