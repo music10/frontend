@@ -25,7 +25,7 @@ export interface IWsAnswerChoose {
 }
 
 export class WS {
-  private socket: typeof Socket;
+  private socket: Socket;
 
   constructor() {
     this.socket = io(`${WS_HOST}/game`, {

@@ -17,8 +17,3 @@ export const AMPLITUDE_API_KEY = process.env.REACT_APP_AMPLITUDE_API_KEY || '';
  * Track number per game
  */
 export const TRACKS_PER_ROUND = 10;
-
-/**
- * Track duration in ms
- */
-export const TRACK_DURATION = 10000;

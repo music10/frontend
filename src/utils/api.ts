@@ -6,7 +6,6 @@ import { API_HOST } from './variables';
 
 export class Api implements IApi {
   private axiosInstance: AxiosInstance;
-  private market = 'RU';
 
   constructor() {
     this.axiosInstance = axios.create({
@@ -19,18 +18,16 @@ export class Api implements IApi {
 
   searchPlaylists = (query?: string): Promise<IPlaylist[]> =>
     this.axiosInstance
-      .get('playlists', { params: { query, market: this.market } })
+      .get('playlists', { params: { query } })
       .then(({ data }) => data);
 
   searchPlaylistsByArtist = (query?: string): Promise<IPlaylist[]> =>
     this.axiosInstance
-      .get('playlists/artist', { params: { query, market: this.market } })
+      .get('playlists/artist', { params: { query } })
       .then(({ data }) => data);
 
   getPlaylistById = (id: string): Promise<IPlaylist> =>
-    this.axiosInstance
-      .get(`playlists/${id}`, { params: { market: this.market } })
-      .then(({ data }) => data);
+    this.axiosInstance.get(`playlists/${id}`).then(({ data }) => data);
 
   getShareImage = (playlistId: string, guess: number): Promise<string> =>
     this.axiosInstance

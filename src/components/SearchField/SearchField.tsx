@@ -17,15 +17,13 @@ export const SearchField: FC<TextInputProps> = (props) => {
 
   return (
     <Pressable
-      style={({ hovered, focused }: InteractionState) => css`
+      style={({ hovered }: InteractionState) => css`
         display: flex;
         flex-direction: row;
         align-items: center;
-        padding: 0 16px;
-        border: 2px solid ${focused ? theme.colors.main : 'transparent'};
-        background: ${hovered || focused
-          ? theme.colors.main20
-          : theme.colors.main10};
+        padding: 8px 16px;
+        border: 2px solid transparent;
+        background: ${hovered ? theme.colors.main20 : theme.colors.main10};
         border-radius: 0;
       `}
     >
@@ -36,7 +34,7 @@ export const SearchField: FC<TextInputProps> = (props) => {
             placeholder={t('SearchInSpotify')}
             style={css`
               width: 100%;
-              padding: 8px;
+              padding: 0;
               border: 0;
               color: ${pressed ? theme.colors.main80 : theme.colors.main50};
               margin-left: 16px;

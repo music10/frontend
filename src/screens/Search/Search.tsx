@@ -84,25 +84,31 @@ export const Search: FC = () => {
           setValue={setByArtist}
         />
       </ByArtistLayout>
-      {query ? (
-        request.isSuccess && !request.data?.length ? (
-          <>
-            <View
-              style={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}
-            >
-              <NotFound byArtist={byArtist} />
-            </View>
-            <Link
-              to={ROUTES.Playlists}
-              component={MenuItem}
-              icon={RewindIcon}
-              text={t('ToPlaylists')}
-            />
-          </>
-        ) : (
-          <PlaylistList {...request} />
-        )
-      ) : null}
+      <View style={{ marginTop: 16 }}>
+        {query ? (
+          request.isSuccess && !request.data?.length ? (
+            <>
+              <View
+                style={{
+                  flexGrow: 1,
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <NotFound byArtist={byArtist} />
+              </View>
+              <Link
+                to={ROUTES.Playlists}
+                component={MenuItem}
+                icon={RewindIcon}
+                text={t('ToPlaylists')}
+              />
+            </>
+          ) : (
+            <PlaylistList {...request} />
+          )
+        ) : null}
+      </View>
     </>
   );
 };

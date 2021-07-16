@@ -151,11 +151,11 @@ android {
             keyPassword 'android'
         }
         release {
-            if (project.hasProperty('MUSIC10_UPLOAD_STORE_FILE')) {
-                storeFile file(MUSIC10_UPLOAD_STORE_FILE)
-                storePassword MUSIC10_UPLOAD_STORE_PASSWORD
-                keyAlias MUSIC10_UPLOAD_KEY_ALIAS
-                keyPassword MUSIC10_UPLOAD_KEY_PASSWORD
+            if (project.hasProperty('MUSIQ_UPLOAD_STORE_FILE')) {
+                storeFile file(MUSIQ_UPLOAD_STORE_FILE)
+                storePassword MUSIQ_UPLOAD_STORE_PASSWORD
+                keyAlias MUSIQ_UPLOAD_KEY_ALIAS
+                keyPassword MUSIQ_UPLOAD_KEY_PASSWORD
             }
         }
     }

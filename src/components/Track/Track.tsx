@@ -27,18 +27,13 @@ const Artist = styled(Text)<Partial<Props>>(
 );
 
 const TrackName = styled(Text)<Partial<Props>>(
-  ({ theme, disabled, success, selected }) => `
+  ({ theme, disabled, success }) => `
   font-weight: 500;
   font-size: 14px;
   text-align: center;
   margin-top: 8px;
-  color: ${
-    success
-      ? theme.colors.accent
-      : disabled && !selected
-      ? theme.colors.main80
-      : theme.colors.main
-  };
+  opacity: ${disabled ? 0.5 : 1};
+  color: ${success ? theme.colors.accent : theme.colors.main};
 `,
 );
 
@@ -56,17 +51,15 @@ export const Track: FC<Props> = ({
   return (
     <Pressable
       key={id}
-      style={({ hovered, focused, pressed }: InteractionState) => css`
+      style={({ hovered, pressed }: InteractionState) => css`
         padding: 16px;
-        background: ${!disabled && (hovered || focused || pressed)
+        background: ${!disabled && (hovered || pressed)
           ? theme.colors.main10
           : 'transparent'};
         border: ${success
           ? `2px solid ${theme.colors.accent}`
           : disabled && !selected
           ? `2px solid ${theme.colors.main20}`
-          : focused && !selected
-          ? `2px solid ${theme.colors.main}`
           : `2px solid ${theme.colors.main50}`};
       `}
       disabled={disabled}

@@ -9,9 +9,10 @@ import { useHistory, useParams } from 'react-router';
 import styled, { css } from '@emotion/native';
 
 import { View } from 'react-native';
+import { useQuery } from 'react-query';
 import { AmplitudeContext, ApiContext, WsContext } from '../../contexts';
 import { IWsAnswerChoose, IWsAnswerNext, TRACKS_PER_ROUND } from '../../utils';
-import { ITrack } from '../../interfaces';
+import { IPlaylist, ITrack } from '../../interfaces';
 import { Counter, Loader, Track } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import { Music } from './components/Music';
@@ -45,11 +46,14 @@ export const Game = () => {
   const [correct, setCorrect] = useState('');
   const number = useRef(0);
 
-  useEffect(() => {
-    api
-      .getPlaylistById(playlistId)
-      .then(({ name, id }) => amp.logEvent('Playlist Opened', { name, id }));
-  }, [amp, api, playlistId]);
+  useQuery<IPlaylist, Error>(
+    ['getPlaylistById', playlistId],
+    () => api.getPlaylistById(playlistId),
+    {
+      onSuccess: ({ name, id }) =>
+        amp.logEvent('Playlist Opened', { name, id }),
+    },
+  );
 
   const getNextTracks = useCallback(async () => {
     if (number.current < TRACKS_PER_ROUND) {
@@ -68,11 +72,13 @@ export const Game = () => {
     }
   }, [ws, history]);
 
-  const setPlaylist = useCallback(async () => {
-    (await ws.setPlaylist(playlistId))
-      .once('playlist', getNextTracks)
-      .once('exception', () => history.replace(ROUTES.Start));
-  }, [ws, playlistId, getNextTracks, history]);
+  const setPlaylist = useCallback(
+    async () =>
+      (await ws.setPlaylist(playlistId))
+        .once('playlist', getNextTracks)
+        .once('exception', () => history.replace(ROUTES.Start)),
+    [ws, playlistId, getNextTracks, history],
+  );
 
   const choose = useCallback(
     async (trackId) => {
@@ -101,7 +107,7 @@ export const Game = () => {
     <Music setMp3Loading={setMp3Loading} mp3={mp3}>
       <GameLayout>
         <Header />
-        {isMp3Loading ? (
+        {isMp3Loading || !tracks.length ? (
           <Loader />
         ) : (
           <>

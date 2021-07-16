@@ -38,7 +38,7 @@ export const PlaylistItem: FC<Props> = ({ id, name, cover, ...props }) => {
       to={`${ROUTES.Game}/${id}`}
       component={Pressable}
       accessibilityRole="button"
-      style={({ focused, hovered, pressed }: InteractionState) =>
+      style={({ hovered, pressed }: InteractionState) =>
         css`
           display: flex;
           flex-direction: row;
@@ -50,10 +50,8 @@ export const PlaylistItem: FC<Props> = ({ id, name, cover, ...props }) => {
             ? theme.colors.main10
             : pressed
             ? theme.colors.main5
-            : focused
-            ? theme.colors.main10
             : 'transparent'};
-          border: 2px solid ${focused ? theme.colors.main : 'transparent'};
+          border: 2px solid transparent;
         `
       }
       {...props}

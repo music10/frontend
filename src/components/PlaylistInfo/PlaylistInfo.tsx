@@ -29,12 +29,12 @@ export const PlaylistInfo: FC<Props> = ({ name }) => {
 
   return (
     <Pressable
-      style={({ focused }: InteractionState) => css`
+      style={css`
         padding: 8px;
-        border: 2px solid ${focused ? theme.colors.main80 : 'transparent'};
+        border: 2px solid transparent;
       `}
     >
-      {({ focused, hovered }: InteractionState) => (
+      {({ hovered }: InteractionState) => (
         <>
           <TitleLayout>
             <Text
@@ -43,9 +43,7 @@ export const PlaylistInfo: FC<Props> = ({ name }) => {
                 font-size: 14px;
                 line-height: 17px;
                 margin-right: 8px;
-                color: ${hovered || focused
-                  ? theme.colors.main80
-                  : theme.colors.main50};
+                color: ${hovered ? theme.colors.main80 : theme.colors.main50};
               `}
             >
               {t('Playlist')}
@@ -53,9 +51,7 @@ export const PlaylistInfo: FC<Props> = ({ name }) => {
             <SchevronRightIcon
               width={16}
               height={16}
-              fill={
-                hovered || focused ? theme.colors.main80 : theme.colors.main50
-              }
+              fill={hovered ? theme.colors.main80 : theme.colors.main50}
             />
           </TitleLayout>
           <PlaylistName>{name}</PlaylistName>

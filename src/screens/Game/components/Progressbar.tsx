@@ -6,9 +6,8 @@ import { Progress } from '../../../components';
 import { MusicContext } from '../../../contexts';
 
 export const Progressbar: FC = () => {
-  const { isPlaying, play, pause, stop, setAllowPlay } = useContext(
-    MusicContext,
-  );
+  const { isPlaying, play, pause, stop, setAllowPlay } =
+    useContext(MusicContext);
 
   const visibilityHandler = useCallback(
     (visible: boolean) => (visible ? play() : pause()),

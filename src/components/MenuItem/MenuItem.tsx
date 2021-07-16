@@ -32,20 +32,16 @@ export const MenuItem: FC<Props> = ({
 
   return (
     <Pressable
-      style={({ focused, hovered, pressed }: InteractionState) => css`
+      style={({ hovered, pressed }: InteractionState) => css`
         display: flex;
         flex-direction: row;
         align-items: center;
-        padding: ${focused || hovered || pressed
-          ? '16px 24px 16px 32px'
-          : '16px 24px'};
+        padding: ${hovered || pressed ? '16px 24px 16px 32px' : '16px 24px'};
         background-color: ${primary ? theme.colors.accent : theme.colors.bg};
-        border: ${focused
-          ? `2px solid ${theme.colors.main}`
-          : primary
+        border: ${primary
           ? `2px solid ${theme.colors.accent}`
           : `2px solid ${theme.colors.bg}`};
-        box-shadow: ${!primary || !(focused || hovered || pressed)
+        box-shadow: ${!primary || !(hovered || pressed)
           ? 'none'
           : hovered
           ? '0px 24px 48px rgba(0, 0, 0, 0.75);'

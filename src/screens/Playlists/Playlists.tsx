@@ -4,8 +4,7 @@ import { ScrollView } from 'react-native';
 
 import styled from '@emotion/native';
 
-import { Link, PlaylistList, Search } from '../../components';
-import { ROUTES } from '../../routes/Routes.types';
+import { PlaylistList, Search } from '../../components';
 import { ApiContext } from '../../contexts';
 import { IPlaylist } from '../../interfaces';
 
@@ -27,7 +26,7 @@ export const Playlists: React.FC = () => {
   return (
     <PlaylistsLayout>
       <ScrollView>
-        <Link to={ROUTES.Search} component={Search} />
+        <Search />
         <PlaylistList {...request} />
       </ScrollView>
     </PlaylistsLayout>

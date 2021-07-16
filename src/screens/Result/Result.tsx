@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Alert, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import styled from '@emotion/native';
@@ -40,6 +40,13 @@ export const Result = () => {
   const [shareData, setShareData] = useState('');
   const shareFunction = useShare();
 
+  useEffect(
+    () => () => {
+      ws.reconnect();
+    },
+    [ws],
+  );
+
   const getResults = useCallback(async () => {
     (await ws.getResult())
       .once('result', setResult)
@@ -56,9 +63,7 @@ export const Result = () => {
 
   const share = useCallback(() => {
     amp.logEvent('Shared');
-    shareFunction(shareData).catch((err: Record<string, unknown>) => {
-      err && Alert.alert(JSON.stringify(err));
-    });
+    shareFunction(shareData);
   }, [amp, shareData, shareFunction]);
 
   useEffect(() => {
