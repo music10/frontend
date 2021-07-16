@@ -31,7 +31,7 @@ yarn-error.log*
 release.keystore
 gradle.properties
 
-src/utils/variables.android.ts
+src/utils/variables.ts
 src/utils/variables.web.ts
 
 
