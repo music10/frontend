@@ -1,4 +1,5 @@
 export * from './Search';
+export * from './Exit';
 export * from './Play';
 export * from './Pause';
 export * from './Rewind';

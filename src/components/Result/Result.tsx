@@ -14,8 +14,7 @@ const ResultLayout = styled.View`
   justify-content: center;
 `;
 const StyledTotal = styled(Text)`
-  font-style: italic;
-  font-weight: 800;
+  font-family: ${({ theme }) => theme.fontFamilyExtraBoldItalic};
   font-size: 64px;
   line-height: 78px;
   text-align: center;
@@ -24,7 +23,7 @@ const StyledTotal = styled(Text)`
 
 const StyledText = styled(Text)`
   font-style: italic;
-  font-weight: bold;
+  font-family: ${({ theme }) => theme.fontFamilyBold};
   font-size: 24px;
   line-height: 29px;
   text-align: center;

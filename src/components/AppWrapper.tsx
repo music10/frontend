@@ -1,8 +1,6 @@
-import React, { FC, useEffect } from 'react';
-import { Platform } from 'react-native';
+import React, { FC } from 'react';
 import { NativeRouter } from 'react-router-native';
 
-import { YandexMetrica } from 'react-native-appmetrica-yandex';
 import { useBackHandler } from '@react-native-community/hooks';
 import { useHistory } from 'react-router';
 
@@ -17,16 +15,8 @@ const HandleBack: FC = ({ children }) => {
   return <>{children}</>;
 };
 
-export const AppWrapper: React.FC = ({ children }) => {
-  useEffect(() => {
-    if (Platform.OS === 'android' && process.env.APP_METRIKA_API_KEY) {
-      YandexMetrica.activateWithApiKey(process.env.APP_METRIKA_API_KEY);
-    }
-  });
-
-  return (
-    <NativeRouter>
-      <HandleBack>{children}</HandleBack>
-    </NativeRouter>
-  );
-};
+export const AppWrapper: React.FC = ({ children }) => (
+  <NativeRouter>
+    <HandleBack>{children}</HandleBack>
+  </NativeRouter>
+);

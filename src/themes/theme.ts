@@ -1,5 +1,10 @@
 export const theme = {
   fontFamily: 'Montserrat',
+  fontFamilyMedium: 'Montserrat-Medium',
+  fontFamilySemiBold: 'Montserrat-SemiBold',
+  fontFamilyBold: 'Montserrat-Bold',
+  fontFamilyExtraBoldItalic: 'Montserrat-ExtraBoldItalic',
+
   colors: {
     accent: '#8dce24',
     accent50: 'rgba(141, 206, 36, .5)',

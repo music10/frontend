@@ -3,6 +3,10 @@ import '@emotion/react';
 declare module '@emotion/react' {
   export interface Theme {
     fontFamily: string;
+    fontFamilyMedium: string;
+    fontFamilySemiBold: string;
+    fontFamilyBold: string;
+    fontFamilyExtraBoldItalic: string;
     colors: {
       accent: string;
       accent50: string;

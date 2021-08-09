@@ -20,7 +20,7 @@ interface Props extends PressableProps {
 }
 
 const StyledText = styled(Text)`
-  font-weight: 600;
+  font-family: ${({ theme }) => theme.fontFamilySemiBold};
   font-size: 14px;
   margin-left: 24px;
   color: ${({ theme }) => theme.colors.main};

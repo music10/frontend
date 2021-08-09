@@ -1,13 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from '@emotion/native';
-import { Link, Logo, MenuItem } from '../../components';
+import { Link, Logo, MenuItem, BottomMenu } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import { PlayIcon } from '../../components/icons';
 
 const StartLayout = styled.View`
   display: flex;
-  padding: 32px 16px;
   align-items: stretch;
   height: 100%;
 `;
@@ -26,13 +25,15 @@ export const Start = () => {
       <LogoLayout>
         <Logo />
       </LogoLayout>
-      <Link
-        to={ROUTES.Playlists}
-        component={MenuItem}
-        primary
-        icon={PlayIcon}
-        text={t('Play')}
-      />
+      <BottomMenu>
+        <Link
+          to={ROUTES.Playlists}
+          component={MenuItem}
+          primary
+          icon={PlayIcon}
+          text={t('Play')}
+        />
+      </BottomMenu>
     </StartLayout>
   );
 };

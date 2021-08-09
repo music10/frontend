@@ -14,19 +14,20 @@ const NotFoundLayout = styled.View`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
+  flex-grow: 1;
 `;
 
 const StyledText = styled(Text)`
   color: ${({ theme }) => theme.colors.main};
   font-size: 16px;
-  font-weight: 600;
+  font-family: ${({ theme }) => theme.fontFamilySemiBold}; ;
 `;
 const StyledSubText = styled(Text)`
   margin-top: 8px;
+  text-align: center;
   color: ${({ theme }) => theme.colors.main50};
   font-size: 14px;
-  font-weight: 500;
+  font-family: ${({ theme }) => theme.fontFamilyMedium}; ;
 `;
 
 export const NotFound: FC<Props> = ({ byArtist }) => {

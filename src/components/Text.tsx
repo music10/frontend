@@ -1,6 +1,6 @@
 import styled from '@emotion/native';
 
 export const Text = styled.Text`
-  font-family: ${({ theme }) => theme.fontFamily};
+  font-family: ${({ theme }) => theme.fontFamilyMedium};
   text-decoration: none;
 `;

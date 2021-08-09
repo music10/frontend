@@ -6,7 +6,7 @@ export const ErrorMessage = styled(Text)`
   font-size: 12px;
   color: ${({ theme }) => theme.colors.main};
   border: 2px solid ${({ theme }) => theme.colors.danger};
-  font-weight: 700;
+  font-family: ${({ theme }) => theme.fontFamilySemiBold};
   position: relative;
   text-align: center;
 `;

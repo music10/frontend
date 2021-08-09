@@ -7,6 +7,7 @@ import { SearchIcon } from './Search';
 import { ShareIcon } from './Share';
 import { ReplayIcon } from './Replay';
 import { PauseIcon } from './Pause';
+import { ExitIcon } from './Exit';
 import { SchevronRightIcon } from './SchevronRight';
 
 export default {
@@ -19,6 +20,7 @@ export const Search: Story = (args) => <SearchIcon fill="white" {...args} />;
 export const Share: Story = (args) => <ShareIcon fill="white" {...args} />;
 export const Replay: Story = (args) => <ReplayIcon fill="white" {...args} />;
 export const Pause: Story = (args) => <PauseIcon fill="white" {...args} />;
+export const Exit: Story = (args) => <ExitIcon fill="white" {...args} />;
 export const SchevronRight: Story = (args) => (
   <SchevronRightIcon fill="white" {...args} />
 );

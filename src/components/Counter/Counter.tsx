@@ -1,24 +1,24 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import styled from '@emotion/native';
-import { TextProps } from 'react-native';
 import { TRACKS_PER_ROUND } from '../../utils';
 import { Text } from '../Text';
+import { GameContext } from '../../contexts';
 
 const StyledCounter = styled(Text)`
   font-size: 16px;
-  font-weight: 500;
+  font-family: ${({ theme }) => theme.fontFamilyMedium};
   padding: 16px;
   margin-bottom: 24px;
   text-align: center;
   color: ${({ theme }) => theme.colors.main};
 `;
 
-interface Props extends TextProps {
-  current: number;
-}
+export const Counter: FC = () => {
+  const { number } = useContext(GameContext);
 
-export const Counter: FC<Props> = ({ current, ...props }) => (
-  <StyledCounter {...props}>
-    {current} / {TRACKS_PER_ROUND}
-  </StyledCounter>
-);
+  return (
+    <StyledCounter>
+      {number.current} / {TRACKS_PER_ROUND}
+    </StyledCounter>
+  );
+};

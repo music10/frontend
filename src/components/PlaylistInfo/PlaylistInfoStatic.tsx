@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 import styled from '@emotion/native';
 import { useTranslation } from 'react-i18next';
 
-import { IPlaylist } from '../../interfaces';
 import { Text } from '../Text';
+import { Components } from '../../api/api.types';
 
-interface Props extends IPlaylist {}
+interface Props extends Components.Schemas.PlaylistDto {}
 
 const StyledPlaylistInfo = styled.View<Partial<Props>>`
   padding: 8px;
@@ -18,7 +18,7 @@ const TitleLayout = styled.View<Partial<Props>>`
 `;
 
 const Title = styled(Text)<Partial<Props>>`
-  font-weight: 500;
+  font-family: ${({ theme }) => theme.fontFamilyMedium};
   font-size: 14px;
   line-height: 17px;
   margin-right: 8px;
@@ -27,7 +27,7 @@ const Title = styled(Text)<Partial<Props>>`
 
 const PlaylistName = styled(Text)<Partial<Props>>`
   margin-top: 8px;
-  font-weight: 600;
+  font-family: ${({ theme }) => theme.fontFamilySemiBold};
   font-size: 14px;
   line-height: 17px;
   color: ${({ theme }) => theme.colors.main80};

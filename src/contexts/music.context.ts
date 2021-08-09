@@ -1,14 +1,14 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import Sound from 'react-native-sound';
+import { createContext, Dispatch, SetStateAction } from 'react';
+import { SoundData } from 'react-native-use-sound/src/types';
 
-interface MusicContextValue {
+interface IMusicContext {
   play: () => void;
   stop: () => void;
   pause: () => void;
-  sound: Sound | null;
+  sound: SoundData | null;
   isPlaying: boolean;
   duration: number | null;
   allowPlay: boolean;
   setAllowPlay: Dispatch<SetStateAction<boolean>>;
 }
-export const MusicContext = React.createContext({} as MusicContextValue);
+export const MusicContext = createContext({} as IMusicContext);

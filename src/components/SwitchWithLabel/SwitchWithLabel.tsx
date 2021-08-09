@@ -20,7 +20,7 @@ const Layout = styled.Pressable`
 
 const Label = styled(Text)`
   color: ${({ theme }) => theme.colors.main};
-  font-weight: 600;
+  font-family: ${({ theme }) => theme.fontFamilySemiBold};
   font-size: 14px;
 `;
 

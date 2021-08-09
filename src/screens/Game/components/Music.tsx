@@ -1,7 +1,7 @@
-import React, { Dispatch, useEffect, useState } from 'react';
+import React, { Dispatch, useContext, useEffect, useState } from 'react';
 
 import { usePlaying } from '../../../hooks';
-import { MusicContext } from '../../../contexts';
+import { GameContext, MusicContext } from '../../../contexts';
 
 export interface Props {
   mp3: string;
@@ -11,12 +11,14 @@ export interface Props {
 export const Music: React.FC<Props> = ({ mp3, setMp3Loading, children }) => {
   const { play, stop, pause, ...rest } = usePlaying(mp3, setMp3Loading);
   const [allowPlay, setAllowPlay] = useState(true);
+  const { isPause } = useContext(GameContext);
 
   useEffect(() => {
-    play();
-    return () => {
-      stop();
-    };
+    if (!isPause) {
+      play();
+    }
+    return () => stop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [play, stop]);
 
   return (

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Meta, Story } from '@storybook/react/types-6-0';
-import { Button, View } from 'react-native';
+import { Animated, Button, View } from 'react-native';
 import { Progress } from './Progress';
 
 export default {

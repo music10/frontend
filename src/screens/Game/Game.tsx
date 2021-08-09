@@ -10,14 +10,20 @@ import styled, { css } from '@emotion/native';
 
 import { View } from 'react-native';
 import { useQuery } from 'react-query';
-import { AmplitudeContext, ApiContext, WsContext } from '../../contexts';
+import {
+  AmplitudeContext,
+  ApiContext,
+  GameContext,
+  WsContext,
+} from '../../contexts';
 import { IWsAnswerChoose, IWsAnswerNext, TRACKS_PER_ROUND } from '../../utils';
-import { IPlaylist, ITrack } from '../../interfaces';
 import { Counter, Loader, Track } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
+import { Components } from '../../api/api.types';
 import { Music } from './components/Music';
 import { Header } from './components/Header';
 import { Progressbar } from './components/Progressbar';
+import { PauseMenu } from './components/PauseMenu';
 
 const TracksLayout = styled.View`
   display: flex;
@@ -38,15 +44,16 @@ export const Game = () => {
   const amp = useContext(AmplitudeContext);
   const history = useHistory();
   const { playlistId } = useParams<{ playlistId: string }>();
-  const [tracks, setTracks] = useState<ITrack[]>([]);
+  const [tracks, setTracks] = useState<Components.Schemas.TrackDto[]>([]);
   const [mp3, setMp3] = useState('');
   const [timer, setTimer] = useState(0);
   const [isMp3Loading, setMp3Loading] = useState(true);
+  const [isPause, setPause] = useState(false);
   const [selected, setSelected] = useState('');
   const [correct, setCorrect] = useState('');
   const number = useRef(0);
 
-  useQuery<IPlaylist, Error>(
+  useQuery<Components.Schemas.PlaylistDto, Error>(
     ['getPlaylistById', playlistId],
     () => api.getPlaylistById(playlistId),
     {
@@ -104,48 +111,51 @@ export const Game = () => {
   }, [setPlaylist]);
 
   return (
-    <Music setMp3Loading={setMp3Loading} mp3={mp3}>
-      <GameLayout>
-        <Header />
-        {isMp3Loading || !tracks.length ? (
-          <Loader />
-        ) : (
-          <>
-            <TracksLayout
-              onClick={() => {
-                if (selected) {
-                  clearTimeout(timer);
-                  getNextTracks();
-                  amp.logEvent('Result Skipped');
-                }
-              }}
-            >
-              <Counter current={number.current} />
-              {tracks.map((track) => (
-                <View
-                  key={track.id + selected + correct}
-                  style={css`
-                    margin-bottom: 16px;
-                  `}
-                >
-                  <Track
-                    disabled={!!selected}
-                    selected={track.id === selected}
-                    success={track.id === correct}
-                    onPress={() => {
-                      if (!selected) {
-                        choose(track.id);
-                      }
-                    }}
-                    {...track}
-                  />
-                </View>
-              ))}
-            </TracksLayout>
-            <Progressbar key={mp3} />
-          </>
-        )}
-      </GameLayout>
-    </Music>
+    <GameContext.Provider value={{ number, isPause, setPause }}>
+      <Music setMp3Loading={setMp3Loading} mp3={mp3}>
+        <GameLayout>
+          <Header />
+          {isMp3Loading || !tracks.length ? (
+            <Loader />
+          ) : (
+            <>
+              <TracksLayout
+                onClick={() => {
+                  if (selected) {
+                    clearTimeout(timer);
+                    getNextTracks();
+                    amp.logEvent('Result Skipped');
+                  }
+                }}
+              >
+                <Counter />
+                {tracks.map((track) => (
+                  <View
+                    key={track.id + selected + correct}
+                    style={css`
+                      margin-bottom: 16px;
+                    `}
+                  >
+                    <Track
+                      disabled={!!selected}
+                      selected={track.id === selected}
+                      success={track.id === correct}
+                      onPress={() => {
+                        if (!selected) {
+                          choose(track.id);
+                        }
+                      }}
+                      {...track}
+                    />
+                  </View>
+                ))}
+              </TracksLayout>
+              <Progressbar key={mp3} />
+            </>
+          )}
+        </GameLayout>
+        <PauseMenu />
+      </Music>
+    </GameContext.Provider>
   );
 };

@@ -6,9 +6,9 @@ import { InteractionState, Pressable } from 'react-native';
 
 import { Text } from '../Text';
 import { SchevronRightIcon } from '../icons';
-import { IPlaylist } from '../../interfaces';
+import { Components } from '../../api/api.types';
 
-interface Props extends IPlaylist {}
+interface Props extends Components.Schemas.PlaylistDto {}
 
 const TitleLayout = styled.View<Partial<Props>>`
   display: flex;
@@ -17,7 +17,7 @@ const TitleLayout = styled.View<Partial<Props>>`
 
 const PlaylistName = styled(Text)<Partial<Props>>`
   margin-top: 8px;
-  font-weight: 600;
+  font-family: ${({ theme }) => theme.fontFamilySemiBold};
   font-size: 14px;
   line-height: 17px;
   color: ${({ theme }) => theme.colors.main80};
@@ -39,7 +39,7 @@ export const PlaylistInfo: FC<Props> = ({ name }) => {
           <TitleLayout>
             <Text
               style={css`
-                font-weight: 500;
+                font-family: ${theme.fontFamilyMedium};
                 font-size: 14px;
                 line-height: 17px;
                 margin-right: 8px;

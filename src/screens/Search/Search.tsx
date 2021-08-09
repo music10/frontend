@@ -5,8 +5,8 @@ import { useQuery } from 'react-query';
 import styled from '@emotion/native';
 import { useTheme } from '@emotion/react';
 
-import { View } from 'react-native';
 import {
+  BottomMenu,
   Link,
   MenuItem,
   NotFound,
@@ -16,8 +16,8 @@ import {
 } from '../../components';
 import { RewindIcon } from '../../components/icons';
 import { AmplitudeContext, ApiContext } from '../../contexts';
-import { IPlaylist } from '../../interfaces';
 import { ROUTES } from '../../routes/Routes.types';
+import { Components } from '../../api/api.types';
 
 const SearchLayout = styled.View`
   display: flex;
@@ -27,6 +27,7 @@ const SearchLayout = styled.View`
 `;
 const BackLayout = styled.View`
   margin: 0 16px;
+  line-height: 0;
 `;
 const SearchFieldLayout = styled.View`
   margin-left: 16px;
@@ -34,6 +35,7 @@ const SearchFieldLayout = styled.View`
 `;
 const ByArtistLayout = styled.View`
   padding: 16px 8px;
+  margin-bottom: 16px;
 `;
 
 export const Search: FC = () => {
@@ -52,7 +54,7 @@ export const Search: FC = () => {
     };
   }, [amp]);
 
-  const request = useQuery<IPlaylist[], Error>(
+  const request = useQuery<Components.Schemas.PlaylistDto[], Error>(
     ['searchPlaylists', query, byArtist],
     () =>
       byArtist
@@ -65,7 +67,7 @@ export const Search: FC = () => {
       <SearchLayout>
         <BackLayout>
           <Link to={ROUTES.Playlists}>
-            <RewindIcon fill={theme.colors.main50} />
+            <RewindIcon fill={theme.colors.main50} height={24} width={24} />
           </Link>
         </BackLayout>
         <SearchFieldLayout>
@@ -84,31 +86,23 @@ export const Search: FC = () => {
           setValue={setByArtist}
         />
       </ByArtistLayout>
-      <View style={{ marginTop: 16 }}>
-        {query ? (
-          request.isSuccess && !request.data?.length ? (
-            <>
-              <View
-                style={{
-                  flexGrow: 1,
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}
-              >
-                <NotFound byArtist={byArtist} />
-              </View>
+      {query ? (
+        request.isSuccess && !request.data?.length ? (
+          <>
+            <NotFound byArtist={byArtist} />
+            <BottomMenu>
               <Link
                 to={ROUTES.Playlists}
                 component={MenuItem}
                 icon={RewindIcon}
                 text={t('ToPlaylists')}
               />
-            </>
-          ) : (
-            <PlaylistList {...request} />
-          )
-        ) : null}
-      </View>
+            </BottomMenu>
+          </>
+        ) : (
+          <PlaylistList {...request} />
+        )
+      ) : null}
     </>
   );
 };

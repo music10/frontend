@@ -7,4 +7,4 @@ export default {
   component: Counter,
 } as Meta;
 
-export const Default: Story = (args) => <Counter current={6} {...args} />;
+export const Default: Story = (args) => <Counter {...args} />;

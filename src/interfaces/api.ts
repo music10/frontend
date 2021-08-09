@@ -1,9 +1,11 @@
-import { IPlaylist } from './playlist.interface';
+import { Components } from '../api/api.types';
 
 export interface IApi {
-  getCherryPickPlaylists: () => Promise<IPlaylist[]>;
-  searchPlaylists: (query: string) => Promise<IPlaylist[]>;
-  searchPlaylistsByArtist: (query: string) => Promise<IPlaylist[]>;
+  getCherryPickPlaylists: () => Promise<Components.Schemas.PlaylistDto[]>;
+  searchPlaylists: (query: string) => Promise<Components.Schemas.PlaylistDto[]>;
+  searchPlaylistsByArtist: (
+    query: string,
+  ) => Promise<Components.Schemas.PlaylistDto[]>;
   getShareImage: (
     playlist: string,
     guess: number,

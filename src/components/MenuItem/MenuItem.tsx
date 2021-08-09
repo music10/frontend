@@ -15,7 +15,7 @@ interface Props extends PressableProps {
 const StyledText = styled(Text)<Partial<Props>>(
   ({ primary, theme }) => `
   color: ${primary ? theme.colors.bg : theme.colors.main};
-  font-weight: 600;
+  font-family: ${theme.fontFamilySemiBold};
   font-size: 14px;
   margin-left: 24px;
   line-height: 24px;

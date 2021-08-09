@@ -3,8 +3,10 @@
   "NotFoundSubtext": "среди публичных плейлистов,\nгде больше 50 песен",
   "Playlist": "Плейлист",
   "SearchInSpotify": "Найти в Spotify",
+  "Completed": "Пройдено",
+  "Play": "Играть",
+  "Exit": "Выход",
   "ToPlaylists": "К плейлистам",
   "Share": "Поделиться результатом",
-  "FindByArtist": "Искать по исполнителям",
-  "Play": "Играть"
+  "FindByArtist": "Искать по исполнителям"
 }

@@ -1,5 +1,5 @@
 import React, { Dispatch } from 'react';
-import Sound from 'react-native-sound';
+import { SoundData } from 'react-native-use-sound/src/types';
 
 export type usePlayingType = (
   mp3: string,
@@ -8,7 +8,7 @@ export type usePlayingType = (
   play: () => void;
   stop: () => void;
   pause: () => void;
-  sound: Sound | null;
+  sound: SoundData | null;
   isPlaying: boolean;
   duration: number | null;
 };

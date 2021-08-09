@@ -3,37 +3,30 @@ import styled, { css } from '@emotion/native';
 import { InteractionState, Pressable, PressableProps } from 'react-native';
 
 import { useTheme } from '@emotion/react';
-import { ITrack } from '../../interfaces';
 import { Text } from '../Text';
+import { Components } from '../../api/api.types';
 
-interface Props extends ITrack, PressableProps {
+interface Props extends Components.Schemas.TrackDto, PressableProps {
   success?: boolean;
   selected?: boolean;
 }
 
 const Artist = styled(Text)<Partial<Props>>(
-  ({ theme, disabled, success, selected }) => `
-  font-weight: 600;
+  ({ theme, success }) => `
+  font-family: ${theme.fontFamilySemiBold};
   font-size: 14px;
   text-align: center;
-  color: ${
-    success
-      ? theme.colors.accent
-      : disabled && !selected
-      ? theme.colors.main80
-      : theme.colors.main
-  };
+  color: ${success ? theme.colors.accent : theme.colors.main};
 `,
 );
 
 const TrackName = styled(Text)<Partial<Props>>(
-  ({ theme, disabled, success }) => `
-  font-weight: 500;
+  ({ theme, success }) => `
+  font-family: ${theme.fontFamilyMedium};
   font-size: 14px;
   text-align: center;
   margin-top: 8px;
-  opacity: ${disabled ? 0.5 : 1};
-  color: ${success ? theme.colors.accent : theme.colors.main};
+  color: ${success ? theme.colors.accent : theme.colors.main80};
 `,
 );
 
@@ -53,13 +46,12 @@ export const Track: FC<Props> = ({
       key={id}
       style={({ hovered, pressed }: InteractionState) => css`
         padding: 16px;
-        background: ${!disabled && (hovered || pressed)
+        opacity: ${disabled && !selected ? '0.5' : '1'};
+        background-color: ${!disabled && (hovered || pressed)
           ? theme.colors.main10
           : 'transparent'};
         border: ${success
           ? `2px solid ${theme.colors.accent}`
-          : disabled && !selected
-          ? `2px solid ${theme.colors.main20}`
           : `2px solid ${theme.colors.main50}`};
       `}
       disabled={disabled}

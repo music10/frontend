@@ -23,7 +23,9 @@ export const SearchField: FC<TextInputProps> = (props) => {
         align-items: center;
         padding: 8px 16px;
         border: 2px solid transparent;
-        background: ${hovered ? theme.colors.main20 : theme.colors.main10};
+        background-color: ${hovered
+          ? theme.colors.main20
+          : theme.colors.main10};
         border-radius: 0;
       `}
     >
@@ -39,7 +41,7 @@ export const SearchField: FC<TextInputProps> = (props) => {
               color: ${pressed ? theme.colors.main80 : theme.colors.main50};
               margin-left: 16px;
               font-size: 18px;
-              font-family: ${theme.fontFamily};
+              font-family: ${theme.fontFamilyMedium};
             `}
             {...props}
           />

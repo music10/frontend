@@ -10,6 +10,7 @@ import {
   Result as ResultComponent,
   MenuItem,
   PlaylistInfo,
+  BottomMenu,
 } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import { ReplayIcon, ShareIcon } from '../../components/icons';
@@ -19,7 +20,6 @@ import { IWsAnswerResult } from '../../utils';
 
 const StartLayout = styled.View`
   display: flex;
-  padding: 32px 16px;
   align-items: stretch;
   height: 100%;
 `;
@@ -84,19 +84,21 @@ export const Result = () => {
       <ResultLayout>
         <ResultComponent guess={result.guessed} text={result.text} />
       </ResultLayout>
-      <Link
-        to={ROUTES.Playlists}
-        component={MenuItem}
-        primary
-        icon={ReplayIcon}
-        text={t('ToPlaylists')}
-        onClick={() => {
-          amp.logEvent('Restarted');
-        }}
-      />
-      {Platform.OS !== 'web' && (
-        <MenuItem icon={ShareIcon} text={t('Share')} onPress={share} />
-      )}
+      <BottomMenu>
+        <Link
+          to={ROUTES.Playlists}
+          component={MenuItem}
+          primary
+          icon={ReplayIcon}
+          text={t('ToPlaylists')}
+          onClick={() => {
+            amp.logEvent('Restarted');
+          }}
+        />
+        {Platform.OS !== 'web' && (
+          <MenuItem icon={ShareIcon} text={t('Share')} onPress={share} />
+        )}
+      </BottomMenu>
     </StartLayout>
   );
 };

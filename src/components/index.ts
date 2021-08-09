@@ -4,12 +4,14 @@ export * from './ErrorMessage';
 export * from './Loader';
 export * from './Result';
 
+export * from './BottomMenu';
 export * from './Button';
 export * from './Link';
 export * from './Search';
 export * from './Counter';
 export * from './Progress';
 export * from './Track';
+export * from './Text';
 export * from './SearchField';
 export * from './MenuItem';
 export * from './NotFound';

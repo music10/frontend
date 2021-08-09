@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 
 import { IApi } from '../interfaces/api';
-import { IPlaylist } from '../interfaces';
+import { Components } from '../api/api.types';
 import { API_HOST } from './variables';
 
 export class Api implements IApi {
@@ -13,20 +13,24 @@ export class Api implements IApi {
     });
   }
 
-  getCherryPickPlaylists = (): Promise<IPlaylist[]> =>
+  getCherryPickPlaylists = (): Promise<Components.Schemas.PlaylistDto[]> =>
     this.axiosInstance.get('playlists/cherry-pick').then(({ data }) => data);
 
-  searchPlaylists = (query?: string): Promise<IPlaylist[]> =>
+  searchPlaylists = (
+    query?: string,
+  ): Promise<Components.Schemas.PlaylistDto[]> =>
     this.axiosInstance
       .get('playlists', { params: { query } })
       .then(({ data }) => data);
 
-  searchPlaylistsByArtist = (query?: string): Promise<IPlaylist[]> =>
+  searchPlaylistsByArtist = (
+    query?: string,
+  ): Promise<Components.Schemas.PlaylistDto[]> =>
     this.axiosInstance
       .get('playlists/artist', { params: { query } })
       .then(({ data }) => data);
 
-  getPlaylistById = (id: string): Promise<IPlaylist> =>
+  getPlaylistById = (id: string): Promise<Components.Schemas.PlaylistDto> =>
     this.axiosInstance.get(`playlists/${id}`).then(({ data }) => data);
 
   getShareImage = (playlistId: string, guess: number): Promise<string> =>

@@ -1,6 +1,6 @@
 import io, { Socket } from 'socket.io-client';
 
-import { IPlaylist, ITrack } from '../interfaces';
+import { Components } from '../api/api.types';
 import { WS_HOST } from './variables';
 
 export interface IResult {
@@ -10,11 +10,11 @@ export interface IResult {
 
 export interface IWsAnswerNext {
   mp3: string;
-  tracks: ITrack[];
+  tracks: Components.Schemas.TrackDto[];
 }
 
 export interface IWsAnswerResult {
-  playlist: IPlaylist;
+  playlist: Components.Schemas.PlaylistDto;
   guessed: number;
   text: string;
 }
