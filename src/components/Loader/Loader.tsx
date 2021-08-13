@@ -1,19 +1,17 @@
-import React from 'react';
-import styled from '@emotion/native';
-import { ActivityIndicator } from 'react-native';
-import { useTheme } from '@emotion/react';
+import React, { FC } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 
-const StyledLoader = styled.View`
-  width: 200px;
-  height: 200px;
-  margin: auto;
-`;
+import { theme } from '../../themes';
 
-export const Loader: React.FC = () => {
-  const theme = useTheme();
-  return (
-    <StyledLoader>
-      <ActivityIndicator size="large" color={theme.colors.accent} />
-    </StyledLoader>
-  );
-};
+export const Loader: FC = () => (
+  <View
+    style={{
+      alignSelf: 'center',
+      width: 200,
+      height: 200,
+      margin: 'auto',
+    }}
+  >
+    <ActivityIndicator size="large" color={theme.colors.accent} />
+  </View>
+);

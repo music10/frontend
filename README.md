@@ -4,7 +4,6 @@
 Hybrid application (Web and Android) for Musiq
 
 ### NPM-scripts
-* _api:generate_ - Pull new version of API
 * _start_ - Run application
 * _build_ - Build application
 * _help_ - Help React native CLI
@@ -30,8 +29,6 @@ Hybrid application (Web and Android) for Musiq
 Rename **/src/utils/~variables.example.ts** to **/src/utils/variables.ts** and change some variables;
 
 `npm install` for install all dependencies
-
-`npm run api:generate` for pull last version types for API
 
 ### Testing
 `npm run test` for run all unit-tests

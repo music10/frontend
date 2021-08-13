@@ -1,28 +1,6 @@
 import io, { Socket } from 'socket.io-client';
 
-import { Components } from '../api/api.types';
 import { WS_HOST } from './variables';
-
-export interface IResult {
-  progress: boolean[];
-  isEnd: boolean;
-}
-
-export interface IWsAnswerNext {
-  mp3: string;
-  tracks: Components.Schemas.TrackDto[];
-}
-
-export interface IWsAnswerResult {
-  playlist: Components.Schemas.PlaylistDto;
-  guessed: number;
-  text: string;
-}
-
-export interface IWsAnswerChoose {
-  correct: string;
-  result: IResult;
-}
 
 export class WS {
   private socket: Socket;

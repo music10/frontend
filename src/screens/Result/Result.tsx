@@ -1,10 +1,8 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Platform } from 'react-native';
-import { useTranslation } from 'react-i18next';
-
-import styled from '@emotion/native';
-
 import { useHistory } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { Platform, StyleProp, View, ViewStyle } from 'react-native';
+
 import {
   Link,
   Result as ResultComponent,
@@ -16,19 +14,20 @@ import { ROUTES } from '../../routes/Routes.types';
 import { ReplayIcon, ShareIcon } from '../../components/icons';
 import { AmplitudeContext, ApiContext, WsContext } from '../../contexts';
 import { useShare } from '../../hooks';
-import { IWsAnswerResult } from '../../utils';
+import { ResultDto } from '../../api/api.types';
 
-const StartLayout = styled.View`
-  display: flex;
-  align-items: stretch;
-  height: 100%;
-`;
-const ResultLayout = styled.View`
-  display: flex;
-  flex-grow: 1;
-  align-self: center;
-  justify-content: center;в
-`;
+const layoutStyle: StyleProp<ViewStyle> = {
+  display: 'flex',
+  alignItems: 'stretch',
+  height: '100%',
+};
+
+const resultStyle: StyleProp<ViewStyle> = {
+  display: 'flex',
+  flexGrow: 1,
+  alignSelf: 'center',
+  justifyContent: 'center',
+};
 
 export const Result = () => {
   const { t } = useTranslation();
@@ -36,7 +35,7 @@ export const Result = () => {
   const api = useContext(ApiContext);
   const ws = useContext(WsContext);
   const amp = useContext(AmplitudeContext);
-  const [result, setResult] = useState<IWsAnswerResult>({} as IWsAnswerResult);
+  const [result, setResult] = useState<ResultDto>({} as ResultDto);
   const [shareData, setShareData] = useState('');
   const shareFunction = useShare();
 
@@ -57,7 +56,7 @@ export const Result = () => {
     const playlistId = result.playlist?.id;
     const guess = result.guessed;
     if (playlistId) {
-      setShareData(await api.getShareImage(playlistId, guess));
+      setShareData(await api.share(playlistId, guess));
     }
   }, [api, result]);
 
@@ -79,11 +78,11 @@ export const Result = () => {
   }, [loadShareImage, result]);
 
   return (
-    <StartLayout>
+    <View style={layoutStyle}>
       <PlaylistInfo {...result.playlist} />
-      <ResultLayout>
+      <View style={resultStyle}>
         <ResultComponent guess={result.guessed} text={result.text} />
-      </ResultLayout>
+      </View>
       <BottomMenu>
         <Link
           to={ROUTES.Playlists}
@@ -99,6 +98,6 @@ export const Result = () => {
           <MenuItem icon={ShareIcon} text={t('Share')} onPress={share} />
         )}
       </BottomMenu>
-    </StartLayout>
+    </View>
   );
 };

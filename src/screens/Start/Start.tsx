@@ -1,30 +1,32 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from '@emotion/native';
-import { Link, Logo, MenuItem, BottomMenu } from '../../components';
+import { StyleProp, View, ViewStyle } from 'react-native';
+
+import { BottomMenu, Link, Logo, MenuItem } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import { PlayIcon } from '../../components/icons';
 
-const StartLayout = styled.View`
-  display: flex;
-  align-items: stretch;
-  height: 100%;
-`;
-const LogoLayout = styled.View`
-  display: flex;
-  flex-grow: 1;
-  align-self: center;
-  justify-content: center;
-`;
+const layoutStyle: StyleProp<ViewStyle> = {
+  display: 'flex',
+  alignItems: 'stretch',
+  height: '100%',
+};
+
+const logoStyle: StyleProp<ViewStyle> = {
+  display: 'flex',
+  flexGrow: 1,
+  alignSelf: 'center',
+  justifyContent: 'center',
+};
 
 export const Start = () => {
   const { t } = useTranslation();
 
   return (
-    <StartLayout>
-      <LogoLayout>
+    <View style={layoutStyle}>
+      <View style={logoStyle}>
         <Logo />
-      </LogoLayout>
+      </View>
       <BottomMenu>
         <Link
           to={ROUTES.Playlists}
@@ -34,6 +36,6 @@ export const Start = () => {
           text={t('Play')}
         />
       </BottomMenu>
-    </StartLayout>
+    </View>
   );
 };

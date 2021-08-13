@@ -1,3 +1,4 @@
+export * from './Eye';
 export * from './Search';
 export * from './Exit';
 export * from './Play';
@@ -6,6 +7,7 @@ export * from './Rewind';
 export * from './Replay';
 export * from './Share';
 export * from './SchevronRight';
+export * from './Spotify';
 export * from './Rewind';
 export * from './NoArtists';
 export * from './NoPlaylists';

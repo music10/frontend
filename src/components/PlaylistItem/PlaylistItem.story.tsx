@@ -1,5 +1,7 @@
 import React from 'react';
 import { Meta, Story } from '@storybook/react/types-6-0';
+import { MenuProvider } from 'react-native-popup-menu';
+import { PLAYLIST_MOCK } from '../../mocks';
 import { PlaylistItem } from './PlaylistItem';
 
 export default {
@@ -8,10 +10,7 @@ export default {
 } as Meta;
 
 export const Default: Story = (args) => (
-  <PlaylistItem
-    cover="https://music.dergunov.net/images/hiphop.svg"
-    id="playlist"
-    name="Русский рэп"
-    {...args}
-  />
+  <MenuProvider>
+    <PlaylistItem {...PLAYLIST_MOCK} {...args} />
+  </MenuProvider>
 );

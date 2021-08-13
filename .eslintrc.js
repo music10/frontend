@@ -4,10 +4,13 @@ module.exports = {
     project: "tsconfig.json",
     sourceType: "module",
   },
-  plugins: ["@typescript-eslint/eslint-plugin", "prettier", "@emotion", "react-hooks", "import"],
-  extends: [
-    "@react-native-community",
+  plugins: [
+    "@typescript-eslint/eslint-plugin",
+    "prettier",
+    "react-hooks",
+    "import",
   ],
+  extends: ["@react-native-community"],
   root: true,
   env: {
     browser: true,
@@ -18,7 +21,7 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    'import/order': 'error',
-    "prettier/prettier": 'warn'
+    "import/order": "error",
+    "prettier/prettier": "warn",
   },
 };

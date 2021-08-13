@@ -1,78 +1,132 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback, useState } from 'react';
+import { useHistory } from 'react-router';
 import {
-  Image,
   InteractionState,
-  Platform,
   Pressable,
-  PressableProps,
+  StyleProp,
+  TextStyle,
+  View,
+  ViewStyle,
 } from 'react-native';
-import styled, { css } from '@emotion/native';
-import { SvgUri } from 'react-native-svg';
-import { useTheme } from '@emotion/react';
-import { Text } from '../Text';
-import { Link } from '../Link';
-import { ROUTES } from '../../routes/Routes.types';
+import {
+  Menu,
+  MenuOption,
+  MenuOptions,
+  MenuTrigger,
+} from 'react-native-popup-menu';
 
-interface Props extends PressableProps {
+import { Text } from '../Text';
+import { PlaylistCover } from '../PlaylistCover';
+import { ROUTES } from '../../routes/Routes.types';
+import { Link } from '../Link';
+import { EyeIcon } from '../icons';
+import { BlurView } from '../BlurView/BlurView';
+import { theme } from '../../themes';
+
+const textStyle: StyleProp<TextStyle> = {
+  fontFamily: theme.fontFamilySemiBold,
+  fontSize: 14,
+  marginLeft: 24,
+  color: theme.colors.main,
+};
+const contextMenuItemStyle: StyleProp<ViewStyle> = {
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+};
+const contextMenuTextStyle: StyleProp<TextStyle> = {
+  margin: 18,
+  fontFamily: theme.fontFamilySemiBold,
+  fontSize: 14,
+  color: theme.colors.main,
+};
+
+interface Props {
   id: string;
   cover: string;
   name: string;
 }
 
-const StyledText = styled(Text)`
-  font-family: ${({ theme }) => theme.fontFamilySemiBold};
-  font-size: 14px;
-  margin-left: 24px;
-  color: ${({ theme }) => theme.colors.main};
-`;
+export const PlaylistItem: FC<Props> = ({ id, name, cover }) => {
+  const history = useHistory();
+  const goToGame = useCallback(() => {
+    history.push(`${ROUTES.Game}/${id}`);
+  }, [history, id]);
 
-const borderRadiusStyle = {
-  borderRadius: 4,
-};
+  const [opened, setOpened] = useState(false);
 
-export const PlaylistItem: FC<Props> = ({ id, name, cover, ...props }) => {
-  const theme = useTheme();
+  const hideContextMenu = useCallback(() => {
+    setOpened(false);
+  }, []);
+
+  const showContextMenu = useCallback(() => {
+    setOpened(true);
+  }, []);
 
   return (
-    <Link
-      to={`${ROUTES.Game}/${id}`}
-      component={Pressable}
-      accessibilityRole="button"
-      style={({ hovered, pressed }: InteractionState) =>
-        css`
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          border-radius: 4px;
-          padding: 8px;
-          margin: 0 8px;
-          background-color: ${hovered
+    <Menu
+      opened={opened}
+      onBackdropPress={hideContextMenu}
+      onClose={hideContextMenu}
+    >
+      <MenuTrigger
+        triggerOnLongPress
+        customStyles={{
+          triggerOuterWrapper: { position: 'absolute', right: 32 },
+        }}
+      />
+      <Pressable
+        testID="PlaylistItem"
+        accessibilityRole="button"
+        onPress={goToGame}
+        onLongPress={showContextMenu}
+        delayLongPress={450}
+        style={({ hovered, pressed }: InteractionState) => ({
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          borderRadius: 4,
+          paddingVertical: 8,
+          paddingHorizontal: 8,
+          marginVertical: 0,
+          marginHorizontal: 8,
+          backgroundColor: hovered
             ? theme.colors.main10
             : pressed
             ? theme.colors.main5
-            : 'transparent'};
-          border: 2px solid transparent;
-        `
-      }
-      {...props}
-    >
-      {Platform.OS === 'web' ? (
-        <img
-          alt=""
-          src={cover}
-          height={48}
-          width={48}
-          style={borderRadiusStyle}
-        />
-      ) : /\.svg$/.test(cover) && cover ? (
-        <SvgUri uri={cover} height={48} width={48} style={borderRadiusStyle} />
-      ) : (
-        <Image
-          source={{ uri: cover, height: 48, width: 48 }}
-          style={borderRadiusStyle}
-        />
-      )}
-      <StyledText>{name}</StyledText>
-    </Link>
+            : 'transparent',
+          borderWidth: 2,
+          borderColor: 'transparent',
+        })}
+      >
+        <PlaylistCover size={48} cover={cover} />
+        <Text style={textStyle}>{name}</Text>
+      </Pressable>
+
+      <MenuOptions
+        optionsContainerStyle={{
+          backgroundColor: theme.colors.main20,
+          borderRadius: 8,
+          zIndex: 1,
+          elevation: 1,
+          overflow: 'hidden',
+        }}
+      >
+        <BlurView overlayColor="transparent">
+          <MenuOption>
+            <View style={{ paddingVertical: 8, paddingHorizontal: 16 }}>
+              <Link
+                to={`${ROUTES.Playlist}/${id}`}
+                component={Pressable}
+                style={contextMenuItemStyle}
+              >
+                <EyeIcon fill={theme.colors.main} />
+                <Text style={contextMenuTextStyle}>Просмотреть</Text>
+              </Link>
+            </View>
+          </MenuOption>
+        </BlurView>
+      </MenuOptions>
+    </Menu>
   );
 };

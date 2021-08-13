@@ -1,47 +1,47 @@
 import React, { FC } from 'react';
-import styled from '@emotion/native';
 import { useTranslation } from 'react-i18next';
+import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
 
 import { Text } from '../Text';
-import { Components } from '../../api/api.types';
+import { theme } from '../../themes';
+import { PlaylistDto } from '../../api/api.types';
 
-interface Props extends Components.Schemas.PlaylistDto {}
+const layoutStyle: StyleProp<ViewStyle> = {
+  paddingVertical: 8,
+  paddingHorizontal: 8,
+  borderWidth: 2,
+  borderColor: 'transparent',
+};
 
-const StyledPlaylistInfo = styled.View<Partial<Props>>`
-  padding: 8px;
-  border: 2px solid transparent;
-`;
+const titleWrapStyle: StyleProp<ViewStyle> = {
+  display: 'flex',
+  flexDirection: 'row',
+};
 
-const TitleLayout = styled.View<Partial<Props>>`
-  display: flex;
-  flex-direction: row;
-`;
+const titleStyle: StyleProp<TextStyle> = {
+  fontFamily: theme.fontFamilyMedium,
+  fontSize: 14,
+  lineHeight: 17,
+  marginRight: 8,
+  color: theme.colors.main50,
+};
+const nameStyle: StyleProp<TextStyle> = {
+  marginTop: 8,
+  fontFamily: theme.fontFamilySemiBold,
+  fontSize: 14,
+  lineHeight: 17,
+  color: theme.colors.main80,
+};
 
-const Title = styled(Text)<Partial<Props>>`
-  font-family: ${({ theme }) => theme.fontFamilyMedium};
-  font-size: 14px;
-  line-height: 17px;
-  margin-right: 8px;
-  color: ${({ theme }) => theme.colors.main50};
-`;
-
-const PlaylistName = styled(Text)<Partial<Props>>`
-  margin-top: 8px;
-  font-family: ${({ theme }) => theme.fontFamilySemiBold};
-  font-size: 14px;
-  line-height: 17px;
-  color: ${({ theme }) => theme.colors.main80};
-`;
-
-export const PlaylistInfo: FC<Props> = ({ name }) => {
+export const PlaylistInfo: FC<PlaylistDto> = ({ name }) => {
   const { t } = useTranslation();
 
   return (
-    <StyledPlaylistInfo>
-      <TitleLayout>
-        <Title>{t('Playlist')}</Title>
-      </TitleLayout>
-      <PlaylistName>{name}</PlaylistName>
-    </StyledPlaylistInfo>
+    <View style={layoutStyle}>
+      <View style={titleWrapStyle}>
+        <Text style={titleStyle}>{t('Playlist')}</Text>
+      </View>
+      <Text style={nameStyle}>{name}</Text>
+    </View>
   );
 };

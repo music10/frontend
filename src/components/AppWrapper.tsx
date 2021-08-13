@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
-import { NativeRouter } from 'react-router-native';
-
-import { useBackHandler } from '@react-native-community/hooks';
 import { useHistory } from 'react-router';
+import { NativeRouter } from 'react-router-native';
+import { useBackHandler } from '@react-native-community/hooks';
 
 const HandleBack: FC = ({ children }) => {
   const history = useHistory();

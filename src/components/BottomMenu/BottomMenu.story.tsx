@@ -12,6 +12,6 @@ export default {
 export const Default: Story = (args) => (
   <BottomMenu {...args}>
     <MenuItem primary text="К плейлистам" icon={PlayIcon} />
-    <MenuItem primary text="Поделиться результатами" icon={ShareIcon} />
+    <MenuItem text="Поделиться результатами" icon={ShareIcon} />
   </BottomMenu>
 );

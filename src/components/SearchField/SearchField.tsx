@@ -6,43 +6,40 @@ import {
   TextInput,
   TextInputProps,
 } from 'react-native';
-import { css } from '@emotion/native';
-import { useTheme } from '@emotion/react';
 
+import { theme } from '../../themes';
 import { SearchIcon } from '../icons';
 
 export const SearchField: FC<TextInputProps> = (props) => {
   const { t } = useTranslation('translation');
-  const theme = useTheme();
 
   return (
     <Pressable
-      style={({ hovered }: InteractionState) => css`
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        padding: 8px 16px;
-        border: 2px solid transparent;
-        background-color: ${hovered
-          ? theme.colors.main20
-          : theme.colors.main10};
-        border-radius: 0;
-      `}
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderWidth: 2,
+        borderColor: 'transparent',
+        backgroundColor: theme.colors.main10,
+      }}
     >
       {({ pressed }: InteractionState) => (
         <>
           <SearchIcon fill={theme.colors.main50} width={24} height={24} />
           <TextInput
             placeholder={t('SearchInSpotify')}
-            style={css`
-              width: 100%;
-              padding: 0;
-              border: 0;
-              color: ${pressed ? theme.colors.main80 : theme.colors.main50};
-              margin-left: 16px;
-              font-size: 18px;
-              font-family: ${theme.fontFamilyMedium};
-            `}
+            style={{
+              width: '100%',
+              padding: 0,
+              borderWidth: 0,
+              color: pressed ? theme.colors.main80 : theme.colors.main50,
+              marginLeft: 16,
+              fontSize: 18,
+              fontFamily: theme.fontFamilyMedium,
+            }}
             {...props}
           />
         </>

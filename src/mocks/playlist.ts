@@ -1,7 +1,7 @@
-import { Components } from '../api/api.types';
+import { PlaylistDto } from '../api/api.types';
 
-export const PLAYLIST_MOCK: Components.Schemas.PlaylistDto = {
+export const PLAYLIST_MOCK: PlaylistDto = {
   id: '6536346784',
   name: 'Русский рэп',
-  cover: 'https://music.dergunov.net/images/hiphop.png',
+  cover: 'https://i.scdn.co/image/ab67706c0000bebb9fe89caef5c9f3d66b0d988d',
 };

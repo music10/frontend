@@ -1,24 +1,25 @@
 import React, { FC, useContext } from 'react';
-import styled from '@emotion/native';
-import { TRACKS_PER_ROUND } from '../../utils';
+
 import { Text } from '../Text';
 import { GameContext } from '../../contexts';
-
-const StyledCounter = styled(Text)`
-  font-size: 16px;
-  font-family: ${({ theme }) => theme.fontFamilyMedium};
-  padding: 16px;
-  margin-bottom: 24px;
-  text-align: center;
-  color: ${({ theme }) => theme.colors.main};
-`;
+import { theme } from '../../themes';
+import { TRACKS_PER_ROUND } from '../../utils';
 
 export const Counter: FC = () => {
   const { number } = useContext(GameContext);
 
   return (
-    <StyledCounter>
+    <Text
+      style={{
+        fontSize: 16,
+        fontFamily: theme.fontFamilyMedium,
+        padding: 16,
+        marginBottom: 24,
+        textAlign: 'center',
+        color: theme.colors.main,
+      }}
+    >
       {number.current} / {TRACKS_PER_ROUND}
-    </StyledCounter>
+    </Text>
   );
 };

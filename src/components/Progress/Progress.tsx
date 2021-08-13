@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Easing, View } from 'react-native';
-import { css } from '@emotion/native';
-import { useTheme } from '@emotion/react';
+import { theme } from '../../themes';
 
 interface Props {
   state: 'start' | 'stop';
@@ -9,7 +8,6 @@ interface Props {
 }
 
 export const Progress: FC<Props> = ({ state, callback }) => {
-  const theme = useTheme();
   const animationValue = useRef(new Animated.Value(0)).current;
   const [duration, setDuration] = useState(10000);
 
@@ -37,11 +35,7 @@ export const Progress: FC<Props> = ({ state, callback }) => {
   }, [animation, animationValue, callback, state]);
 
   return (
-    <View
-      style={css`
-        height: 6px;
-      `}
-    >
+    <View style={{ height: 6 }}>
       <Animated.View
         style={{
           height: 6,

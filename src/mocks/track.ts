@@ -1,6 +1,6 @@
-import { Components } from '../api/api.types';
+import { TrackDto } from '../api/api.types';
 
-export const TRACK_MOCK: Components.Schemas.TrackDto = {
+export const TRACK_MOCK: TrackDto = {
   id: '92007768',
   name: 'Вокруг шум',
   artist: 'Каста',
