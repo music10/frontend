@@ -10,7 +10,7 @@
     "help": "react-scripts start --help",
     "deploy": "scp -r build/* musiq@msq.app:~/web",
     "android": "react-native run-android --deviceId R5CN30KJ6FL",
-    "android:release": "react-native run-android --variant release --deviceId R5CN30KJ6FL",
+    "android:release": "react-native run-android --variant release",
     "build:android:apk": "cd android && gradlew assembleRelease",
     "build:android:aab": "cd android && gradlew bundleRelease",
     "storybook": "start-storybook -p 6006 -s public",

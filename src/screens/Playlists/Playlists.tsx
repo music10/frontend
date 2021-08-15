@@ -26,7 +26,7 @@ export const Playlists: React.FC = () => {
   return (
     <View style={layoutStyle}>
       <Search />
-      <PlaylistList {...request} />
+      <PlaylistList withRandom {...request} />
     </View>
   );
 };

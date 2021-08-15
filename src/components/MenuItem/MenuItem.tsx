@@ -30,12 +30,12 @@ export const MenuItem: FC<Props> = ({
       paddingVertical: 16,
       paddingLeft: hovered || pressed ? 32 : 24,
       paddingRight: 24,
-      backgroundColor: primary ? theme.colors.accent : theme.colors.bg,
+      backgroundColor: primary ? theme.colors.accent : 'transparent',
       borderWidth: 2,
-      borderColor: primary ? theme.colors.accent : theme.colors.bg,
+      borderColor: primary ? theme.colors.accent : 'transparent',
       ...Platform.select({
         android: {
-          elevation: !primary || !(hovered || pressed) ? 0 : hovered ? 30 : 15,
+          elevation: !primary || !(hovered || pressed) ? 0 : hovered ? 10 : 5,
         },
         web: {
           boxShadow:
