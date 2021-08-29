@@ -22,6 +22,7 @@ import { Link } from '../Link';
 import { EyeIcon } from '../icons';
 import { BlurView } from '../BlurView/BlurView';
 import { theme } from '../../themes';
+import { PlaylistDto } from '../../api/api.types';
 
 const textStyle: StyleProp<TextStyle> = {
   fontFamily: theme.fontFamilySemiBold,
@@ -41,13 +42,16 @@ const contextMenuTextStyle: StyleProp<TextStyle> = {
   color: theme.colors.main,
 };
 
-interface Props {
-  id: string;
-  cover: string;
-  name: string;
+interface Props extends PlaylistDto {
+  withoutMenu?: boolean;
 }
 
-export const PlaylistItem: FC<Props> = ({ id, name, cover }) => {
+export const PlaylistItem: FC<Props> = ({
+  id,
+  name,
+  cover,
+  withoutMenu = false,
+}) => {
   const history = useHistory();
   const goToGame = useCallback(() => {
     history.push(`${ROUTES.Game}/${id}`);
@@ -69,12 +73,14 @@ export const PlaylistItem: FC<Props> = ({ id, name, cover }) => {
       onBackdropPress={hideContextMenu}
       onClose={hideContextMenu}
     >
-      <MenuTrigger
-        triggerOnLongPress
-        customStyles={{
-          triggerOuterWrapper: { position: 'absolute', right: 32 },
-        }}
-      />
+      {!withoutMenu && (
+        <MenuTrigger
+          triggerOnLongPress
+          customStyles={{
+            triggerOuterWrapper: { position: 'absolute', right: 32 },
+          }}
+        />
+      )}
       <Pressable
         testID="PlaylistItem"
         accessibilityRole="button"
@@ -103,30 +109,32 @@ export const PlaylistItem: FC<Props> = ({ id, name, cover }) => {
         <Text style={textStyle}>{name}</Text>
       </Pressable>
 
-      <MenuOptions
-        optionsContainerStyle={{
-          backgroundColor: theme.colors.main20,
-          borderRadius: 8,
-          zIndex: 1,
-          elevation: 1,
-          overflow: 'hidden',
-        }}
-      >
-        <BlurView overlayColor="transparent">
-          <MenuOption>
-            <View style={{ paddingVertical: 8, paddingHorizontal: 16 }}>
-              <Link
-                to={`${ROUTES.Playlist}/${id}`}
-                component={Pressable}
-                style={contextMenuItemStyle}
-              >
-                <EyeIcon fill={theme.colors.main} />
-                <Text style={contextMenuTextStyle}>Просмотреть</Text>
-              </Link>
-            </View>
-          </MenuOption>
-        </BlurView>
-      </MenuOptions>
+      {!withoutMenu && (
+        <MenuOptions
+          optionsContainerStyle={{
+            backgroundColor: theme.colors.main20,
+            borderRadius: 8,
+            zIndex: 1,
+            elevation: 1,
+            overflow: 'hidden',
+          }}
+        >
+          <BlurView overlayColor="transparent">
+            <MenuOption>
+              <View style={{ paddingVertical: 8, paddingHorizontal: 16 }}>
+                <Link
+                  to={`${ROUTES.Playlist}/${id}`}
+                  component={Pressable}
+                  style={contextMenuItemStyle}
+                >
+                  <EyeIcon fill={theme.colors.main} />
+                  <Text style={contextMenuTextStyle}>Просмотреть</Text>
+                </Link>
+              </View>
+            </MenuOption>
+          </BlurView>
+        </MenuOptions>
+      )}
     </Menu>
   );
 };
