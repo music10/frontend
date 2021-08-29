@@ -1,43 +1,45 @@
 import React, { FC } from 'react';
-import styled from '@emotion/native';
+import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { NoArtists, NoPlaylists } from '../icons';
 import { Text } from '../Text';
+import { theme } from '../../themes';
 
 interface Props {
   byArtist?: boolean;
 }
 
-const NotFoundLayout = styled.View`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex-grow: 1;
-`;
+const layoutStyles: StyleProp<ViewStyle> = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexGrow: 1,
+};
 
-const StyledText = styled(Text)`
-  color: ${({ theme }) => theme.colors.main};
-  font-size: 16px;
-  font-family: ${({ theme }) => theme.fontFamilySemiBold}; ;
-`;
-const StyledSubText = styled(Text)`
-  margin-top: 8px;
-  text-align: center;
-  color: ${({ theme }) => theme.colors.main50};
-  font-size: 14px;
-  font-family: ${({ theme }) => theme.fontFamilyMedium}; ;
-`;
+const textStyle: StyleProp<TextStyle> = {
+  color: theme.colors.main,
+  fontSize: 16,
+  fontFamily: theme.fontFamilySemiBold,
+};
+
+const subTextStyle: StyleProp<TextStyle> = {
+  marginTop: 8,
+  textAlign: 'center',
+  color: theme.colors.main50,
+  fontSize: 14,
+  fontFamily: theme.fontFamilyMedium,
+};
 
 export const NotFound: FC<Props> = ({ byArtist }) => {
   const { t } = useTranslation();
 
   return (
-    <NotFoundLayout>
+    <View style={layoutStyles}>
       {byArtist ? <NoArtists /> : <NoPlaylists />}
-      <StyledText>{t('NotFound')}</StyledText>
-      <StyledSubText>{t('NotFoundSubtext')}</StyledSubText>
-    </NotFoundLayout>
+      <Text style={textStyle}>{t('NotFound')}</Text>
+      <Text style={subTextStyle}>{t('NotFoundSubtext')}</Text>
+    </View>
   );
 };

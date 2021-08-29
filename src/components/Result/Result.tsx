@@ -1,38 +1,41 @@
 import React from 'react';
-import styled from '@emotion/native';
+import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
+
 import { Text } from '../Text';
+import { theme } from '../../themes';
 
 interface Props {
   guess: number;
   text: string;
 }
 
-const ResultLayout = styled.View`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-const StyledTotal = styled(Text)`
-  font-family: ${({ theme }) => theme.fontFamilyExtraBoldItalic};
-  font-size: 64px;
-  line-height: 78px;
-  text-align: center;
-  color: ${({ theme }) => theme.colors.accent};
-`;
+const layoutStyle: StyleProp<ViewStyle> = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
 
-const StyledText = styled(Text)`
-  font-style: italic;
-  font-family: ${({ theme }) => theme.fontFamilyBold};
-  font-size: 24px;
-  line-height: 29px;
-  text-align: center;
-  color: ${({ theme }) => theme.colors.accent};
-`;
+const totalStyle: StyleProp<TextStyle> = {
+  fontFamily: theme.fontFamilyExtraBoldItalic,
+  fontSize: 64,
+  lineHeight: 78,
+  textAlign: 'center',
+  color: theme.colors.accent,
+};
+
+const textStyle: StyleProp<TextStyle> = {
+  fontStyle: 'italic',
+  fontFamily: theme.fontFamilyExtraBoldItalic,
+  fontSize: 24,
+  lineHeight: 29,
+  textAlign: 'center',
+  color: theme.colors.accent,
+};
 
 export const Result: React.FC<Props> = ({ guess, text }) => (
-  <ResultLayout>
-    <StyledTotal>{guess} / 10</StyledTotal>
-    <StyledText>{text}</StyledText>
-  </ResultLayout>
+  <View style={layoutStyle}>
+    <Text style={totalStyle}>{guess} / 10</Text>
+    <Text style={textStyle}>{text}</Text>
+  </View>
 );

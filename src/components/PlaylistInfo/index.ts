@@ -1,1 +1,1 @@
-export * from './PlaylistInfoStatic';
+export * from './PlaylistInfo';

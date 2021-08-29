@@ -1,6 +1,16 @@
-import styled from '@emotion/native';
+import React, { FC } from 'react';
+import { TextProps, StyleSheet, Text as RNText } from 'react-native';
+import { theme } from '../themes';
 
-export const Text = styled.Text`
-  font-family: ${({ theme }) => theme.fontFamilyMedium};
-  text-decoration: none;
-`;
+export const Text: FC<TextProps> = ({ style, ...props }) => (
+  <RNText
+    style={StyleSheet.compose(
+      {
+        fontFamily: theme.fontFamilyMedium,
+        textDecorationLine: 'none',
+      },
+      style,
+    )}
+    {...props}
+  />
+);

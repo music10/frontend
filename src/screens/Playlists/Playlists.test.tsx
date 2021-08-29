@@ -1,32 +1,31 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react-native';
+import { render, waitFor } from '@testing-library/react';
 import { PLAYLISTS_MOCK } from '../../mocks';
-import { Api, WS } from '../../utils';
+import { Api } from '../../utils';
 import { AppWrapper, ContextProvider } from '../../components';
 import { Playlists } from './Playlists';
 
-describe('Playlists', () => {
+describe('Playlists screen', () => {
   const api = new Api();
-  const ws = new WS();
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     jest
       .spyOn(api, 'getCherryPickPlaylists')
       .mockImplementation(async () => PLAYLISTS_MOCK);
   });
 
-  it('Should render', async () => {
-    const { getAllByRole } = render(
+  test('Should render', async () => {
+    const { findAllByRole } = render(
       <AppWrapper>
-        <ContextProvider api={api} ws={ws}>
+        <ContextProvider api={api}>
           <Playlists />
         </ContextProvider>
       </AppWrapper>,
     );
+    expect(api.getCherryPickPlaylists).toHaveBeenCalledTimes(1);
 
-    expect(api.getCherryPickPlaylists).toHaveBeenCalled();
-    await waitFor(() => getAllByRole('button'));
-    expect(getAllByRole('button')).toHaveLength(17);
-    expect(getAllByRole('button')[0]).toContain('Русский рэп');
+    await waitFor(() => expect(findAllByRole('button')).toBeTruthy());
+    expect(findAllByRole('button')).toBe(5);
+    expect(true).toBe(true);
   });
 });

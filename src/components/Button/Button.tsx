@@ -1,22 +1,26 @@
 import React, { FC } from 'react';
-import { Pressable, PressableProps } from 'react-native';
-import { css } from '@emotion/native';
-import { useTheme } from '@emotion/react';
+import { Pressable, PressableProps, StyleSheet } from 'react-native';
 
-export const Button: FC<PressableProps> = (props) => {
-  const theme = useTheme();
+import { theme } from '../../themes';
 
-  return (
-    <Pressable
-      style={css`
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        padding: 16px 24px;
-        background-color: ${theme.colors.bg};
-        border: 2px solid ${theme.colors.bg};
-      `}
-      {...props}
-    />
-  );
-};
+export const Button: FC<PressableProps> = ({ style, ...props }) => (
+  <Pressable
+    style={(state) =>
+      StyleSheet.compose(
+        {
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingVertical: 16,
+          paddingHorizontal: 24,
+          backgroundColor: theme.colors.bg,
+          borderWidth: 2,
+          borderStyle: 'solid',
+          borderColor: theme.colors.bg,
+        },
+        style instanceof Function ? style(state) : style,
+      )
+    }
+    {...props}
+  />
+);

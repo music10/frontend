@@ -6,37 +6,40 @@ import React, {
   useState,
 } from 'react';
 import { useHistory, useParams } from 'react-router';
-import styled, { css } from '@emotion/native';
-
-import { View } from 'react-native';
 import { useQuery } from 'react-query';
+import { StyleProp, View, ViewStyle } from 'react-native';
+
 import {
   AmplitudeContext,
   ApiContext,
   GameContext,
   WsContext,
 } from '../../contexts';
-import { IWsAnswerChoose, IWsAnswerNext, TRACKS_PER_ROUND } from '../../utils';
+import { TRACKS_PER_ROUND } from '../../utils';
 import { Counter, Loader, Track } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
-import { Components } from '../../api/api.types';
+import {
+  ChooseAnswerDto,
+  PlaylistDto,
+  ShortTrackDto,
+  TracksForUserDto,
+} from '../../api/api.types';
 import { Music } from './components/Music';
 import { Header } from './components/Header';
 import { Progressbar } from './components/Progressbar';
 import { PauseMenu } from './components/PauseMenu';
 
-const TracksLayout = styled.View`
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-`;
-
-const GameLayout = styled.View`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
+const tracksStyle: StyleProp<ViewStyle> = {
+  display: 'flex',
+  flexDirection: 'column',
+  padding: 16,
+};
+const gameStyle: StyleProp<ViewStyle> = {
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+};
 
 export const Game = () => {
   const ws = useContext(WsContext);
@@ -44,7 +47,7 @@ export const Game = () => {
   const amp = useContext(AmplitudeContext);
   const history = useHistory();
   const { playlistId } = useParams<{ playlistId: string }>();
-  const [tracks, setTracks] = useState<Components.Schemas.TrackDto[]>([]);
+  const [tracks, setTracks] = useState<ShortTrackDto[]>([]);
   const [mp3, setMp3] = useState('');
   const [timer, setTimer] = useState(0);
   const [isMp3Loading, setMp3Loading] = useState(true);
@@ -53,9 +56,9 @@ export const Game = () => {
   const [correct, setCorrect] = useState('');
   const number = useRef(0);
 
-  useQuery<Components.Schemas.PlaylistDto, Error>(
+  useQuery<PlaylistDto, Error>(
     ['getPlaylistById', playlistId],
-    () => api.getPlaylistById(playlistId),
+    () => api.getPlaylist(playlistId),
     {
       onSuccess: ({ name, id }) =>
         amp.logEvent('Playlist Opened', { name, id }),
@@ -67,10 +70,10 @@ export const Game = () => {
       setSelected('');
       setCorrect('');
       setTracks([]);
-      (await ws.next()).once('nextTracks', ({ tracks, mp3 }: IWsAnswerNext) => {
+      (await ws.next()).once('nextTracks', (answer: TracksForUserDto) => {
         setMp3Loading(true);
-        setTracks(tracks);
-        setMp3(mp3);
+        setTracks(answer.tracks);
+        setMp3(answer.mp3);
       });
 
       ++number.current;
@@ -92,7 +95,7 @@ export const Game = () => {
       setSelected(trackId);
       (await ws.choose(trackId)).once(
         'chooseResult',
-        (answer: IWsAnswerChoose) => {
+        (answer: ChooseAnswerDto) => {
           amp.logEvent('Track Chosen', {
             variants: tracks.map(({ artist, name }) => ({ artist, name })),
             chosen: tracks.findIndex(({ id }) => id === trackId) + 1,
@@ -113,13 +116,14 @@ export const Game = () => {
   return (
     <GameContext.Provider value={{ number, isPause, setPause }}>
       <Music setMp3Loading={setMp3Loading} mp3={mp3}>
-        <GameLayout>
+        <View style={gameStyle}>
           <Header />
           {isMp3Loading || !tracks.length ? (
             <Loader />
           ) : (
             <>
-              <TracksLayout
+              <View
+                style={tracksStyle}
                 onClick={() => {
                   if (selected) {
                     clearTimeout(timer);
@@ -132,9 +136,7 @@ export const Game = () => {
                 {tracks.map((track) => (
                   <View
                     key={track.id + selected + correct}
-                    style={css`
-                      margin-bottom: 16px;
-                    `}
+                    style={{ marginBottom: 16 }}
                   >
                     <Track
                       disabled={!!selected}
@@ -149,11 +151,11 @@ export const Game = () => {
                     />
                   </View>
                 ))}
-              </TracksLayout>
+              </View>
               <Progressbar key={mp3} />
             </>
           )}
-        </GameLayout>
+        </View>
         <PauseMenu />
       </Music>
     </GameContext.Provider>

@@ -11,6 +11,7 @@ export default {
 export const Default: Story = (args) => (
   <MenuItem icon={PlayIcon} text="Text" {...args} />
 );
+
 export const Primary: Story = (args) => (
   <MenuItem icon={PlayIcon} primary text="Text" {...args} />
 );

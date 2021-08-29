@@ -46,6 +46,21 @@
             height: 100vh; /* Fallback for browsers that do not support Custom Properties */
             height: var(--viewportHeight, 100vh);
         }
+
+        body {
+            background: #151518;
+            margin: auto;
+            max-width: 520px;
+        }
+
+        #root {
+            display: flex;
+            flex-direction: column;
+        }
+
+        :focus {
+            outline: none;
+        }
     </style>
     <script>
       function setViewportHeight() {
@@ -53,7 +68,7 @@
         document.documentElement.style.setProperty('--viewportHeight', `${viewportHeight}px`);
       }
 
-      setViewportHeight();
+    setViewportHeight();
 
       window.addEventListener('resize', () => {
         setViewportHeight();

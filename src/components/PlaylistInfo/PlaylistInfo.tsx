@@ -1,50 +1,65 @@
-import { useTheme } from '@emotion/react';
 import React, { FC } from 'react';
-import styled, { css } from '@emotion/native';
 import { useTranslation } from 'react-i18next';
-import { InteractionState, Pressable } from 'react-native';
+import {
+  InteractionState,
+  Pressable,
+  StyleProp,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 
 import { Text } from '../Text';
+import { Link } from '../Link';
 import { SchevronRightIcon } from '../icons';
-import { Components } from '../../api/api.types';
+import { ROUTES } from '../../routes/Routes.types';
+import { theme } from '../../themes';
+import { PlaylistDto } from '../../api/api.types';
 
-interface Props extends Components.Schemas.PlaylistDto {}
+interface Props extends PlaylistDto {}
 
-const TitleLayout = styled.View<Partial<Props>>`
-  display: flex;
-  flex-direction: row;
-`;
+const linkStyle: StyleProp<ViewStyle> = {
+  marginHorizontal: 16,
+  marginTop: 80,
+  marginBottom: 0,
+  paddingVertical: 8,
+  paddingHorizontal: 8,
+  borderWidth: 2,
+  borderColor: 'transparent',
+};
+const titleWrapStyle: StyleProp<ViewStyle> = {
+  display: 'flex',
+  flexDirection: 'row',
+};
 
-const PlaylistName = styled(Text)<Partial<Props>>`
-  margin-top: 8px;
-  font-family: ${({ theme }) => theme.fontFamilySemiBold};
-  font-size: 14px;
-  line-height: 17px;
-  color: ${({ theme }) => theme.colors.main80};
-`;
+const nameStyle: StyleProp<TextStyle> = {
+  marginTop: 8,
+  fontFamily: theme.fontFamilySemiBold,
+  fontSize: 14,
+  lineHeight: 17,
+  color: theme.colors.main80,
+};
 
-export const PlaylistInfo: FC<Props> = ({ name }) => {
-  const theme = useTheme();
+export const PlaylistInfo: FC<Props> = ({ name, id }) => {
   const { t } = useTranslation();
 
   return (
-    <Pressable
-      style={css`
-        padding: 8px;
-        border: 2px solid transparent;
-      `}
+    <Link
+      to={`${ROUTES.Playlist}/${id}`}
+      component={Pressable}
+      style={linkStyle}
     >
       {({ hovered }: InteractionState) => (
         <>
-          <TitleLayout>
+          <View style={titleWrapStyle}>
             <Text
-              style={css`
-                font-family: ${theme.fontFamilyMedium};
-                font-size: 14px;
-                line-height: 17px;
-                margin-right: 8px;
-                color: ${hovered ? theme.colors.main80 : theme.colors.main50};
-              `}
+              style={{
+                fontFamily: theme.fontFamilyMedium,
+                fontSize: 14,
+                lineHeight: 17,
+                marginRight: 8,
+                color: hovered ? theme.colors.main80 : theme.colors.main50,
+              }}
             >
               {t('Playlist')}
             </Text>
@@ -53,10 +68,10 @@ export const PlaylistInfo: FC<Props> = ({ name }) => {
               height={16}
               fill={hovered ? theme.colors.main80 : theme.colors.main50}
             />
-          </TitleLayout>
-          <PlaylistName>{name}</PlaylistName>
+          </View>
+          <Text style={nameStyle}>{name}</Text>
         </>
       )}
-    </Pressable>
+    </Link>
   );
 };

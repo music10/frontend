@@ -1,10 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
 
-import { IApi } from '../interfaces/api';
-import { Components } from '../api/api.types';
+import { PlaylistDto, TrackDto } from '../api/api.types';
 import { API_HOST } from './variables';
 
-export class Api implements IApi {
+export class Api {
   private axiosInstance: AxiosInstance;
 
   constructor() {
@@ -13,27 +12,29 @@ export class Api implements IApi {
     });
   }
 
-  getCherryPickPlaylists = (): Promise<Components.Schemas.PlaylistDto[]> =>
+  getCherryPickPlaylists = (): Promise<PlaylistDto[]> =>
     this.axiosInstance.get('playlists/cherry-pick').then(({ data }) => data);
 
-  searchPlaylists = (
-    query?: string,
-  ): Promise<Components.Schemas.PlaylistDto[]> =>
+  getRandomPlaylist = (): Promise<PlaylistDto> =>
+    this.axiosInstance.get('playlists/random').then(({ data }) => data);
+
+  getPlaylists = (query?: string): Promise<PlaylistDto[]> =>
     this.axiosInstance
       .get('playlists', { params: { query } })
       .then(({ data }) => data);
 
-  searchPlaylistsByArtist = (
-    query?: string,
-  ): Promise<Components.Schemas.PlaylistDto[]> =>
+  getPlaylistsByArtist = (query?: string): Promise<PlaylistDto[]> =>
     this.axiosInstance
       .get('playlists/artist', { params: { query } })
       .then(({ data }) => data);
 
-  getPlaylistById = (id: string): Promise<Components.Schemas.PlaylistDto> =>
+  getPlaylist = (id: string): Promise<PlaylistDto> =>
     this.axiosInstance.get(`playlists/${id}`).then(({ data }) => data);
 
-  getShareImage = (playlistId: string, guess: number): Promise<string> =>
+  findTracksByPlaylistId = (id: string): Promise<TrackDto[]> =>
+    this.axiosInstance.get(`playlists/${id}/tracks`).then(({ data }) => data);
+
+  share = (playlistId: string, guess: number): Promise<string> =>
     this.axiosInstance
       .get('share', { params: { playlistId, guess } })
       .then(({ data }) => data);

@@ -1,9 +1,14 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
-
-import styled from '@emotion/native';
-import { useTheme } from '@emotion/react';
+import { StyleProp, View, ViewStyle } from 'react-native';
 
 import {
   BottomMenu,
@@ -17,34 +22,41 @@ import {
 import { RewindIcon } from '../../components/icons';
 import { AmplitudeContext, ApiContext } from '../../contexts';
 import { ROUTES } from '../../routes/Routes.types';
-import { Components } from '../../api/api.types';
+import { theme } from '../../themes';
+import { PlaylistDto } from '../../api/api.types';
 
-const SearchLayout = styled.View`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 12px 16px;
-`;
-const BackLayout = styled.View`
-  margin: 0 16px;
-  line-height: 0;
-`;
-const SearchFieldLayout = styled.View`
-  margin-left: 16px;
-  flex: 1 1 auto;
-`;
-const ByArtistLayout = styled.View`
-  padding: 16px 8px;
-  margin-bottom: 16px;
-`;
+const layoutStyle: StyleProp<ViewStyle> = {
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingVertical: 12,
+  paddingHorizontal: 16,
+};
+const backStyle: StyleProp<ViewStyle> = {
+  marginVertical: 0,
+  marginHorizontal: 16,
+};
+
+const searchFieldStyle: StyleProp<ViewStyle> = {
+  marginLeft: 16,
+  flexGrow: 1,
+  flexShrink: 1,
+  flexBasis: 'auto',
+};
+const byArtistStyle: StyleProp<ViewStyle> = {
+  paddingVertical: 16,
+  paddingHorizontal: 8,
+  marginBottom: 16,
+};
 
 export const Search: FC = () => {
   const { t } = useTranslation();
-  const theme = useTheme();
   const api = useContext(ApiContext);
   const amp = useContext(AmplitudeContext);
   const [query, setQuery] = useState('');
+  const [allowRequest, setAllowRequest] = useState(false);
   const [byArtist, setByArtist] = useState(false);
+  const timeout = useRef(0);
 
   useEffect(() => {
     amp.logEvent('Search Opened');
@@ -54,38 +66,51 @@ export const Search: FC = () => {
     };
   }, [amp]);
 
-  const request = useQuery<Components.Schemas.PlaylistDto[], Error>(
+  const onChangeHandler = useCallback((value: string) => {
+    setQuery(value);
+    clearTimeout(timeout.current);
+    timeout.current = +setTimeout(() => {
+      setAllowRequest(true);
+    }, 500);
+  }, []);
+
+  const onChangeByArtistHandler = useCallback((value: boolean) => {
+    setByArtist(value);
+    setAllowRequest(true);
+  }, []);
+
+  const request = useQuery<PlaylistDto[], Error>(
     ['searchPlaylists', query, byArtist],
     () =>
-      byArtist
-        ? api.searchPlaylistsByArtist(query)
-        : api.searchPlaylists(query),
+      byArtist ? api.getPlaylistsByArtist(query) : api.getPlaylists(query),
+    {
+      enabled: !!query && allowRequest,
+      onSettled: () => setAllowRequest(false),
+    },
   );
 
   return (
     <>
-      <SearchLayout>
-        <BackLayout>
-          <Link to={ROUTES.Playlists}>
-            <RewindIcon fill={theme.colors.main50} height={24} width={24} />
-          </Link>
-        </BackLayout>
-        <SearchFieldLayout>
+      <View style={layoutStyle}>
+        <Link to={ROUTES.Playlists} style={backStyle}>
+          <RewindIcon fill={theme.colors.main50} height={24} width={24} />
+        </Link>
+        <View style={searchFieldStyle}>
           <SearchField
-            onChangeText={setQuery}
+            onChangeText={onChangeHandler}
             autoFocus
             spellCheck={false}
             placeholderTextColor={theme.colors.main50}
           />
-        </SearchFieldLayout>
-      </SearchLayout>
-      <ByArtistLayout>
+        </View>
+      </View>
+      <View style={byArtistStyle}>
         <SwitchWithLabel
           text={t('FindByArtist')}
           value={byArtist}
-          setValue={setByArtist}
+          setValue={onChangeByArtistHandler}
         />
-      </ByArtistLayout>
+      </View>
       {query ? (
         request.isSuccess && !request.data?.length ? (
           <>
