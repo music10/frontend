@@ -16,6 +16,8 @@
 
 android/.gradle
 android/app/build
+android/app/gradle.properties
+android/app/release.keystore
 
 # misc
 .DS_Store
@@ -28,8 +30,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-release.keystore
-gradle.properties
 
 src/utils/variables.ts
 src/utils/variables.web.ts

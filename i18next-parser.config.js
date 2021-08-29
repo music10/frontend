@@ -1,5 +1,4 @@
 module.exports = {
-  locales: ['en', 'ru'],
-  output: 'src/locales/$LOCALE/$NAMESPACE.json',
-
+  locales: ["en", "ru"],
+  output: "src/locales/$LOCALE/$NAMESPACE.json",
 };
