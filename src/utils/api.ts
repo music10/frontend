@@ -15,7 +15,7 @@ export class Api {
   getCherryPickPlaylists = (): Promise<PlaylistDto[]> =>
     this.axiosInstance.get('playlists/cherry-pick').then(({ data }) => data);
 
-  getRandomPlaylist = (): Promise<PlaylistDto[]> =>
+  getRandomPlaylist = (): Promise<PlaylistDto> =>
     this.axiosInstance.get('playlists/random').then(({ data }) => data);
 
   getPlaylists = (query?: string): Promise<PlaylistDto[]> =>
