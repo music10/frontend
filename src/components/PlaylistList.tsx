@@ -35,8 +35,7 @@ export const PlaylistList: FC<Props> = ({
   return (
     <MenuProvider>
       <ScrollView>
-        {/*TODO*/}
-        {false && withRandom && randomPlaylist ? (
+        {withRandom && randomPlaylist ? (
           <PlaylistItem
             withoutMenu
             id={randomPlaylist?.id ?? ''}

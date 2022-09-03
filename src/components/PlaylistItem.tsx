@@ -53,9 +53,10 @@ export const PlaylistItem: FC<Props> = ({
   withoutMenu = false,
 }) => {
   const navigate = useNavigate();
-  const goToGame = useCallback(() => {
-    navigate(`${ROUTES.Game}/${type}/${id}`);
-  }, [id, navigate, type]);
+  const goToGame = useCallback(
+    () => navigate(`${ROUTES.Game}/${type}/${id}`),
+    [id, navigate, type],
+  );
 
   const [opened, setOpened] = useState(false);
 
