@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import {
   InteractionState,
   Pressable,
@@ -18,7 +18,6 @@ import {
 import { Text } from '../Text';
 import { PlaylistCover } from '../PlaylistCover';
 import { ROUTES } from '../../routes/Routes.types';
-import { Link } from '../Link';
 import { EyeIcon } from '../icons';
 import { BlurView } from '../BlurView/BlurView';
 import { theme } from '../../themes';
@@ -42,7 +41,7 @@ const contextMenuTextStyle: StyleProp<TextStyle> = {
   color: theme.colors.main,
 };
 
-interface Props extends PlaylistDto {
+interface Props extends Pick<PlaylistDto, 'id' | 'name' | 'cover' | 'type'> {
   withoutMenu?: boolean;
 }
 
@@ -50,12 +49,13 @@ export const PlaylistItem: FC<Props> = ({
   id,
   name,
   cover,
+  type,
   withoutMenu = false,
 }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const goToGame = useCallback(() => {
-    history.push(`${ROUTES.Game}/${id}`);
-  }, [history, id]);
+    navigate(`${ROUTES.Game}/${type}/${id}`);
+  }, [id, navigate, type]);
 
   const [opened, setOpened] = useState(false);
 
@@ -122,14 +122,13 @@ export const PlaylistItem: FC<Props> = ({
           <BlurView overlayColor="transparent">
             <MenuOption>
               <View style={{ paddingVertical: 8, paddingHorizontal: 16 }}>
-                <Link
-                  to={`${ROUTES.Playlist}/${id}`}
-                  component={Pressable}
+                <Pressable
                   style={contextMenuItemStyle}
+                  onPress={() => navigate(`${ROUTES.Playlist}/${type}/${id}`)}
                 >
                   <EyeIcon fill={theme.colors.main} />
                   <Text style={contextMenuTextStyle}>Просмотреть</Text>
-                </Link>
+                </Pressable>
               </View>
             </MenuOption>
           </BlurView>

@@ -1,10 +1,9 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Platform, StyleProp, View, ViewStyle } from 'react-native';
 
 import {
-  Link,
   Result as ResultComponent,
   MenuItem,
   PlaylistInfo,
@@ -31,7 +30,7 @@ const resultStyle: StyleProp<ViewStyle> = {
 
 export const Result = () => {
   const { t } = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const api = useContext(ApiContext);
   const ws = useContext(WsContext);
   const amp = useContext(AmplitudeContext);
@@ -49,8 +48,8 @@ export const Result = () => {
   const getResults = useCallback(async () => {
     (await ws.getResult())
       .once('result', setResult)
-      .once('exception', () => history.replace(ROUTES.Start));
-  }, [history, ws]);
+      .once('exception', () => navigate(ROUTES.Start, { replace: true }));
+  }, [navigate, ws]);
 
   const loadShareImage = useCallback(async () => {
     const playlistId = result.playlist?.id;
@@ -84,14 +83,13 @@ export const Result = () => {
         <ResultComponent guess={result.guessed} text={result.text} />
       </View>
       <BottomMenu>
-        <Link
-          to={ROUTES.Playlists}
-          component={MenuItem}
+        <MenuItem
           primary
           icon={ReplayIcon}
           text={t('ToPlaylists')}
-          onClick={() => {
+          onPress={() => {
             amp.logEvent('Restarted');
+            navigate(ROUTES.Playlists);
           }}
         />
         {Platform.OS !== 'web' && (

@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useQuery } from 'react-query';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
@@ -23,6 +23,7 @@ import {
   PlaylistDto,
   ShortTrackDto,
   TracksForUserDto,
+  Type,
 } from '../../api/api.types';
 import { Music } from './components/Music';
 import { Header } from './components/Header';
@@ -45,8 +46,8 @@ export const Game = () => {
   const ws = useContext(WsContext);
   const api = useContext(ApiContext);
   const amp = useContext(AmplitudeContext);
-  const history = useHistory();
-  const { playlistId } = useParams<{ playlistId: string }>();
+  const navigate = useNavigate();
+  const { type, id } = useParams<{ type: Type; id: string }>();
   const [tracks, setTracks] = useState<ShortTrackDto[]>([]);
   const [mp3, setMp3] = useState('');
   const [timer, setTimer] = useState(0);
@@ -56,16 +57,24 @@ export const Game = () => {
   const [correct, setCorrect] = useState('');
   const number = useRef(0);
 
+  console.info('GAME RENDER');
+
   useQuery<PlaylistDto, Error>(
-    ['getPlaylistById', playlistId],
-    () => api.getPlaylist(playlistId),
+    ['getPlaylistById', type, id],
+    () => {
+      console.info('GET PLAYLIST');
+
+      return api.getPlaylist(type ?? Type.playlist, id ?? '');
+    },
     {
-      onSuccess: ({ name, id }) =>
+      onSuccess: ({ id, name }) =>
         amp.logEvent('Playlist Opened', { name, id }),
     },
   );
 
   const getNextTracks = useCallback(async () => {
+    console.info('GET NEXT');
+
     if (number.current < TRACKS_PER_ROUND) {
       setSelected('');
       setCorrect('');
@@ -78,20 +87,23 @@ export const Game = () => {
 
       ++number.current;
     } else {
-      history.replace(ROUTES.Results);
+      navigate(ROUTES.Results, { replace: true });
     }
-  }, [ws, history]);
+  }, [ws, navigate]);
 
   const setPlaylist = useCallback(
     async () =>
-      (await ws.setPlaylist(playlistId))
+      (await ws.setPlaylist(id ?? '', type))
         .once('playlist', getNextTracks)
-        .once('exception', () => history.replace(ROUTES.Start)),
-    [ws, playlistId, getNextTracks, history],
+        .once('exception', (e) => {
+          console.error(e);
+          navigate(ROUTES.Start, { replace: true });
+        }),
+    [ws, id, type, getNextTracks, navigate],
   );
 
   const choose = useCallback(
-    async (trackId) => {
+    async (trackId: string) => {
       setSelected(trackId);
       (await ws.choose(trackId)).once(
         'chooseResult',

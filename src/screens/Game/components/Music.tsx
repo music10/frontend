@@ -1,4 +1,11 @@
-import React, { Dispatch, useContext, useEffect, useState } from 'react';
+import React, {
+  FC,
+  Dispatch,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import { usePlaying } from '../../../hooks';
 import { GameContext, MusicContext } from '../../../contexts';
@@ -8,7 +15,11 @@ export interface Props {
   setMp3Loading: Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Music: React.FC<Props> = ({ mp3, setMp3Loading, children }) => {
+export const Music: FC<PropsWithChildren<Props>> = ({
+  mp3,
+  setMp3Loading,
+  children,
+}) => {
   const { play, stop, pause, ...rest } = usePlaying(mp3, setMp3Loading);
   const [allowPlay, setAllowPlay] = useState(true);
   const { isPause } = useContext(GameContext);

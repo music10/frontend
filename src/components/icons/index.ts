@@ -7,7 +7,7 @@ export * from './Rewind';
 export * from './Replay';
 export * from './Share';
 export * from './SchevronRight';
-export * from './Spotify';
+export * from './YaMusic';
 export * from './Rewind';
 export * from './NoArtists';
 export * from './NoPlaylists';

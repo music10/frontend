@@ -59,6 +59,7 @@ export const MenuItem: FC<Props> = ({
         color: primary ? theme.colors.bg : theme.colors.main,
         fontFamily: theme.fontFamilySemiBold,
         fontSize: 14,
+        textDecorationLine: 'none',
         marginLeft: 24,
         lineHeight: 24,
       }}

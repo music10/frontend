@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { FC, PropsWithChildren, useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { I18nextProvider } from 'react-i18next';
 
@@ -11,7 +11,7 @@ interface ContextProviderProps {
   ws?: WS;
 }
 
-export const ContextProvider: React.FC<ContextProviderProps> = ({
+export const ContextProvider: FC<PropsWithChildren<ContextProviderProps>> = ({
   children,
   api,
   ws,
@@ -20,7 +20,7 @@ export const ContextProvider: React.FC<ContextProviderProps> = ({
   const apiValue = useMemo(() => api || new Api(), [api]);
   const wsValue = useMemo(() => ws || new WS(), [ws]);
   const queryClient = useMemo(() => new QueryClient(), []);
-
+  console.info('CONTEXT RENDER');
   return (
     <I18nextProvider i18n={i18n}>
       <QueryClientProvider client={queryClient}>

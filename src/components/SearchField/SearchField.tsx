@@ -30,7 +30,7 @@ export const SearchField: FC<TextInputProps> = (props) => {
         <>
           <SearchIcon fill={theme.colors.main50} width={24} height={24} />
           <TextInput
-            placeholder={t('SearchInSpotify')}
+            placeholder={t('Search')}
             style={{
               width: '100%',
               padding: 0,

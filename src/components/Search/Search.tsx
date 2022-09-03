@@ -7,11 +7,11 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
+import { useNavigate } from 'react-router';
 
 import { SearchIcon } from '../icons';
 import { Text } from '../Text';
 import { ROUTES } from '../../routes/Routes.types';
-import { Link } from '../Link';
 import { theme } from '../../themes';
 
 const linkStyle: StyleProp<ViewStyle> = {
@@ -28,9 +28,14 @@ const linkStyle: StyleProp<ViewStyle> = {
 
 export const Search: FC<PressableProps> = (props) => {
   const { t } = useTranslation('translation');
+  const navigate = useNavigate();
 
   return (
-    <Link to={ROUTES.Search} component={Pressable} style={linkStyle} {...props}>
+    <Pressable
+      style={linkStyle}
+      onPress={() => navigate(ROUTES.Search)}
+      {...props}
+    >
       {({ hovered, pressed }: InteractionState) => (
         <>
           <SearchIcon
@@ -49,10 +54,10 @@ export const Search: FC<PressableProps> = (props) => {
               fontSize: 24,
             }}
           >
-            {t('SearchInSpotify')}
+            {t('Search')}
           </Text>
         </>
       )}
-    </Link>
+    </Pressable>
   );
 };

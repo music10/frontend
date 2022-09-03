@@ -9,6 +9,6 @@ export type usePlayingType = (
   stop: () => void;
   pause: () => void;
   sound: SoundData | null;
-  isPlaying: boolean;
+  isPlaying?: boolean;
   duration: number | null;
 };
