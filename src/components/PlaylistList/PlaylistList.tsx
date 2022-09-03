@@ -3,7 +3,7 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { ScrollView } from 'react-native';
 import { MenuProvider } from 'react-native-popup-menu';
 
-import { PlaylistDto } from '../../api/api.types';
+import { PlaylistDto, Type } from '../../api/api.types';
 import { ApiContext } from '../../contexts';
 import { Loader } from '../Loader';
 import { ErrorMessage } from '../ErrorMessage';
@@ -35,12 +35,14 @@ export const PlaylistList: FC<Props> = ({
   return (
     <MenuProvider>
       <ScrollView>
-        {withRandom && randomPlaylist ? (
+        {/*TODO*/}
+        {false && withRandom && randomPlaylist ? (
           <PlaylistItem
             withoutMenu
-            id={randomPlaylist.id}
-            cover="https://msq.app/images/random.svg"
+            id={randomPlaylist?.id ?? ''}
+            cover="https://musiq.dergunov.net/images/random.svg"
             name="Случайный плейлист"
+            type={randomPlaylist?.type ?? Type.playlist}
           />
         ) : null}
         {data?.map((playlist) => (

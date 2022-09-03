@@ -1,8 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleProp, View, ViewStyle } from 'react-native';
+import { useNavigate } from 'react-router';
 
-import { BottomMenu, Link, Logo, MenuItem } from '../../components';
+import { BottomMenu, Logo, MenuItem } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import { PlayIcon } from '../../components/icons';
 
@@ -21,6 +22,7 @@ const logoStyle: StyleProp<ViewStyle> = {
 
 export const Start = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <View style={layoutStyle}>
@@ -28,12 +30,11 @@ export const Start = () => {
         <Logo />
       </View>
       <BottomMenu>
-        <Link
-          to={ROUTES.Playlists}
-          component={MenuItem}
-          primary
-          icon={PlayIcon}
+        <MenuItem
           text={t('Play')}
+          icon={PlayIcon}
+          primary
+          onPress={() => navigate(ROUTES.Playlists)}
         />
       </BottomMenu>
     </View>

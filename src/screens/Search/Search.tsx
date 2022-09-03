@@ -9,10 +9,10 @@ import React, {
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 import { StyleProp, View, ViewStyle } from 'react-native';
+import { useNavigate } from 'react-router';
 
 import {
   BottomMenu,
-  Link,
   MenuItem,
   NotFound,
   PlaylistList,
@@ -23,7 +23,7 @@ import { RewindIcon } from '../../components/icons';
 import { AmplitudeContext, ApiContext } from '../../contexts';
 import { ROUTES } from '../../routes/Routes.types';
 import { theme } from '../../themes';
-import { PlaylistDto } from '../../api/api.types';
+import { PlaylistDto, Type } from '../../api/api.types';
 
 const layoutStyle: StyleProp<ViewStyle> = {
   display: 'flex',
@@ -51,6 +51,7 @@ const byArtistStyle: StyleProp<ViewStyle> = {
 
 export const Search: FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const api = useContext(ApiContext);
   const amp = useContext(AmplitudeContext);
   const [query, setQuery] = useState('');
@@ -71,7 +72,7 @@ export const Search: FC = () => {
     clearTimeout(timeout.current);
     timeout.current = +setTimeout(() => {
       setAllowRequest(true);
-    }, 500);
+    }, 1000);
   }, []);
 
   const onChangeByArtistHandler = useCallback((value: boolean) => {
@@ -81,8 +82,7 @@ export const Search: FC = () => {
 
   const request = useQuery<PlaylistDto[], Error>(
     ['searchPlaylists', query, byArtist],
-    () =>
-      byArtist ? api.getPlaylistsByArtist(query) : api.getPlaylists(query),
+    () => api.getPlaylists(byArtist ? Type.artist : Type.playlist, query),
     {
       enabled: !!query && allowRequest,
       onSettled: () => setAllowRequest(false),
@@ -92,9 +92,14 @@ export const Search: FC = () => {
   return (
     <>
       <View style={layoutStyle}>
-        <Link to={ROUTES.Playlists} style={backStyle}>
-          <RewindIcon fill={theme.colors.main50} height={24} width={24} />
-        </Link>
+        <View style={backStyle}>
+          <RewindIcon
+            fill={theme.colors.main50}
+            height={24}
+            width={24}
+            onPress={() => navigate(ROUTES.Playlists)}
+          />
+        </View>
         <View style={searchFieldStyle}>
           <SearchField
             onChangeText={onChangeHandler}
@@ -116,11 +121,10 @@ export const Search: FC = () => {
           <>
             <NotFound byArtist={byArtist} />
             <BottomMenu>
-              <Link
-                to={ROUTES.Playlists}
-                component={MenuItem}
+              <MenuItem
                 icon={RewindIcon}
                 text={t('ToPlaylists')}
+                onPress={() => navigate(ROUTES.Playlists)}
               />
             </BottomMenu>
           </>

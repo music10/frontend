@@ -1,8 +1,9 @@
 import React, { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Platform, StyleProp, TextStyle, View, ViewStyle } from 'react-native';
+import { useNavigate } from 'react-router';
 
-import { BlurView, Link, MenuItem, Text } from '../../../components';
+import { BlurView, MenuItem, Text } from '../../../components';
 import { ExitIcon, PlayIcon } from '../../../components/icons';
 import { ROUTES } from '../../../routes/Routes.types';
 import { TRACKS_PER_ROUND } from '../../../utils';
@@ -58,6 +59,8 @@ const totalStyle: StyleProp<TextStyle> = {
 
 export const PauseMenu: FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
   const { number, isPause, setPause } = useContext(GameContext);
   const ws = useContext(WsContext);
 
@@ -75,12 +78,13 @@ export const PauseMenu: FC = () => {
             primary
             onPress={() => setPause(false)}
           />
-          <Link
-            to={ROUTES.Playlists}
-            onPress={ws.reconnect}
-            component={MenuItem}
+          <MenuItem
             icon={ExitIcon}
             text={t('Exit')}
+            onPress={() => {
+              ws.reconnect();
+              navigate(ROUTES.Playlists);
+            }}
           />
         </View>
       </BlurView>

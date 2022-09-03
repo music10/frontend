@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 
-import { PlaylistDto, TrackDto } from '../api/api.types';
+import { PlaylistDto, Type } from '../api/api.types';
 import { API_HOST } from './variables';
 
 export class Api {
@@ -18,23 +18,15 @@ export class Api {
   getRandomPlaylist = (): Promise<PlaylistDto> =>
     this.axiosInstance.get('playlists/random').then(({ data }) => data);
 
-  getPlaylists = (query?: string): Promise<PlaylistDto[]> =>
+  getPlaylists = (type: Type, query?: string): Promise<PlaylistDto[]> =>
     this.axiosInstance
-      .get('playlists', { params: { query } })
+      .get(`playlists/${type}`, { params: { query } })
       .then(({ data }) => data);
 
-  getPlaylistsByArtist = (query?: string): Promise<PlaylistDto[]> =>
-    this.axiosInstance
-      .get('playlists/artist', { params: { query } })
-      .then(({ data }) => data);
+  getPlaylist = (type: Type, id: string): Promise<PlaylistDto> =>
+    this.axiosInstance.get(`playlists/${type}/${id}`).then(({ data }) => data);
 
-  getPlaylist = (id: string): Promise<PlaylistDto> =>
-    this.axiosInstance.get(`playlists/${id}`).then(({ data }) => data);
-
-  findTracksByPlaylistId = (id: string): Promise<TrackDto[]> =>
-    this.axiosInstance.get(`playlists/${id}/tracks`).then(({ data }) => data);
-
-  share = (playlistId: string, guess: number): Promise<string> =>
+  share = (playlistId: string | number, guess: number): Promise<string> =>
     this.axiosInstance
       .get('share', { params: { playlistId, guess } })
       .then(({ data }) => data);

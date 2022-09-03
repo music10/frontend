@@ -9,7 +9,7 @@ import {
 
 import { Text } from '../Text';
 import { theme } from '../../themes';
-import { TrackDto } from '../../api/api.types';
+import { PlaylistDto } from '../../api/api.types';
 
 const wrapperStyle: StyleProp<ViewStyle> = {
   marginVertical: 16,
@@ -48,11 +48,7 @@ const nameStyle: StyleProp<TextStyle> = {
   color: theme.colors.main,
 };
 
-interface Props {
-  tracks: TrackDto[];
-}
-
-export const PlaylistTracks: FC<Props> = ({ tracks }) => (
+export const PlaylistTracks: FC<Pick<PlaylistDto, 'tracks'>> = ({ tracks }) => (
   <ScrollView>
     <View style={wrapperStyle}>
       {tracks?.map((track, index) => (

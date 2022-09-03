@@ -1,12 +1,11 @@
 import React, { FC, useContext } from 'react';
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
 import {
   BottomMenu,
-  Link,
   Loader,
   MenuItem,
   PlaylistHeader,
@@ -15,8 +14,9 @@ import {
 import { PlayIcon } from '../../components/icons';
 import { ROUTES } from '../../routes/Routes.types';
 import { ApiContext } from '../../contexts';
+import { PlaylistDto, Type } from '../../api/api.types';
 import { Header } from './components/Header';
-import { OpenInSpotify } from './components/OpenInSpotify';
+import { OpenInYaMusic } from './components/OpenInYaMusic';
 
 const layoutStyle: StyleProp<ViewStyle> = {
   display: 'flex',
@@ -27,31 +27,33 @@ const layoutStyle: StyleProp<ViewStyle> = {
 
 export const Playlist: FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
   const api = useContext(ApiContext);
-  const { playlistId } = useParams<{ playlistId: string }>();
-  const { data: playlist } = useQuery(['getPlaylist', playlistId], () =>
-    api.getPlaylist(playlistId),
+  const { id, type } = useParams<{
+    id: string;
+    type: Type;
+  }>();
+  const { data: playlist } = useQuery<PlaylistDto>(
+    ['getPlaylist', type, id],
+    () => api.getPlaylist(type ?? Type.playlist, id ?? ''),
   );
 
-  const { data: tracks } = useQuery(
-    ['findTracksByPlaylistId', playlistId],
-    () => api.findTracksByPlaylistId(playlistId),
-  );
-
-  return playlist && tracks ? (
+  return playlist ? (
     <View style={layoutStyle}>
       <Header />
       <PlaylistHeader {...playlist} />
-      <PlaylistTracks tracks={tracks} />
+      <PlaylistTracks tracks={playlist.tracks} />
       <BottomMenu>
-        <Link
-          to={`${ROUTES.Game}/${playlist.id}`}
-          component={MenuItem}
+        <MenuItem
           primary
           icon={PlayIcon}
           text={t('Play')}
+          onPress={() =>
+            navigate(`${ROUTES.Game}/${playlist.type}/${playlist.id}`)
+          }
         />
-        <OpenInSpotify id={playlist.id} />
+        <OpenInYaMusic url={playlist.url} />
       </BottomMenu>
     </View>
   ) : (

@@ -8,9 +8,9 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import { useNavigate } from 'react-router';
 
 import { Text } from '../Text';
-import { Link } from '../Link';
 import { SchevronRightIcon } from '../icons';
 import { ROUTES } from '../../routes/Routes.types';
 import { theme } from '../../themes';
@@ -27,6 +27,7 @@ const linkStyle: StyleProp<ViewStyle> = {
   borderWidth: 2,
   borderColor: 'transparent',
 };
+
 const titleWrapStyle: StyleProp<ViewStyle> = {
   display: 'flex',
   flexDirection: 'row',
@@ -40,14 +41,14 @@ const nameStyle: StyleProp<TextStyle> = {
   color: theme.colors.main80,
 };
 
-export const PlaylistInfo: FC<Props> = ({ name, id }) => {
+export const PlaylistInfo: FC<Props> = ({ name, id, type }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
-    <Link
-      to={`${ROUTES.Playlist}/${id}`}
-      component={Pressable}
+    <Pressable
       style={linkStyle}
+      onPress={() => navigate(`${ROUTES.Playlist}/${type}/${id}`)}
     >
       {({ hovered }: InteractionState) => (
         <>
@@ -72,6 +73,6 @@ export const PlaylistInfo: FC<Props> = ({ name, id }) => {
           <Text style={nameStyle}>{name}</Text>
         </>
       )}
-    </Link>
+    </Pressable>
   );
 };
