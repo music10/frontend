@@ -5,7 +5,6 @@ export * from './Button';
 export * from './ContextProvider';
 export * from './Counter';
 export * from './ErrorMessage';
-export * from './Link';
 export * from './Loader';
 export * from './Logo';
 export * from './MenuItem';

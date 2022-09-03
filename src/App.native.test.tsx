@@ -10,6 +10,5 @@ test('render App component', () => {
     </AppWrapper>,
   );
   const linkElement = getByText(/Играть/i);
-  console.log(linkElement);
   expect(linkElement).toBeDefined();
 });

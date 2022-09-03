@@ -15,6 +15,8 @@ export const API_HOST =
  */
 export const AMPLITUDE_API_KEY = process.env.REACT_APP_AMPLITUDE_API_KEY || '';
 
+export const BUGSNAG_KEY = process.env.REACT_APP_BUGSNAG_KEY ?? null;
+
 /**
  * Track number per game
  */

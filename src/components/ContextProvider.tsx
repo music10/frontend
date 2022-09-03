@@ -20,7 +20,7 @@ export const ContextProvider: FC<PropsWithChildren<ContextProviderProps>> = ({
   const apiValue = useMemo(() => api || new Api(), [api]);
   const wsValue = useMemo(() => ws || new WS(), [ws]);
   const queryClient = useMemo(() => new QueryClient(), []);
-  console.info('CONTEXT RENDER');
+
   return (
     <I18nextProvider i18n={i18n}>
       <QueryClientProvider client={queryClient}>
