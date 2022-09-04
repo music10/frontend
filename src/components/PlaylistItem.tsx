@@ -74,14 +74,12 @@ export const PlaylistItem: FC<Props> = ({
       onBackdropPress={hideContextMenu}
       onClose={hideContextMenu}
     >
-      {!withoutMenu && (
-        <MenuTrigger
-          triggerOnLongPress
-          customStyles={{
-            triggerOuterWrapper: { position: 'absolute', right: 32 },
-          }}
-        />
-      )}
+      <MenuTrigger
+        triggerOnLongPress={!withoutMenu}
+        customStyles={{
+          triggerOuterWrapper: { position: 'absolute', right: 32 },
+        }}
+      />
       <Pressable
         testID="PlaylistItem"
         accessibilityRole="button"
@@ -110,31 +108,29 @@ export const PlaylistItem: FC<Props> = ({
         <Text style={textStyle}>{name}</Text>
       </Pressable>
 
-      {!withoutMenu && (
-        <MenuOptions
-          optionsContainerStyle={{
-            backgroundColor: theme.colors.main20,
-            borderRadius: 8,
-            zIndex: 1,
-            elevation: 1,
-            overflow: 'hidden',
-          }}
-        >
-          <BlurView overlayColor="transparent">
-            <MenuOption>
-              <View style={{ paddingVertical: 8, paddingHorizontal: 16 }}>
-                <Pressable
-                  style={contextMenuItemStyle}
-                  onPress={() => navigate(`${ROUTES.Playlist}/${type}/${id}`)}
-                >
-                  <EyeIcon fill={theme.colors.main} />
-                  <Text style={contextMenuTextStyle}>Просмотреть</Text>
-                </Pressable>
-              </View>
-            </MenuOption>
-          </BlurView>
-        </MenuOptions>
-      )}
+      <MenuOptions
+        optionsContainerStyle={{
+          backgroundColor: theme.colors.main20,
+          borderRadius: 8,
+          zIndex: 1,
+          elevation: 1,
+          overflow: 'hidden',
+        }}
+      >
+        <BlurView overlayColor="transparent">
+          <MenuOption>
+            <View style={{ paddingVertical: 8, paddingHorizontal: 16 }}>
+              <Pressable
+                style={contextMenuItemStyle}
+                onPress={() => navigate(`${ROUTES.Playlist}/${type}/${id}`)}
+              >
+                <EyeIcon fill={theme.colors.main} />
+                <Text style={contextMenuTextStyle}>Просмотреть</Text>
+              </Pressable>
+            </View>
+          </MenuOption>
+        </BlurView>
+      </MenuOptions>
     </Menu>
   );
 };

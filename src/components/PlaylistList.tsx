@@ -22,11 +22,10 @@ export const PlaylistList: FC<Props> = ({
   const { isLoading: randomIsLoading, data: randomPlaylist } = useQuery<
     PlaylistDto,
     Error
-  >('getRandomPlaylist', api.getRandomPlaylist, { enabled: withRandom });
-
-  if (isLoading || randomIsLoading) {
-    return <Loader />;
-  }
+  >('getRandomPlaylist', api.getRandomPlaylist, {
+    enabled: withRandom,
+    refetchOnWindowFocus: 'always',
+  });
 
   if (isError) {
     return <ErrorMessage>Ошибка: {error?.message}</ErrorMessage>;
@@ -35,7 +34,8 @@ export const PlaylistList: FC<Props> = ({
   return (
     <MenuProvider>
       <ScrollView>
-        {withRandom && randomPlaylist ? (
+        {(isLoading || randomIsLoading) && <Loader />}
+        {withRandom && randomPlaylist && (
           <PlaylistItem
             withoutMenu
             id={randomPlaylist?.id ?? ''}
@@ -43,7 +43,8 @@ export const PlaylistList: FC<Props> = ({
             name="Случайный плейлист"
             type={randomPlaylist?.type ?? Type.playlist}
           />
-        ) : null}
+        )}
+
         {data?.map((playlist) => (
           <PlaylistItem key={playlist.id} {...playlist} />
         ))}
