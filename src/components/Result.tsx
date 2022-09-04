@@ -3,6 +3,7 @@ import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
 
 import { Text } from './Text';
 import { theme } from '../themes';
+import { Loader } from './Loader';
 
 interface Props {
   guess: number;
@@ -35,7 +36,13 @@ const textStyle: StyleProp<TextStyle> = {
 
 export const Result: React.FC<Props> = ({ guess, text }) => (
   <View style={layoutStyle}>
-    <Text style={totalStyle}>{guess} / 10</Text>
-    <Text style={textStyle}>{text}</Text>
+    {guess || text ? (
+      <>
+        <Text style={totalStyle}>{guess} / 10</Text>
+        <Text style={textStyle}>{text}</Text>
+      </>
+    ) : (
+      <Loader />
+    )}
   </View>
 );

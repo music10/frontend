@@ -15,8 +15,13 @@ import {
   GameContext,
   WsContext,
 } from '../../contexts';
-import { TRACKS_PER_ROUND } from '../../utils';
-import { Counter, Loader, Track } from '../../components';
+import { Bugsnag, TRACKS_PER_ROUND } from '../../utils';
+import {
+  Counter,
+  PlaceholderLoaderList,
+  Track,
+  TrackLoading,
+} from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import {
   ChooseAnswerDto,
@@ -25,7 +30,6 @@ import {
   TracksForUserDto,
   Type,
 } from '../../api/api.types';
-import { Bugsnag } from '../../utils';
 import { Music } from './components/Music';
 import { Header } from './components/Header';
 import { Progressbar } from './components/Progressbar';
@@ -42,6 +46,12 @@ const gameStyle: StyleProp<ViewStyle> = {
   flexDirection: 'column',
   justifyContent: 'space-between',
 };
+
+const TracksLoading = () => (
+  <View style={{ marginBottom: 16 }}>
+    <TrackLoading />
+  </View>
+);
 
 export const Game = () => {
   const ws = useContext(WsContext);
@@ -123,43 +133,41 @@ export const Game = () => {
       <Music setMp3Loading={setMp3Loading} mp3={mp3}>
         <View style={gameStyle}>
           <Header />
-          {isMp3Loading || !tracks.length ? (
-            <Loader />
-          ) : (
-            <>
-              <View
-                style={tracksStyle}
-                onClick={() => {
-                  if (selected) {
-                    clearTimeout(timer);
-                    getNextTracks();
-                    amp.logEvent('Result Skipped');
-                  }
-                }}
-              >
-                <Counter />
-                {tracks.map((track) => (
-                  <View
-                    key={track.id + selected + correct}
-                    style={{ marginBottom: 16 }}
-                  >
-                    <Track
-                      disabled={!!selected}
-                      selected={track.id === selected}
-                      success={track.id === correct}
-                      onPress={() => {
-                        if (!selected) {
-                          choose(track.id);
-                        }
-                      }}
-                      {...track}
-                    />
-                  </View>
-                ))}
-              </View>
-              <Progressbar key={mp3} />
-            </>
-          )}
+          <View
+            style={tracksStyle}
+            onClick={() => {
+              if (selected) {
+                clearTimeout(timer);
+                getNextTracks();
+                amp.logEvent('Result Skipped');
+              }
+            }}
+          >
+            <Counter />
+            {!isMp3Loading && tracks.length ? (
+              tracks.map((track) => (
+                <View
+                  key={track.id + selected + correct}
+                  style={{ marginBottom: 16 }}
+                >
+                  <Track
+                    disabled={!!selected}
+                    selected={track.id === selected}
+                    success={track.id === correct}
+                    onPress={() => {
+                      if (!selected) {
+                        choose(track.id);
+                      }
+                    }}
+                    {...track}
+                  />
+                </View>
+              ))
+            ) : (
+              <PlaceholderLoaderList number={4} component={TracksLoading} />
+            )}
+          </View>
+          <Progressbar key={mp3} />
         </View>
         <PauseMenu />
       </Music>

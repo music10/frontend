@@ -8,6 +8,7 @@ import {
   MenuItem,
   PlaylistInfo,
   BottomMenu,
+  PlaylistInfoLoading,
 } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import { ReplayIcon, ShareIcon } from '../../components/icons';
@@ -71,7 +72,11 @@ export const Result = () => {
 
   return (
     <View style={layoutStyle}>
-      <PlaylistInfo {...result.playlist} />
+      {result.playlist ? (
+        <PlaylistInfo {...result.playlist} />
+      ) : (
+        <PlaylistInfoLoading />
+      )}
       <View style={resultStyle}>
         <ResultComponent guess={result.guessed} text={result.text} />
       </View>
