@@ -89,9 +89,9 @@ export const PlaylistInfo: FC<Props> = ({ name, id, type, cover }) => {
         }
       >
         {isFavorite(id) ? (
-          <HeartIcon fill={theme.colors.main} />
+          <HeartIcon fill={theme.colors.accent} />
         ) : (
-          <HeartOutlinedIcon fill={theme.colors.main} />
+          <HeartOutlinedIcon fill={theme.colors.accent} />
         )}
       </Pressable>
     </View>
