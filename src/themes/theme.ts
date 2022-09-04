@@ -17,6 +17,11 @@ export const theme = {
     main20: 'rgba(250, 250, 250, .2)',
     main50: 'rgba(250, 250, 250, .5)',
     main80: 'rgba(250, 250, 250, .8)',
+    main5onBg: '#202023',
+    main10onBg: '#2c2c2f',
+    main20onBg: '#434345',
+    main50onBg: '#888889',
+    main80onBg: '#cccccd',
     danger: '#e94d43',
   },
 };

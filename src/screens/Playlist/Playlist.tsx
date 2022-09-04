@@ -6,9 +6,9 @@ import { StyleProp, View, ViewStyle } from 'react-native';
 
 import {
   BottomMenu,
-  Loader,
   MenuItem,
   PlaylistHeader,
+  PlaylistHeaderLoading,
   PlaylistTracks,
 } from '../../components';
 import {
@@ -21,6 +21,7 @@ import { ApiContext, FavoritesContext } from '../../contexts';
 import { PlaylistDto, Type } from '../../api/api.types';
 import { Header } from './components/Header';
 import { OpenInYaMusic } from './components/OpenInYaMusic';
+import { PlaylistTracksLoading } from '../../components';
 
 const layoutStyle: StyleProp<ViewStyle> = {
   display: 'flex',
@@ -49,17 +50,22 @@ export const Playlist: FC = () => {
     [playlist?.id, isFavorite],
   );
 
-  return playlist ? (
+  return (
     <View style={layoutStyle}>
       <Header />
-      <PlaylistHeader {...playlist} />
-      <PlaylistTracks tracks={playlist.tracks} />
+      {playlist ? <PlaylistHeader {...playlist} /> : <PlaylistHeaderLoading />}
+      {playlist ? (
+        <PlaylistTracks tracks={playlist.tracks} />
+      ) : (
+        <PlaylistTracksLoading />
+      )}
       <BottomMenu>
         <MenuItem
           primary
           icon={PlayIcon}
           text={t('Play')}
           onPress={() =>
+            playlist &&
             navigate(`${ROUTES.Game}/${playlist.type}/${playlist.id}`)
           }
         />
@@ -67,20 +73,19 @@ export const Playlist: FC = () => {
           icon={isFavoritePlaylist ? HeartBrokenIcon : HeartOutlinedIcon}
           text={isFavoritePlaylist ? 'Удалить из сохраненного' : 'Сохранить'}
           onPress={() =>
-            isFavoritePlaylist && id
+            playlist &&
+            (isFavoritePlaylist && id
               ? remove(id)
               : add({
                   id: playlist.id,
                   name: playlist.name,
                   cover: playlist.cover,
                   type: playlist.type,
-                })
+                }))
           }
         />
-        <OpenInYaMusic url={playlist.url} />
+        <OpenInYaMusic url={playlist?.url} />
       </BottomMenu>
     </View>
-  ) : (
-    <Loader />
   );
 };
