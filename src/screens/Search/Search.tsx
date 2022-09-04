@@ -129,7 +129,7 @@ export const Search: FC = () => {
             </BottomMenu>
           </>
         ) : (
-          <PlaylistList {...request} />
+          <PlaylistList request={request} />
         )
       ) : null}
     </>

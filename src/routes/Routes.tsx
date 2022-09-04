@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Route, Routes } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router';
 
 import { Game, Playlist, Playlists, Result, Search, Start } from '../screens';
 import { AmplitudeContext } from '../contexts';
@@ -17,11 +17,10 @@ export default () => {
       <Route path={ROUTES.Results} element={<Result />} />
       <Route path={ROUTES.Playlists} element={<Playlists />} />
       <Route path={ROUTES.Search} element={<Search />} />
-      <Route path={ROUTES.Game + '/:type/:id'} element={<Game />} />
-      <Route path={ROUTES.Playlist + '/:type/:id'} element={<Playlist />} />
+      <Route path={`${ROUTES.Game}/:type/:id`} element={<Game />} />
+      <Route path={`${ROUTES.Playlist}/:type/:id`} element={<Playlist />} />
       <Route path={ROUTES.Start} element={<Start />} />
-      {/* TODO */}
-      {/*<Redirect to={ROUTES.Start} />*/}
+      <Route path="/" element={<Navigate to={ROUTES.Start} />} />
     </Routes>
   );
 };

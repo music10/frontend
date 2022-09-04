@@ -25,6 +25,7 @@ import {
   TracksForUserDto,
   Type,
 } from '../../api/api.types';
+import { Bugsnag } from '../../utils';
 import { Music } from './components/Music';
 import { Header } from './components/Header';
 import { Progressbar } from './components/Progressbar';
@@ -57,15 +58,9 @@ export const Game = () => {
   const [correct, setCorrect] = useState('');
   const number = useRef(0);
 
-  console.info('GAME RENDER');
-
   useQuery<PlaylistDto, Error>(
     ['getPlaylistById', type, id],
-    () => {
-      console.info('GET PLAYLIST');
-
-      return api.getPlaylist(type ?? Type.playlist, id ?? '');
-    },
+    () => api.getPlaylist(type ?? Type.playlist, id ?? ''),
     {
       onSuccess: ({ id, name }) =>
         amp.logEvent('Playlist Opened', { name, id }),
@@ -73,8 +68,6 @@ export const Game = () => {
   );
 
   const getNextTracks = useCallback(async () => {
-    console.info('GET NEXT');
-
     if (number.current < TRACKS_PER_ROUND) {
       setSelected('');
       setCorrect('');
@@ -95,8 +88,8 @@ export const Game = () => {
     async () =>
       (await ws.setPlaylist(id ?? '', type))
         .once('playlist', getNextTracks)
-        .once('exception', (e) => {
-          console.error(e);
+        .once('exception', (error) => {
+          Bugsnag.notify(error);
           navigate(ROUTES.Start, { replace: true });
         }),
     [ws, id, type, getNextTracks, navigate],
@@ -122,8 +115,8 @@ export const Game = () => {
   );
 
   useEffect(() => {
-    setPlaylist();
-  }, [setPlaylist]);
+    ws.reconnect().then(setPlaylist);
+  }, [setPlaylist, ws]);
 
   return (
     <GameContext.Provider value={{ number, isPause, setPause }}>

@@ -7,7 +7,7 @@ import { BlurView, MenuItem, Text } from '../../../components';
 import { ExitIcon, PlayIcon } from '../../../components/icons';
 import { ROUTES } from '../../../routes/Routes.types';
 import { TRACKS_PER_ROUND } from '../../../utils';
-import { GameContext, WsContext } from '../../../contexts';
+import { GameContext } from '../../../contexts';
 import { theme } from '../../../themes';
 
 const overlayStyle: StyleProp<ViewStyle> = {
@@ -62,7 +62,6 @@ export const PauseMenu: FC = () => {
   const navigate = useNavigate();
 
   const { number, isPause, setPause } = useContext(GameContext);
-  const ws = useContext(WsContext);
 
   return isPause ? (
     <View style={overlayStyle}>
@@ -81,10 +80,7 @@ export const PauseMenu: FC = () => {
           <MenuItem
             icon={ExitIcon}
             text={t('Exit')}
-            onPress={() => {
-              ws.reconnect();
-              navigate(ROUTES.Playlists);
-            }}
+            onPress={() => navigate(ROUTES.Playlists)}
           />
         </View>
       </BlurView>

@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { useQuery } from 'react-query';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { ScrollView, StyleProp, View, ViewStyle } from 'react-native';
 
-import { PlaylistList, Search } from '../../components';
+import { FavoritePlaylistList, PlaylistList, Search } from '../../components';
 import { ApiContext } from '../../contexts';
 import { PlaylistDto } from '../../api/api.types';
 
@@ -26,7 +26,10 @@ export const Playlists: React.FC = () => {
   return (
     <View style={layoutStyle}>
       <Search />
-      <PlaylistList withRandom {...request} />
+      <ScrollView style={{ height: '80%' }}>
+        <PlaylistList withRandom request={request} />
+        <FavoritePlaylistList />
+      </ScrollView>
     </View>
   );
 };
