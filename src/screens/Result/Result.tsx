@@ -38,13 +38,6 @@ export const Result = () => {
   const [shareData, setShareData] = useState('');
   const shareFunction = useShare();
 
-  useEffect(
-    () => () => {
-      ws.reconnect();
-    },
-    [ws],
-  );
-
   const getResults = useCallback(async () => {
     (await ws.getResult())
       .once('result', setResult)

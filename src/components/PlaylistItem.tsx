@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import {
   InteractionState,
@@ -18,10 +18,11 @@ import {
 import { Text } from './Text';
 import { PlaylistCover } from './PlaylistCover';
 import { ROUTES } from '../routes/Routes.types';
-import { EyeIcon } from './icons';
+import { EyeIcon, HeartBrokenIcon, HeartIcon } from './icons';
 import { BlurView } from './BlurView/BlurView';
 import { theme } from '../themes';
 import { PlaylistDto } from '../api/api.types';
+import { FavoritesContext } from '../contexts';
 
 const textStyle: StyleProp<TextStyle> = {
   fontFamily: theme.fontFamilySemiBold,
@@ -33,6 +34,7 @@ const contextMenuItemStyle: StyleProp<ViewStyle> = {
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
+  justifyContent: 'flex-start',
 };
 const contextMenuTextStyle: StyleProp<TextStyle> = {
   margin: 18,
@@ -53,6 +55,9 @@ export const PlaylistItem: FC<Props> = ({
   withoutMenu = false,
 }) => {
   const navigate = useNavigate();
+  const { add, remove, isFavorite } = useContext(FavoritesContext);
+  const isFavoritePlaylist = useMemo(() => isFavorite(id), [id, isFavorite]);
+
   const goToGame = useCallback(
     () => navigate(`${ROUTES.Game}/${type}/${id}`),
     [id, navigate, type],
@@ -70,12 +75,12 @@ export const PlaylistItem: FC<Props> = ({
 
   return (
     <Menu
-      opened={opened}
+      opened={!withoutMenu && opened}
       onBackdropPress={hideContextMenu}
       onClose={hideContextMenu}
     >
       <MenuTrigger
-        triggerOnLongPress={!withoutMenu}
+        triggerOnLongPress={false}
         customStyles={{
           triggerOuterWrapper: { position: 'absolute', right: 32 },
         }}
@@ -115,18 +120,48 @@ export const PlaylistItem: FC<Props> = ({
           zIndex: 1,
           elevation: 1,
           overflow: 'hidden',
+          display: 'flex',
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
         }}
       >
         <BlurView overlayColor="transparent">
-          <MenuOption>
+          <MenuOption
+            onSelect={() => navigate(`${ROUTES.Playlist}/${type}/${id}`)}
+          >
             <View style={{ paddingVertical: 8, paddingHorizontal: 16 }}>
-              <Pressable
-                style={contextMenuItemStyle}
-                onPress={() => navigate(`${ROUTES.Playlist}/${type}/${id}`)}
-              >
+              <View style={contextMenuItemStyle}>
                 <EyeIcon fill={theme.colors.main} />
                 <Text style={contextMenuTextStyle}>Просмотреть</Text>
-              </Pressable>
+              </View>
+            </View>
+          </MenuOption>
+        </BlurView>
+        <BlurView overlayColor="transparent">
+          <MenuOption
+            onSelect={() => {
+              isFavoritePlaylist ? remove(id) : add({ id, name, cover, type });
+              hideContextMenu();
+            }}
+          >
+            <View
+              style={{
+                paddingVertical: 8,
+                paddingHorizontal: 16,
+                alignItems: 'flex-start',
+                justifyContent: 'flex-start',
+              }}
+            >
+              <View style={contextMenuItemStyle}>
+                {isFavoritePlaylist ? (
+                  <HeartBrokenIcon fill={theme.colors.main} />
+                ) : (
+                  <HeartIcon fill={theme.colors.main} />
+                )}
+                <Text style={contextMenuTextStyle}>
+                  {isFavoritePlaylist ? 'Разлюбить' : 'Сохранить'}
+                </Text>
+              </View>
             </View>
           </MenuOption>
         </BlurView>

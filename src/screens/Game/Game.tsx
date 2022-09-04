@@ -115,8 +115,8 @@ export const Game = () => {
   );
 
   useEffect(() => {
-    setPlaylist();
-  }, [setPlaylist]);
+    ws.reconnect().then(setPlaylist);
+  }, [setPlaylist, ws]);
 
   return (
     <GameContext.Provider value={{ number, isPause, setPause }}>

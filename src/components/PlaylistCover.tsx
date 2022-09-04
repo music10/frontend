@@ -11,8 +11,11 @@ const borderRadiusStyle = {
   borderRadius: 4,
 };
 
-export const PlaylistCover: FC<Props> = ({ cover, size }) =>
-  Platform.OS === 'web' ? (
+export const PlaylistCover: FC<Props> = ({ cover, size }) => {
+  if (!cover) {
+    return null;
+  }
+  return Platform.OS === 'web' ? (
     <img
       alt=""
       src={cover}
@@ -28,3 +31,4 @@ export const PlaylistCover: FC<Props> = ({ cover, size }) =>
       style={borderRadiusStyle}
     />
   );
+};
