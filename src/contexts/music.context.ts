@@ -8,7 +8,5 @@ interface IMusicContext {
   sound: SoundData | null;
   isPlaying?: boolean;
   duration: number | null;
-  allowPlay: boolean;
-  setAllowPlay: Dispatch<SetStateAction<boolean>>;
 }
 export const MusicContext = createContext({} as IMusicContext);

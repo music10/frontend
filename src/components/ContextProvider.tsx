@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, useMemo } from 'react';
+import React, { FC, PropsWithChildren, useEffect, useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { I18nextProvider } from 'react-i18next';
 
@@ -27,6 +27,13 @@ export const ContextProvider: FC<PropsWithChildren<ContextProviderProps>> = ({
   const wsValue = useMemo(() => ws || new WS(), [ws]);
   const queryClient = useMemo(() => new QueryClient(), []);
   const favorites = useFavorites();
+
+  useEffect(() => {
+    return () => {
+      wsValue.destructor();
+      queryClient.clear();
+    };
+  }, [wsValue, queryClient]);
 
   return (
     <I18nextProvider i18n={i18n}>

@@ -6,15 +6,9 @@ import React, {
   useState,
 } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { useQuery } from 'react-query';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
-import {
-  AmplitudeContext,
-  ApiContext,
-  GameContext,
-  WsContext,
-} from '../../contexts';
+import { AmplitudeContext, GameContext, WsContext } from '../../contexts';
 import { Bugsnag, TRACKS_PER_ROUND } from '../../utils';
 import {
   Counter,
@@ -25,7 +19,6 @@ import {
 import { ROUTES } from '../../routes/Routes.types';
 import {
   ChooseAnswerDto,
-  PlaylistDto,
   ShortTrackDto,
   TracksForUserDto,
   Type,
@@ -55,7 +48,6 @@ const TracksLoading = () => (
 
 export const Game = () => {
   const ws = useContext(WsContext);
-  const api = useContext(ApiContext);
   const amp = useContext(AmplitudeContext);
   const navigate = useNavigate();
   const { type, id } = useParams<{ type: Type; id: string }>();
@@ -68,14 +60,9 @@ export const Game = () => {
   const [correct, setCorrect] = useState('');
   const number = useRef(0);
 
-  useQuery<PlaylistDto, Error>(
-    ['getPlaylistById', type, id],
-    () => api.getPlaylist(type ?? Type.playlist, id ?? ''),
-    {
-      onSuccess: ({ id, name }) =>
-        amp.logEvent('Playlist Opened', { name, id }),
-    },
-  );
+  useEffect(() => {
+    amp.logEvent('Playlist Opened', { id });
+  }, [amp, id]);
 
   const getNextTracks = useCallback(async () => {
     if (number.current < TRACKS_PER_ROUND) {
@@ -86,9 +73,8 @@ export const Game = () => {
         setMp3Loading(true);
         setTracks(answer.tracks);
         setMp3(answer.mp3);
+        ++number.current;
       });
-
-      ++number.current;
     } else {
       navigate(ROUTES.Results, { replace: true });
     }
@@ -167,7 +153,7 @@ export const Game = () => {
               <PlaceholderLoaderList number={4} component={TracksLoading} />
             )}
           </View>
-          <Progressbar key={mp3} />
+          {!isMp3Loading && <Progressbar key={mp3} />}
         </View>
         <PauseMenu />
       </Music>

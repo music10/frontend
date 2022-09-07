@@ -5,13 +5,12 @@ import { Progress } from '../../../components';
 import { MusicContext } from '../../../contexts';
 
 export const Progressbar: FC = () => {
-  const { isPlaying, stop, setAllowPlay } = useContext(MusicContext);
+  const { isPlaying, stop } = useContext(MusicContext);
 
   const endAnimationCallback = useCallback<Animated.EndCallback>(
     (result) => {
       if (result.finished) {
         stop();
-        setAllowPlay(false);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

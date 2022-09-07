@@ -5,53 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad172b90-85b6-49ec-8d38-941967b45b90" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/PlaylistCover/PlaylistCover.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/PlaylistCover/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/PlaylistHeader/PlaylistHeader.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/PlaylistTracks/PlaylistTracks.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/Playlist/Playlist.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/Playlist/components/Header.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/Playlist/components/OpenInSpotify.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/Playlist/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/usePageVisibility.web.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/debug/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/debug/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build/intermediates/lint-cache/maven.google/androidx/swiperefreshlayout/group-index.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build/intermediates/lint-cache/maven.google/master-index.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build/intermediates/lint-cache/sdk-registry.xml/sdk-registry.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradlew" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradlew.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/i18next-parser.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/i18next-parser.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/api.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/api.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/api.types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PlaylistItem/PlaylistItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PlaylistItem/PlaylistItem.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PlaylistList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PlaylistList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Track/Track.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Track/Track.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/icons/Eye.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/icons/Eye.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/icons/Icons.story.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/icons/Icons.story.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/icons/Spotify.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/icons/Spotify.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/icons/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/icons/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/react-page-visibility.d.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/Routes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/Routes.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/Routes.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/Routes.types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Game/Game.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Game/Game.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Playlists/Playlists.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Playlists/Playlists.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Result/Result.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Result/Result.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Search/Search.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Search/Search.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/usePageVisibility.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/usePageVisibility.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/ws.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/ws.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,10 +23,12 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/android" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="prettierjs.PrettierConfiguration.Package" value="C:\Users\ddergunov\WebstormProjects\musiq\frontend\node_modules\prettier" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
     <property name="ts.external.directory.path" value="C:\Users\ddergunov\WebstormProjects\musiq\frontend\node_modules\typescript\lib" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -104,5 +60,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
