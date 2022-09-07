@@ -13,6 +13,10 @@ export class WS {
     });
   }
 
+  destructor() {
+    this.socket.disconnect().close();
+  }
+
   setPlaylist = async (playlistId: string, type?: Type) =>
     this.socket.emit('setPlaylist', playlistId, type);
 

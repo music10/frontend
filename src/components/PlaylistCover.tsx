@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { Image, Platform } from 'react-native';
-import { SvgUri } from 'react-native-svg';
 
 interface Props {
   size: number;
@@ -23,8 +22,6 @@ export const PlaylistCover: FC<Props> = ({ cover, size }) => {
       width={size}
       style={borderRadiusStyle}
     />
-  ) : /\.svg$/.test(cover) && cover ? (
-    <SvgUri uri={cover} height={size} width={size} style={borderRadiusStyle} />
   ) : (
     <Image
       source={{ uri: cover, height: size, width: size }}

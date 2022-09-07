@@ -21,7 +21,6 @@ export const Music: FC<PropsWithChildren<Props>> = ({
   children,
 }) => {
   const { play, stop, pause, ...rest } = usePlaying(mp3, setMp3Loading);
-  const [allowPlay, setAllowPlay] = useState(true);
   const { isPause } = useContext(GameContext);
 
   useEffect(() => {
@@ -33,9 +32,7 @@ export const Music: FC<PropsWithChildren<Props>> = ({
   }, [play, stop]);
 
   return (
-    <MusicContext.Provider
-      value={{ play, stop, pause, allowPlay, setAllowPlay, ...rest }}
-    >
+    <MusicContext.Provider value={{ play, stop, pause, ...rest }}>
       {children}
     </MusicContext.Provider>
   );

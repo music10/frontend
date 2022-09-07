@@ -24,25 +24,15 @@ const headerStyle: StyleProp<ViewStyle> = {
 
 export const Header: FC = () => {
   const { isPause, setPause } = useContext(GameContext);
-  const { play, pause, allowPlay } = useContext(MusicContext);
-
-  const playFunc = useCallback(() => {
-    if (allowPlay) {
-      play();
-    }
-  }, [allowPlay, play]);
-
-  const pauseFunc = useCallback(() => {
-    pause();
-  }, [pause]);
+  const { play, pause } = useContext(MusicContext);
 
   const togglePause = useCallback(() => {
     setPause((state) => !state);
   }, [setPause]);
 
   useEffect(() => {
-    isPause ? pauseFunc() : playFunc();
-  }, [isPause, pauseFunc, playFunc]);
+    isPause ? pause() : play();
+  }, [isPause, pause, play]);
 
   const isVisible = usePageVisibility();
   useEffect(() => {
