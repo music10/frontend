@@ -1,25 +1,13 @@
-import React, { FC } from 'react';
-import { TextProps, StyleSheet } from 'react-native';
+import styled from '@emotion/native';
 
 import { Text } from './Text';
-import { theme } from '../themes';
 
-export const ErrorMessage: FC<TextProps> = ({ style, ...props }) => (
-  <Text
-    style={StyleSheet.compose(
-      {
-        paddingVertical: 24,
-        paddingHorizontal: 48,
-        fontSize: 12,
-        color: theme.colors.main,
-        borderWidth: 2,
-        borderColor: theme.colors.danger,
-        fontFamily: theme.fontFamilySemiBold,
-        position: 'relative',
-        textAlign: 'center',
-      },
-      style,
-    )}
-    {...props}
-  />
-);
+export const ErrorMessage = styled(Text)`
+  padding: 24px 48px;
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.main};
+  border: 2px solid ${({ theme }) => theme.colors.danger};
+  font-family: ${({ theme }) => theme.fontFamilySemiBold};
+  position: relative;
+  text-align: center;
+`;

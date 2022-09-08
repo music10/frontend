@@ -1,27 +1,21 @@
 import React, { FC } from 'react';
-import { View } from 'react-native';
-import { PlaceholderLoader } from '../PlaceholderLoader';
-import { Text } from '../Text';
 import { useTranslation } from 'react-i18next';
-import {
-  coverStyle,
-  descriptionStyle,
-  titleStyle,
-  wrapperStyle,
-} from './PlaylistHeader.style';
+
+import { PlaceholderLoader } from '../PlaceholderLoader';
+import { Cover, Description, Title, Wrapper } from './PlaylistHeader.styled';
 
 export const PlaylistHeaderLoading: FC = () => {
   const { t } = useTranslation();
 
   return (
-    <View style={wrapperStyle}>
-      <View style={coverStyle}>
+    <Wrapper>
+      <Cover>
         <PlaceholderLoader width={80} height={80} />
-      </View>
-      <View style={descriptionStyle}>
-        <Text style={titleStyle}>{t('Playlist')}</Text>
+      </Cover>
+      <Description>
+        <Title>{t('Playlist')}</Title>
         <PlaceholderLoader height={14} width={170} />
-      </View>
-    </View>
+      </Description>
+    </Wrapper>
   );
 };

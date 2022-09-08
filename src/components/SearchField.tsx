@@ -6,16 +6,18 @@ import {
   TextInput,
   TextInputProps,
 } from 'react-native';
+import { useTheme } from '@emotion/react';
+import { css } from '@emotion/native';
 
-import { theme } from '../themes';
 import { SearchIcon } from './icons';
 
 export const SearchField: FC<TextInputProps> = (props) => {
   const { t } = useTranslation('translation');
+  const theme = useTheme();
 
   return (
     <Pressable
-      style={{
+      style={css({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -24,14 +26,14 @@ export const SearchField: FC<TextInputProps> = (props) => {
         borderWidth: 2,
         borderColor: 'transparent',
         backgroundColor: theme.colors.main10,
-      }}
+      })}
     >
       {({ pressed }: InteractionState) => (
         <>
           <SearchIcon fill={theme.colors.main50} width={24} height={24} />
           <TextInput
             placeholder={t('Search')}
-            style={{
+            style={css({
               width: '100%',
               padding: 0,
               borderWidth: 0,
@@ -39,7 +41,7 @@ export const SearchField: FC<TextInputProps> = (props) => {
               marginLeft: 16,
               fontSize: 18,
               fontFamily: theme.fontFamilyMedium,
-            }}
+            })}
             {...props}
           />
         </>

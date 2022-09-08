@@ -1,15 +1,9 @@
 import React, { FC, useCallback } from 'react';
-import {
-  Pressable,
-  StyleProp,
-  Switch,
-  SwitchProps,
-  TextStyle,
-  ViewStyle,
-} from 'react-native';
+import { Switch, SwitchProps } from 'react-native';
+import styled from '@emotion/native';
 
 import { Text } from './Text';
-import { theme } from '../themes';
+import { useTheme } from '@emotion/react';
 
 interface Props extends SwitchProps {
   text: string;
@@ -17,20 +11,19 @@ interface Props extends SwitchProps {
   setValue: (value: boolean) => void;
 }
 
-const layoutStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginVertical: 0,
-  marginHorizontal: 8,
-};
+const Layout = styled.Pressable`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+`;
 
-const labelStyle: StyleProp<TextStyle> = {
-  color: theme.colors.main,
-  fontFamily: theme.fontFamilySemiBold,
-  fontSize: 14,
-};
+const Label = styled(Text)`
+  color: ${({ theme }) => theme.colors.main};
+  font-family: ${({ theme }) => theme.fontFamilySemiBold};
+  font-size: 14px;
+`;
 
 export const SwitchWithLabel: FC<Props> = ({
   text,
@@ -38,13 +31,14 @@ export const SwitchWithLabel: FC<Props> = ({
   setValue,
   ...props
 }) => {
+  const theme = useTheme();
   const changeValue = useCallback(() => {
     setValue(!value);
   }, [setValue, value]);
 
   return (
-    <Pressable style={layoutStyle} onPress={changeValue}>
-      <Text style={labelStyle}>{text}</Text>
+    <Layout onPress={changeValue}>
+      <Label>{text}</Label>
       <Switch
         trackColor={{
           false: theme.colors.main50,
@@ -56,6 +50,6 @@ export const SwitchWithLabel: FC<Props> = ({
         onValueChange={changeValue}
         {...props}
       />
-    </Pressable>
+    </Layout>
   );
 };

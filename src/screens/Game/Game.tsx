@@ -6,7 +6,6 @@ import React, {
   useState,
 } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { StyleProp, View, ViewStyle } from 'react-native';
 
 import { AmplitudeContext, GameContext, WsContext } from '../../contexts';
 import { Bugsnag, TRACKS_PER_ROUND } from '../../utils';
@@ -27,23 +26,32 @@ import { Music } from './components/Music';
 import { Header } from './components/Header';
 import { Progressbar } from './components/Progressbar';
 import { PauseMenu } from './components/PauseMenu';
+import styled from '@emotion/native';
 
-const tracksStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flexDirection: 'column',
-  padding: 16,
-};
-const gameStyle: StyleProp<ViewStyle> = {
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-};
+const Tracks = styled.View`
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+`;
+const TrackStyled = styled(Track)`
+  margin-bottom: 16px;
+`;
 
-const TracksLoading = () => (
-  <View style={{ marginBottom: 16 }}>
+const GameStyled = styled.View`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const TracksLoadingStyled = styled.View`
+  margin-bottom: 16px;
+`;
+
+const TracksLoadingWrapper = () => (
+  <TracksLoadingStyled>
     <TrackLoading />
-  </View>
+  </TracksLoadingStyled>
 );
 
 export const Game = () => {
@@ -61,8 +69,8 @@ export const Game = () => {
   const number = useRef(0);
 
   useEffect(() => {
-    amp.logEvent('Playlist Opened', { id });
-  }, [amp, id]);
+    amp.logEvent('Playlist Opened', { type, id });
+  }, [amp, type, id]);
 
   const getNextTracks = useCallback(async () => {
     if (number.current < TRACKS_PER_ROUND) {
@@ -99,8 +107,8 @@ export const Game = () => {
         (answer: ChooseAnswerDto) => {
           amp.logEvent('Track Chosen', {
             variants: tracks.map(({ artist, name }) => ({ artist, name })),
-            chosen: tracks.findIndex(({ id }) => id === trackId) + 1,
-            right: tracks.findIndex(({ id }) => id === answer.correct) + 1,
+            chosen: tracks.findIndex((track) => track.id === trackId) + 1,
+            right: tracks.findIndex((track) => track.id === answer.correct) + 1,
           });
           setTimer(+setTimeout(getNextTracks, 1500));
           setCorrect(answer.correct);
@@ -117,10 +125,9 @@ export const Game = () => {
   return (
     <GameContext.Provider value={{ number, isPause, setPause }}>
       <Music setMp3Loading={setMp3Loading} mp3={mp3}>
-        <View style={gameStyle}>
+        <GameStyled>
           <Header />
-          <View
-            style={tracksStyle}
+          <Tracks
             onClick={() => {
               if (selected) {
                 clearTimeout(timer);
@@ -132,29 +139,28 @@ export const Game = () => {
             <Counter />
             {!isMp3Loading && tracks.length ? (
               tracks.map((track) => (
-                <View
+                <TrackStyled
                   key={track.id + selected + correct}
-                  style={{ marginBottom: 16 }}
-                >
-                  <Track
-                    disabled={!!selected}
-                    selected={track.id === selected}
-                    success={track.id === correct}
-                    onPress={() => {
-                      if (!selected) {
-                        choose(track.id);
-                      }
-                    }}
-                    {...track}
-                  />
-                </View>
+                  disabled={!!selected}
+                  selected={track.id === selected}
+                  success={track.id === correct}
+                  onPress={() => {
+                    if (!selected) {
+                      choose(track.id);
+                    }
+                  }}
+                  {...track}
+                />
               ))
             ) : (
-              <PlaceholderLoaderList number={4} component={TracksLoading} />
+              <PlaceholderLoaderList
+                number={4}
+                component={TracksLoadingWrapper}
+              />
             )}
-          </View>
-          {!isMp3Loading && <Progressbar key={mp3} />}
-        </View>
+          </Tracks>
+          <Progressbar key={mp3} isLoading={isMp3Loading} />
+        </GameStyled>
         <PauseMenu />
       </Music>
     </GameContext.Provider>

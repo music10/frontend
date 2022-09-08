@@ -9,14 +9,12 @@ interface Props extends ViewProps {
 export const PlaceholderLoaderList: FC<Props> = ({
   component: Component,
   number,
-}) => {
-  return (
-    <>
-      {Array(number)
-        .fill(true)
-        .map((_, index) => (
-          <Component key={index} index={index} />
-        ))}
-    </>
-  );
-};
+}) => (
+  <>
+    {Array(number)
+      .fill(true)
+      .map((_, index) => (
+        <Component key={index} index={index} />
+      ))}
+  </>
+);

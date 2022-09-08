@@ -1,61 +1,51 @@
 import React, { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform, StyleProp, TextStyle, View, ViewStyle } from 'react-native';
 import { useNavigate } from 'react-router';
+import styled from '@emotion/native';
 
 import { BlurView, MenuItem, Text } from '../../../components';
 import { ExitIcon, PlayIcon } from '../../../components/icons';
 import { ROUTES } from '../../../routes/Routes.types';
 import { TRACKS_PER_ROUND } from '../../../utils';
 import { GameContext } from '../../../contexts';
-import { theme } from '../../../themes';
 
-const overlayStyle: StyleProp<ViewStyle> = {
-  marginVertical: 0,
-  marginHorizontal: 'auto',
-  maxWidth: 520,
-  width: '100%',
-  display: 'flex',
-  position: 'absolute',
-  top: 64,
-  left: 0,
-  right: 0,
-  bottom: 8,
-  justifyContent: 'flex-end',
-};
+const Overlay = styled.View`
+  margin: 0 auto;
+  max-width: 520px;
+  width: 100%;
+  display: flex;
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  justify-content: flex-end;
+`;
 
-const layoutStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flexDirection: 'column',
-  paddingTop: 8,
-  paddingLeft: 16,
-  paddingRight: 16,
-  paddingBottom: 32,
-  backgroundColor: theme.colors.bg75,
-  ...Platform.select({
-    android: {
-      elevation: 50,
-    },
-    web: {
-      boxShadow: `0 -25px 50px ${theme.colors.bg}`,
-    },
-  }),
-};
+const Layout = styled.View`
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px 32px;
+  background-color: ${({ theme }) => theme.colors.bg75};
+  elevation: 50deg;
+  box-shadow: 0 -25px 50px ${({ theme }) => theme.colors.bg};
+`;
 
-const draglineStyle: StyleProp<ViewStyle> = {
-  alignSelf: 'center',
-  marginBottom: 24,
-  width: 42,
-  height: 2,
-  backgroundColor: theme.colors.main,
-};
-const totalStyle: StyleProp<TextStyle> = {
-  padding: 16,
-  marginBottom: 16,
-  fontSize: 16,
-  textAlign: 'center',
-  color: theme.colors.main,
-};
+const Dragline = styled.View`
+  align-self: center;
+  margin-bottom: 24px;
+  width: 42px;
+  height: 2px;
+  background-color: ${({ theme }) => theme.colors.main};
+`;
+
+const Total = styled(Text)`
+  padding: 16px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.main};
+`;
 
 export const PauseMenu: FC = () => {
   const { t } = useTranslation();
@@ -64,13 +54,13 @@ export const PauseMenu: FC = () => {
   const { number, isPause, setPause } = useContext(GameContext);
 
   return isPause ? (
-    <View style={overlayStyle}>
+    <Overlay>
       <BlurView blurRadius={15} overlayColor="transparent">
-        <View style={layoutStyle}>
-          <View style={draglineStyle} />
-          <Text style={totalStyle}>
+        <Layout>
+          <Dragline />
+          <Total>
             {t('Completed')}: {number.current} / {TRACKS_PER_ROUND}
-          </Text>
+          </Total>
           <MenuItem
             text={t('Play')}
             icon={PlayIcon}
@@ -82,8 +72,8 @@ export const PauseMenu: FC = () => {
             text={t('Exit')}
             onPress={() => navigate(ROUTES.Playlists)}
           />
-        </View>
+        </Layout>
       </BlurView>
-    </View>
+    </Overlay>
   ) : null;
 };

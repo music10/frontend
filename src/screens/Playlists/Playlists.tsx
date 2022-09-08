@@ -1,20 +1,22 @@
 import React, { useContext } from 'react';
 import { useQuery } from 'react-query';
-import { ScrollView, StyleProp, View, ViewStyle } from 'react-native';
+import styled from '@emotion/native';
 
 import { FavoritePlaylistList, PlaylistList, Search } from '../../components';
 import { ApiContext } from '../../contexts';
 import { PlaylistDto } from '../../api/api.types';
 
-const layoutStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flexDirection: 'column',
-  paddingTop: 80,
-  paddingHorizontal: 0,
-  paddingBottom: 16,
-  justifyContent: 'space-between',
-  height: '100%',
-};
+const Layout = styled.View`
+  display: flex;
+  flex-direction: column;
+  padding: 80px 0 16px;
+  justify-content: space-between;
+  height: 100%;
+`;
+
+const ScrollViewStyled = styled.ScrollView`
+  height: 80%;
+`;
 
 export const Playlists: React.FC = () => {
   const api = useContext(ApiContext);
@@ -24,12 +26,12 @@ export const Playlists: React.FC = () => {
   );
 
   return (
-    <View style={layoutStyle}>
+    <Layout>
       <Search />
-      <ScrollView style={{ height: '80%' }}>
+      <ScrollViewStyled>
         <PlaylistList withRandom request={request} />
         <FavoritePlaylistList />
-      </ScrollView>
-    </View>
+      </ScrollViewStyled>
+    </Layout>
   );
 };

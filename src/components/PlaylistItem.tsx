@@ -1,47 +1,47 @@
 import React, { FC, useCallback, useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
-import {
-  InteractionState,
-  Pressable,
-  StyleProp,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { InteractionState, Pressable } from 'react-native';
 import {
   Menu,
   MenuOption,
   MenuOptions,
   MenuTrigger,
 } from 'react-native-popup-menu';
+import styled, { css } from '@emotion/native';
+import { useTheme } from '@emotion/react';
 
 import { Text } from './Text';
 import { PlaylistCover } from './PlaylistCover';
 import { ROUTES } from '../routes/Routes.types';
 import { EyeIcon, HeartBrokenIcon, HeartIcon } from './icons';
 import { BlurView } from './BlurView/BlurView';
-import { theme } from '../themes';
 import { PlaylistDto } from '../api/api.types';
 import { FavoritesContext } from '../contexts';
 
-const textStyle: StyleProp<TextStyle> = {
-  fontFamily: theme.fontFamilySemiBold,
-  fontSize: 14,
-  marginLeft: 24,
-  color: theme.colors.main,
-};
-const contextMenuItemStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'flex-start',
-};
-const contextMenuTextStyle: StyleProp<TextStyle> = {
-  margin: 18,
-  fontFamily: theme.fontFamilySemiBold,
-  fontSize: 14,
-  color: theme.colors.main,
-};
+const MenuOptionBlock = styled.View`
+  padding: 8px 16px;
+  align-items: flex-start;
+  justify-content: flex-start;
+`;
+const TextStyled = styled(Text)`
+  font-family: ${({ theme }) => theme.fontFamilySemiBold};
+  font-size: 14px;
+  margin-left: 24px;
+  color: ${({ theme }) => theme.colors.main};
+`;
+const ContextMenuItem = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const ContextMenuText = styled(Text)`
+  margin: 18px;
+  font-family: ${({ theme }) => theme.fontFamilySemiBold};
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.main};
+`;
 
 interface Props extends Pick<PlaylistDto, 'id' | 'name' | 'cover' | 'type'> {
   withoutMenu?: boolean;
@@ -55,6 +55,7 @@ export const PlaylistItem: FC<Props> = ({
   withoutMenu = false,
 }) => {
   const navigate = useNavigate();
+  const theme = useTheme();
   const { add, remove, isFavorite } = useContext(FavoritesContext);
   const isFavoritePlaylist = useMemo(() => isFavorite(id), [id, isFavorite]);
 
@@ -91,30 +92,32 @@ export const PlaylistItem: FC<Props> = ({
         onPress={goToGame}
         onLongPress={showContextMenu}
         delayLongPress={450}
-        style={({ hovered, pressed }: InteractionState) => ({
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderRadius: 4,
-          paddingVertical: 8,
-          paddingHorizontal: 8,
-          marginVertical: 0,
-          marginHorizontal: 8,
-          backgroundColor: hovered
-            ? theme.colors.main10
-            : pressed
-            ? theme.colors.main5
-            : 'transparent',
-          borderWidth: 2,
-          borderColor: 'transparent',
-        })}
+        style={({ hovered, pressed }: InteractionState) =>
+          css({
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderRadius: 4,
+            paddingVertical: 8,
+            paddingHorizontal: 8,
+            marginVertical: 0,
+            marginHorizontal: 8,
+            backgroundColor: hovered
+              ? theme.colors.main10
+              : pressed
+              ? theme.colors.main5
+              : 'transparent',
+            borderWidth: 2,
+            borderColor: 'transparent',
+          })
+        }
       >
         <PlaylistCover size={48} cover={cover} />
-        <Text style={textStyle}>{name}</Text>
+        <TextStyled>{name}</TextStyled>
       </Pressable>
 
       <MenuOptions
-        optionsContainerStyle={{
+        optionsContainerStyle={css({
           backgroundColor: theme.colors.main20,
           borderRadius: 8,
           zIndex: 1,
@@ -123,18 +126,18 @@ export const PlaylistItem: FC<Props> = ({
           display: 'flex',
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
-        }}
+        })}
       >
         <BlurView overlayColor="transparent">
           <MenuOption
             onSelect={() => navigate(`${ROUTES.Playlist}/${type}/${id}`)}
           >
-            <View style={{ paddingVertical: 8, paddingHorizontal: 16 }}>
-              <View style={contextMenuItemStyle}>
+            <MenuOptionBlock>
+              <ContextMenuItem>
                 <EyeIcon fill={theme.colors.main} />
-                <Text style={contextMenuTextStyle}>Просмотреть</Text>
-              </View>
-            </View>
+                <ContextMenuText>Просмотреть</ContextMenuText>
+              </ContextMenuItem>
+            </MenuOptionBlock>
           </MenuOption>
         </BlurView>
         <BlurView overlayColor="transparent">
@@ -144,25 +147,18 @@ export const PlaylistItem: FC<Props> = ({
               hideContextMenu();
             }}
           >
-            <View
-              style={{
-                paddingVertical: 8,
-                paddingHorizontal: 16,
-                alignItems: 'flex-start',
-                justifyContent: 'flex-start',
-              }}
-            >
-              <View style={contextMenuItemStyle}>
+            <MenuOptionBlock>
+              <ContextMenuItem>
                 {isFavoritePlaylist ? (
                   <HeartBrokenIcon fill={theme.colors.main} />
                 ) : (
                   <HeartIcon fill={theme.colors.main} />
                 )}
-                <Text style={contextMenuTextStyle}>
+                <ContextMenuText>
                   {isFavoritePlaylist ? 'Разлюбить' : 'Сохранить'}
-                </Text>
-              </View>
-            </View>
+                </ContextMenuText>
+              </ContextMenuItem>
+            </MenuOptionBlock>
           </MenuOption>
         </BlurView>
       </MenuOptions>
