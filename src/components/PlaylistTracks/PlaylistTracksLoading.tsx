@@ -1,45 +1,28 @@
 import React, { FC } from 'react';
-import { ScrollView, View } from 'react-native';
-
-import { Text } from '../Text';
-import { PlaceholderLoader } from '../PlaceholderLoader';
-import {
-  descriptionStyle,
-  numberStyle,
-  trackStyle,
-  wrapperStyle,
-} from './PlaylistTracks.style';
+import { ScrollView } from 'react-native';
+import { TextPlaceholderLoader } from '../PlaceholderLoader';
 import { PlaceholderLoaderList } from '../PlaceholderLoaderList';
+
+import { Description, Number, Track, Wrapper } from './PlaylistTracks.styled';
 
 interface Props {
   items?: number;
 }
 
+const MockTrack: FC<{ index: number }> = ({ index }) => (
+  <Track key={index}>
+    <Number>{index + 1}</Number>
+    <Description>
+      <TextPlaceholderLoader width={180} height={14} borderRadius={2} />
+      <TextPlaceholderLoader width={115} height={14} borderRadius={2} />
+    </Description>
+  </Track>
+);
+
 export const PlaylistTracksLoading: FC<Props> = ({ items = 20 }) => (
   <ScrollView>
-    <View style={wrapperStyle}>
-      <PlaceholderLoaderList
-        number={items}
-        component={({ index }) => (
-          <View style={trackStyle} key={index}>
-            <Text style={numberStyle}>{index + 1}</Text>
-            <View style={descriptionStyle}>
-              <PlaceholderLoader
-                width={180}
-                height={14}
-                borderRadius={2}
-                style={{ marginVertical: 2 }}
-              />
-              <PlaceholderLoader
-                width={115}
-                height={14}
-                borderRadius={2}
-                style={{ marginVertical: 2 }}
-              />
-            </View>
-          </View>
-        )}
-      />
-    </View>
+    <Wrapper>
+      <PlaceholderLoaderList number={items} component={MockTrack} />
+    </Wrapper>
   </ScrollView>
 );

@@ -10,4 +10,5 @@ interface IGameContext {
   setPause: Dispatch<SetStateAction<boolean>>;
   number: MutableRefObject<number>;
 }
+
 export const GameContext = createContext({} as IGameContext);

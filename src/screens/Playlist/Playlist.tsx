@@ -2,7 +2,7 @@ import React, { FC, useContext, useMemo } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import styled from '@emotion/native';
 
 import {
   BottomMenu,
@@ -10,6 +10,7 @@ import {
   PlaylistHeader,
   PlaylistHeaderLoading,
   PlaylistTracks,
+  PlaylistTracksLoading,
 } from '../../components';
 import {
   HeartBrokenIcon,
@@ -21,14 +22,13 @@ import { ApiContext, FavoritesContext } from '../../contexts';
 import { PlaylistDto, Type } from '../../api/api.types';
 import { Header } from './components/Header';
 import { OpenInYaMusic } from './components/OpenInYaMusic';
-import { PlaylistTracksLoading } from '../../components';
 
-const layoutStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flex: 1,
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-};
+const Layout = styled.View`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+`;
 
 export const Playlist: FC = () => {
   const { t } = useTranslation();
@@ -51,7 +51,7 @@ export const Playlist: FC = () => {
   );
 
   return (
-    <View style={layoutStyle}>
+    <Layout>
       <Header />
       {playlist ? <PlaylistHeader {...playlist} /> : <PlaylistHeaderLoading />}
       {playlist ? (
@@ -86,6 +86,6 @@ export const Playlist: FC = () => {
         />
         <OpenInYaMusic url={playlist?.url} />
       </BottomMenu>
-    </View>
+    </Layout>
   );
 };

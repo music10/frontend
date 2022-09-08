@@ -35,6 +35,7 @@ export interface TrackDto {
   album: string;
   mp3?: string;
 }
+
 export interface TracksForUserDto {
   tracks: ShortTrackDto[];
   mp3: string;

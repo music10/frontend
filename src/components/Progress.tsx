@@ -1,15 +1,21 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Easing, View } from 'react-native';
-import { theme } from '../themes';
+import { Animated, Easing, StyleSheet } from 'react-native';
+import styled from '@emotion/native';
+import { useTheme } from '@emotion/react';
 
 interface Props {
   state: 'start' | 'stop';
   callback?: Animated.EndCallback;
 }
 
+const Wrapper = styled.View`
+  height: 6px;
+`;
+
 export const Progress: FC<Props> = ({ state, callback }) => {
   const animationValue = useRef(new Animated.Value(0)).current;
   const [duration, setDuration] = useState(10000);
+  const theme = useTheme();
 
   const animation = useMemo(
     () =>
@@ -35,17 +41,17 @@ export const Progress: FC<Props> = ({ state, callback }) => {
   }, [animation, animationValue, callback, state]);
 
   return (
-    <View style={{ height: 6 }}>
+    <Wrapper>
       <Animated.View
-        style={{
+        style={StyleSheet.flatten({
           height: 6,
           backgroundColor: theme.colors.main50,
           width: animationValue.interpolate({
             inputRange: [0, 1],
             outputRange: ['0%', '100%'],
           }),
-        }}
+        })}
       />
-    </View>
+    </Wrapper>
   );
 };

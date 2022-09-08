@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction } from 'react';
+import { createContext } from 'react';
 import { SoundData } from 'react-native-use-sound/src/types';
 
 interface IMusicContext {
@@ -9,4 +9,5 @@ interface IMusicContext {
   isPlaying?: boolean;
   duration: number | null;
 }
+
 export const MusicContext = createContext({} as IMusicContext);

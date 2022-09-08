@@ -4,7 +4,7 @@ import { Animated } from 'react-native';
 import { Progress } from '../../../components';
 import { MusicContext } from '../../../contexts';
 
-export const Progressbar: FC = () => {
+export const Progressbar: FC<{ isLoading?: boolean }> = ({ isLoading }) => {
   const { isPlaying, stop } = useContext(MusicContext);
 
   const endAnimationCallback = useCallback<Animated.EndCallback>(
@@ -19,7 +19,7 @@ export const Progressbar: FC = () => {
 
   return (
     <Progress
-      state={isPlaying ? 'start' : 'stop'}
+      state={isPlaying && !isLoading ? 'start' : 'stop'}
       callback={endAnimationCallback}
     />
   );

@@ -7,4 +7,5 @@ export interface IFavoritesContext {
   remove: (id: string) => void;
   isFavorite: (id: string) => boolean;
 }
+
 export const FavoritesContext = createContext({} as IFavoritesContext);

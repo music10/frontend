@@ -1,41 +1,31 @@
 import React, { FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import {
-  InteractionState,
-  Pressable,
-  PressableProps,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import { InteractionState, PressableProps } from 'react-native';
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import styled, { css } from '@emotion/native';
 
 import { SearchIcon } from './icons';
 import { Text } from './Text';
 import { ROUTES } from '../routes/Routes.types';
-import { theme } from '../themes';
+import { useTheme } from '@emotion/react';
 
-const linkStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  paddingVertical: 17,
-  paddingHorizontal: 16,
-  borderWidth: 2,
-  borderColor: 'transparent',
-  borderRadius: 0,
-  marginBottom: 32,
-};
+const Link = styled.Pressable`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 17px 16px;
+  border: 2px solid transparent;
+  border-radius: 0;
+  margin-bottom: 32px;
+`;
 
 export const Search: FC<PressableProps> = (props) => {
   const { t } = useTranslation('translation');
   const navigate = useNavigate();
+  const theme = useTheme();
 
   return (
-    <Pressable
-      style={linkStyle}
-      onPress={() => navigate(ROUTES.Search)}
-      {...props}
-    >
+    <Link onPress={() => navigate(ROUTES.Search)} {...props}>
       {({ hovered, pressed }: InteractionState) => (
         <>
           <SearchIcon
@@ -44,7 +34,7 @@ export const Search: FC<PressableProps> = (props) => {
             }
           />
           <Text
-            style={{
+            style={css({
               color: hovered
                 ? theme.colors.main80
                 : pressed
@@ -52,12 +42,12 @@ export const Search: FC<PressableProps> = (props) => {
                 : theme.colors.main50,
               marginLeft: 16,
               fontSize: 24,
-            }}
+            })}
           >
             {t('Search')}
           </Text>
         </>
       )}
-    </Pressable>
+    </Link>
   );
 };

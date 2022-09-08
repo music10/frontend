@@ -1,4 +1,6 @@
-export const theme = {
+import { ITheme } from './theme.interface';
+
+export const theme: ITheme = {
   fontFamily: 'Montserrat',
   fontFamilyMedium: 'Montserrat-Medium',
   fontFamilySemiBold: 'Montserrat-SemiBold',

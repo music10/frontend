@@ -1,14 +1,15 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { Platform, StyleProp, View, ViewStyle } from 'react-native';
+import { Platform } from 'react-native';
+import styled from '@emotion/native';
 
 import {
-  Result as ResultComponent,
+  BottomMenu,
   MenuItem,
   PlaylistInfo,
-  BottomMenu,
   PlaylistInfoLoading,
+  Result as ResultComponent,
 } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import { ReplayIcon, ShareIcon } from '../../components/icons';
@@ -16,18 +17,18 @@ import { AmplitudeContext, ApiContext, WsContext } from '../../contexts';
 import { useShare } from '../../hooks';
 import { ResultDto } from '../../api/api.types';
 
-const layoutStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  alignItems: 'stretch',
-  height: '100%',
-};
+const Layout = styled.View`
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+`;
 
-const resultStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flexGrow: 1,
-  alignSelf: 'center',
-  justifyContent: 'center',
-};
+const ResultStyled = styled.View`
+  display: flex;
+  flex-grow: 1;
+  align-self: center;
+  justify-content: center;
+`;
 
 export const Result = () => {
   const { t } = useTranslation();
@@ -71,15 +72,15 @@ export const Result = () => {
   }, [loadShareImage, result]);
 
   return (
-    <View style={layoutStyle}>
+    <Layout>
       {result.playlist ? (
         <PlaylistInfo {...result.playlist} />
       ) : (
         <PlaylistInfoLoading />
       )}
-      <View style={resultStyle}>
+      <ResultStyled>
         <ResultComponent guess={result.guessed} text={result.text} />
-      </View>
+      </ResultStyled>
       <BottomMenu>
         <MenuItem
           primary
@@ -94,6 +95,6 @@ export const Result = () => {
           <MenuItem icon={ShareIcon} text={t('Share')} onPress={share} />
         )}
       </BottomMenu>
-    </View>
+    </Layout>
   );
 };

@@ -1,30 +1,25 @@
 import React, { FC, useCallback, useContext, useEffect } from 'react';
-import {
-  InteractionState,
-  Platform,
-  StyleProp,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { InteractionState, Platform } from 'react-native';
+import styled from '@emotion/native';
 
 import usePageVisibility from '../../../utils/usePageVisibility';
 import { GameContext, MusicContext } from '../../../contexts';
 import { PauseIcon, PlayIcon } from '../../../components/icons';
 import { Button } from '../../../components';
-import { theme } from '../../../themes';
+import { useTheme } from '@emotion/react';
 
-const headerStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  paddingVertical: 0,
-  paddingHorizontal: 16,
-  height: 64,
-};
+const HeaderStyled = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  height: 64px;
+`;
 
 export const Header: FC = () => {
   const { isPause, setPause } = useContext(GameContext);
   const { play, pause } = useContext(MusicContext);
+  const theme = useTheme();
 
   const togglePause = useCallback(() => {
     setPause((state) => !state);
@@ -41,7 +36,7 @@ export const Header: FC = () => {
 
   return (
     <>
-      <View style={headerStyle}>
+      <HeaderStyled>
         <Button onPress={togglePause}>
           {({ hovered, focused }: InteractionState) =>
             isPause ? (
@@ -67,7 +62,7 @@ export const Header: FC = () => {
             )
           }
         </Button>
-      </View>
+      </HeaderStyled>
     </>
   );
 };

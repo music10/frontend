@@ -1,38 +1,39 @@
 import React, { FC, useContext } from 'react';
-import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
+import styled from '@emotion/native';
 
-import { Text } from './Text';
-import { theme } from '../themes';
 import { HeartIcon } from './icons';
 import { PlaylistList } from './PlaylistList';
 import { FavoritesContext } from '../contexts';
+import { Text } from './Text';
+import { useTheme } from '@emotion/react';
 
-const titleStyle: StyleProp<ViewStyle> = {
-  marginTop: 32,
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  padding: 24,
-};
+const Title = styled.View`
+  margin-top: 32px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 24px;
+`;
 
-const titleText: StyleProp<TextStyle> = {
-  fontSize: 18,
-  fontFamily: theme.fontFamilyBold,
-  textAlign: 'center',
-  color: theme.colors.main,
-};
+const TitleText = styled(Text)`
+  font-size: 18px;
+  font-family: ${({ theme }) => theme.fontFamilyBold};
+  text-align: center;
+  color: ${({ theme }) => theme.colors.main};
+`;
 
 export const FavoritePlaylistList: FC = () => {
   const { favorites } = useContext(FavoritesContext);
+  const theme = useTheme();
 
   return (
     <>
       {favorites.length ? (
         <>
-          <View style={titleStyle}>
-            <Text style={titleText}>Сохранённые</Text>
+          <Title>
+            <TitleText>Сохранённые</TitleText>
             <HeartIcon fill={theme.colors.accent} />
-          </View>
+          </Title>
           <PlaylistList items={favorites} />
         </>
       ) : null}

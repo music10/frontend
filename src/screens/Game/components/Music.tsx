@@ -1,10 +1,9 @@
 import React, {
-  FC,
   Dispatch,
+  FC,
   PropsWithChildren,
   useContext,
   useEffect,
-  useState,
 } from 'react';
 
 import { usePlaying } from '../../../hooks';
@@ -27,7 +26,7 @@ export const Music: FC<PropsWithChildren<Props>> = ({
     if (!isPause) {
       play();
     }
-    return () => stop();
+    return stop;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [play, stop]);
 

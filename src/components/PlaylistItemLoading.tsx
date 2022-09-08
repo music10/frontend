@@ -1,28 +1,25 @@
 import React, { FC } from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import styled from '@emotion/native';
 import { PlaceholderLoader } from './PlaceholderLoader';
 
-const textStyle: StyleProp<ViewStyle> = {
-  marginLeft: 24,
-};
+const TextStyled = styled(PlaceholderLoader)`
+  margin-left: 24px;
+`;
+
+const PlaylistItemLoadingStyled = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 0 8px;
+  border: 2px solid transparent;
+  background-color: transparent;
+`;
 
 export const PlaylistItemLoading: FC = () => (
-  <View
-    style={{
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      borderRadius: 4,
-      paddingVertical: 8,
-      paddingHorizontal: 8,
-      marginVertical: 0,
-      marginHorizontal: 8,
-      backgroundColor: 'transparent',
-      borderWidth: 2,
-      borderColor: 'transparent',
-    }}
-  >
+  <PlaylistItemLoadingStyled>
     <PlaceholderLoader width={48} height={48} />
-    <PlaceholderLoader width={200} height={14} style={textStyle} />
-  </View>
+    <TextStyled width={200} height={14} />
+  </PlaylistItemLoadingStyled>
 );

@@ -1,25 +1,30 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
+import { useTheme } from '@emotion/react';
+import { css } from '@emotion/native';
 
-import { theme } from '../../themes';
-import { PlaceholderLoader } from '../PlaceholderLoader';
+import { TextPlaceholderLoader } from '../PlaceholderLoader';
 
-export const TrackLoading: FC = () => (
-  <View
-    style={{
-      padding: 16,
-      opacity: 1,
-      backgroundColor: 'transparent',
-      borderWidth: 2,
-      borderColor: theme.colors.main50,
-      alignItems: 'center',
-    }}
-  >
-    <PlaceholderLoader width={115} height={14} style={{ marginVertical: 2 }} />
-    <PlaceholderLoader
-      width={180}
-      height={14}
-      style={{ marginTop: 12, marginBottom: 2 }}
-    />
-  </View>
-);
+export const TrackLoading: FC = () => {
+  const theme = useTheme();
+
+  return (
+    <View
+      style={css({
+        padding: 16,
+        borderWidth: 2,
+        opacity: 1,
+        backgroundColor: 'transparent',
+        borderColor: theme.colors.main50,
+        alignItems: 'center',
+      })}
+    >
+      <TextPlaceholderLoader width={115} height={14} />
+      <TextPlaceholderLoader
+        width={180}
+        height={14}
+        style={css({ marginTop: 12 })}
+      />
+    </View>
+  );
+};

@@ -1,7 +1,8 @@
 import React, { FC, useEffect, useRef } from 'react';
-import { Animated, View, ViewProps } from 'react-native';
+import { Animated, StyleSheet, View, ViewProps } from 'react-native';
+import styled from '@emotion/native';
 
-import { theme } from '../themes';
+import { useTheme } from '@emotion/react';
 
 interface Props extends ViewProps {
   width: number;
@@ -16,6 +17,7 @@ export const PlaceholderLoader: FC<Props> = ({
   ...props
 }) => {
   const animationValue = useRef(new Animated.Value(0)).current;
+  const theme = useTheme();
 
   useEffect(() => {
     Animated.loop(
@@ -40,13 +42,17 @@ export const PlaceholderLoader: FC<Props> = ({
   return (
     <View {...props}>
       <Animated.View
-        style={{
+        style={StyleSheet.flatten({
           height,
           width,
-          backgroundColor: color,
           borderRadius,
-        }}
+          backgroundColor: color,
+        })}
       />
     </View>
   );
 };
+
+export const TextPlaceholderLoader = styled(PlaceholderLoader)`
+  margin: 2px 0;
+`;

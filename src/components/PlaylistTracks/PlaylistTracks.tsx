@@ -1,29 +1,28 @@
 import React, { FC } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 
-import { Text } from '../Text';
 import { PlaylistDto } from '../../api/api.types';
 import {
-  artistStyle,
-  descriptionStyle,
-  nameStyle,
-  numberStyle,
-  trackStyle,
-  wrapperStyle,
-} from './PlaylistTracks.style';
+  Artist,
+  Description,
+  Name,
+  Number,
+  Track,
+  Wrapper,
+} from './PlaylistTracks.styled';
 
 export const PlaylistTracks: FC<Pick<PlaylistDto, 'tracks'>> = ({ tracks }) => (
   <ScrollView>
-    <View style={wrapperStyle}>
+    <Wrapper>
       {tracks?.map((track, index) => (
-        <View style={trackStyle} key={`${index}.${track.id}`}>
-          <Text style={numberStyle}>{index + 1}</Text>
-          <View style={descriptionStyle}>
-            <Text style={nameStyle}>{track.name}</Text>
-            <Text style={artistStyle}>{track.artist}</Text>
-          </View>
-        </View>
+        <Track key={`${index}.${track.id}`}>
+          <Number>{index + 1}</Number>
+          <Description>
+            <Name>{track.name}</Name>
+            <Artist>{track.artist}</Artist>
+          </Description>
+        </Track>
       ))}
-    </View>
+    </Wrapper>
   </ScrollView>
 );
