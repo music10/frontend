@@ -62,8 +62,8 @@ export const Game = () => {
   const [tracks, setTracks] = useState<ShortTrackDto[]>([]);
   const [mp3, setMp3] = useState('');
   const [timer, setTimer] = useState(0);
-  const [isMp3Loading, setMp3Loading] = useState(true);
   const [isPause, setPause] = useState(false);
+  const [isLoaded, setLoaded] = useState(false);
   const [selected, setSelected] = useState('');
   const [correct, setCorrect] = useState('');
   const number = useRef(0);
@@ -78,7 +78,6 @@ export const Game = () => {
       setCorrect('');
       setTracks([]);
       (await ws.next()).once('nextTracks', (answer: TracksForUserDto) => {
-        setMp3Loading(true);
         setTracks(answer.tracks);
         setMp3(answer.mp3);
         ++number.current;
@@ -123,8 +122,10 @@ export const Game = () => {
   }, [setPlaylist, ws]);
 
   return (
-    <GameContext.Provider value={{ number, isPause, setPause }}>
-      <Music setMp3Loading={setMp3Loading} mp3={mp3}>
+    <GameContext.Provider
+      value={{ number, isPause, setPause, isLoaded, setLoaded }}
+    >
+      <Music mp3={mp3}>
         <GameStyled>
           <Header />
           <Tracks
@@ -137,7 +138,7 @@ export const Game = () => {
             }}
           >
             <Counter />
-            {!isMp3Loading && tracks.length ? (
+            {isLoaded && tracks.length ? (
               tracks.map((track) => (
                 <TrackStyled
                   key={track.id + selected + correct}
@@ -159,7 +160,7 @@ export const Game = () => {
               />
             )}
           </Tracks>
-          <Progressbar key={mp3} isLoading={isMp3Loading} />
+          <Progressbar key={mp3} />
         </GameStyled>
         <PauseMenu />
       </Music>

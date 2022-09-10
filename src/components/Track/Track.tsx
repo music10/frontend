@@ -71,7 +71,6 @@ export const Track: FC<Props> = ({
     }
   }, [selected, success]);
 
-  console.log('Track', success ? theme.colors.accent : theme.colors.main50);
   return (
     <Pressable disabled={disabled} {...props}>
       {({ hovered, pressed }: InteractionState) => (

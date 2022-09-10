@@ -7,10 +7,11 @@ module.exports = {
     {
       files: ['*.ts', '*.tsx'],
       rules: {
-        '@typescript-eslint/no-shadow': ['warn'],
+        '@typescript-eslint/no-shadow': 'warn',
         'no-shadow': 'off',
         'no-undef': 'off',
         'prettier/prettier': 'warn',
+        'react-hooks/exhaustive-deps': 'warn',
       },
     },
   ],

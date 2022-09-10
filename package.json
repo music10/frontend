@@ -33,6 +33,7 @@
     "amplitude-js": "^8.20.1",
     "axios": "^0.27.2",
     "global": "^4.4.0",
+    "howler": "^2.2.3",
     "i18next": "^21.9.1",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
@@ -43,7 +44,6 @@
     "react-native-share": "^7.9.0",
     "react-native-sound": "^0.11.2",
     "react-native-svg": "^13.1.0",
-    "react-native-use-sound": "1.2.1",
     "react-native-web": "^0.18.9",
     "react-page-visibility": "^7.0.0",
     "react-query": "^3.39.2",
@@ -52,8 +52,7 @@
     "react-router-native": "^6.3.0",
     "react-scripts": "5.0.1",
     "rxjs": "^7.5.6",
-    "socket.io-client": "^4.5.2",
-    "use-sound": "^3.0.1"
+    "socket.io-client": "^4.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.19.0",
@@ -66,6 +65,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@tsconfig/react-native": "^2.0.2",
     "@types/amplitude-js": "^8.16.2",
+    "@types/howler": "^2.2.7",
     "@types/jest": "^29.0.0",
     "@types/node": "^18.7.15",
     "@types/react-dom": "^18.0.6",

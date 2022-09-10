@@ -11,8 +11,6 @@ import {
 import { AmplitudeInstance, Api, WS } from '../utils';
 import i18n from '../i18n';
 import { useFavorites } from '../hooks/useFavorites';
-import { theme } from '../themes';
-import { ThemeProvider } from '@emotion/react';
 
 interface ContextProviderProps {
   api?: Api;
@@ -39,19 +37,17 @@ export const ContextProvider: FC<PropsWithChildren<ContextProviderProps>> = ({
 
   return (
     <I18nextProvider i18n={i18n}>
-      <ThemeProvider theme={theme}>
-        <QueryClientProvider client={queryClient}>
-          <ApiContext.Provider value={apiValue}>
-            <WsContext.Provider value={wsValue}>
-              <FavoritesContext.Provider value={favorites}>
-                <AmplitudeContext.Provider value={amplitudeValue}>
-                  {children}
-                </AmplitudeContext.Provider>
-              </FavoritesContext.Provider>
-            </WsContext.Provider>
-          </ApiContext.Provider>
-        </QueryClientProvider>
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ApiContext.Provider value={apiValue}>
+          <WsContext.Provider value={wsValue}>
+            <FavoritesContext.Provider value={favorites}>
+              <AmplitudeContext.Provider value={amplitudeValue}>
+                {children}
+              </AmplitudeContext.Provider>
+            </FavoritesContext.Provider>
+          </WsContext.Provider>
+        </ApiContext.Provider>
+      </QueryClientProvider>
     </I18nextProvider>
   );
 };

@@ -3,7 +3,7 @@ import { InteractionState, Platform } from 'react-native';
 import styled from '@emotion/native';
 
 import usePageVisibility from '../../../utils/usePageVisibility';
-import { GameContext, MusicContext } from '../../../contexts';
+import { GameContext } from '../../../contexts';
 import { PauseIcon, PlayIcon } from '../../../components/icons';
 import { Button } from '../../../components';
 import { useTheme } from '@emotion/react';
@@ -18,16 +18,11 @@ const HeaderStyled = styled.View`
 
 export const Header: FC = () => {
   const { isPause, setPause } = useContext(GameContext);
-  const { play, pause } = useContext(MusicContext);
   const theme = useTheme();
 
   const togglePause = useCallback(() => {
     setPause((state) => !state);
   }, [setPause]);
-
-  useEffect(() => {
-    isPause ? pause() : play();
-  }, [isPause, pause, play]);
 
   const isVisible = usePageVisibility();
   useEffect(() => {
