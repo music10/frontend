@@ -141,9 +141,10 @@ android {
         applicationId "net.dergunov.musiq"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 10
+        versionName "2.0.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+        manifestPlaceholders = [BUGSNAG_API_KEY: "$System.env.REACT_APP_BUGSNAG_KEY"]
 
         if (isNewArchitectureEnabled()) {
             // We configure the CMake build only if you decide to opt-in for the New Architecture.
