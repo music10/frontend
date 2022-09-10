@@ -27,7 +27,6 @@ const Layout = styled.View`
   flex-direction: column;
   padding: 8px 16px 32px;
   background-color: ${({ theme }) => theme.colors.bg75};
-  elevation: 50deg;
   box-shadow: 0 -25px 50px ${({ theme }) => theme.colors.bg};
 `;
 

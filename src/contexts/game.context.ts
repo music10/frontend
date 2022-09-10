@@ -8,6 +8,8 @@ import {
 interface IGameContext {
   isPause: boolean;
   setPause: Dispatch<SetStateAction<boolean>>;
+  isLoaded: boolean;
+  setLoaded: Dispatch<SetStateAction<boolean>>;
   number: MutableRefObject<number>;
 }
 

@@ -2,24 +2,25 @@ import React, { FC, useCallback, useContext } from 'react';
 import { Animated } from 'react-native';
 
 import { Progress } from '../../../components';
-import { MusicContext } from '../../../contexts';
+import { GameContext, MusicContext } from '../../../contexts';
 
-export const Progressbar: FC<{ isLoading?: boolean }> = ({ isLoading }) => {
-  const { isPlaying, stop } = useContext(MusicContext);
+export const Progressbar: FC = () => {
+  const { isPause, isLoaded } = useContext(GameContext);
+  const sound = useContext(MusicContext);
 
   const endAnimationCallback = useCallback<Animated.EndCallback>(
     (result) => {
       if (result.finished) {
-        stop();
+        sound.stop();
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [stop],
+    [sound],
   );
 
   return (
     <Progress
-      state={isPlaying && !isLoading ? 'start' : 'stop'}
+      state={!isPause && isLoaded ? 'start' : 'stop'}
       callback={endAnimationCallback}
     />
   );

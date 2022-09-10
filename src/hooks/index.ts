@@ -1,2 +1,2 @@
-export * from './usePlaying';
 export * from './useShare';
+export * from './useSound';
