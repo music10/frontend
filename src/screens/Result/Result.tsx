@@ -5,6 +5,7 @@ import { Platform } from 'react-native';
 import styled from '@emotion/native';
 
 import {
+  BackHeader,
   BottomMenu,
   MenuItem,
   PlaylistInfo,
@@ -13,9 +14,15 @@ import {
 } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import { ReplayIcon, ShareIcon } from '../../components/icons';
-import { AmplitudeContext, ApiContext, WsContext } from '../../contexts';
+import {
+  AmplitudeContext,
+  ApiContext,
+  StatisticsContext,
+  WsContext,
+} from '../../contexts';
 import { useShare } from '../../hooks';
 import { ResultDto } from '../../api/api.types';
+import { Coins } from '../../components/Coins';
 
 const Layout = styled.View`
   display: flex;
@@ -39,10 +46,14 @@ export const Result = () => {
   const [result, setResult] = useState<ResultDto>({} as ResultDto);
   const [shareData, setShareData] = useState('');
   const shareFunction = useShare();
+  const { updateStatistics } = useContext(StatisticsContext);
 
   const getResults = useCallback(async () => {
     (await ws.getResult())
-      .once('result', setResult)
+      .once('result', (resultData: ResultDto) => {
+        setResult(resultData);
+        updateStatistics(resultData.guessed);
+      })
       .once('exception', () => navigate(ROUTES.Start, { replace: true }));
   }, [navigate, ws]);
 
@@ -73,6 +84,9 @@ export const Result = () => {
 
   return (
     <Layout>
+      <BackHeader onPress={() => navigate(ROUTES.Start)} text="меню">
+        <Coins />
+      </BackHeader>
       {result.playlist ? (
         <PlaylistInfo {...result.playlist} />
       ) : (

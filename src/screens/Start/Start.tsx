@@ -4,13 +4,19 @@ import { useNavigate } from 'react-router';
 
 import { BottomMenu, Logo, MenuItem } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
-import { PlayIcon } from '../../components/icons';
+import { PlayIcon, StatsIcon } from '../../components/icons';
 import styled from '@emotion/native';
+import { Coins } from '../../components/Coins';
 
 const Layout = styled.View`
   display: flex;
   align-items: stretch;
   height: 100%;
+`;
+
+const Header = styled.View`
+  flex-direction: row;
+  justify-content: flex-end;
 `;
 
 const LogoStyled = styled.View`
@@ -26,6 +32,9 @@ export const Start = () => {
 
   return (
     <Layout>
+      <Header>
+        <Coins />
+      </Header>
       <LogoStyled>
         <Logo />
       </LogoStyled>
@@ -35,6 +44,11 @@ export const Start = () => {
           icon={PlayIcon}
           primary
           onPress={() => navigate(ROUTES.Playlists)}
+        />
+        <MenuItem
+          text={t('Statistics')}
+          icon={StatsIcon}
+          onPress={() => navigate(ROUTES.Statistics)}
         />
       </BottomMenu>
     </Layout>

@@ -8,12 +8,19 @@ export interface Props {
 }
 
 export const Music: FC<PropsWithChildren<Props>> = ({ mp3, children }) => {
-  const { isPause } = useContext(GameContext);
+  const { isPause, setMsAfterStart, startTime } = useContext(GameContext);
+
   const sound = useSound(mp3);
 
   useEffect(() => {
-    !isPause ? sound.play() : sound.pause();
-  }, [isPause, sound]);
+    if (!isPause) {
+      startTime.current = Date.now();
+      sound.play();
+    } else {
+      setMsAfterStart((prev) => prev + Date.now() - startTime.current);
+      sound.pause();
+    }
+  }, [isPause, sound, startTime]);
 
   return (
     <MusicContext.Provider value={sound}>{children}</MusicContext.Provider>

@@ -5,12 +5,16 @@ import { I18nextProvider } from 'react-i18next';
 import {
   AmplitudeContext,
   ApiContext,
+  CoinsContext,
   FavoritesContext,
   WsContext,
 } from '../contexts';
 import { AmplitudeInstance, Api, WS } from '../utils';
 import i18n from '../i18n';
 import { useFavorites } from '../hooks/useFavorites';
+import { useCoins } from '../hooks';
+import { useStatistics } from '../hooks/useStatistics';
+import { StatisticsContext } from '../contexts/statistics.context';
 
 interface ContextProviderProps {
   api?: Api;
@@ -27,6 +31,8 @@ export const ContextProvider: FC<PropsWithChildren<ContextProviderProps>> = ({
   const wsValue = useMemo(() => ws || new WS(), [ws]);
   const queryClient = useMemo(() => new QueryClient(), []);
   const favorites = useFavorites();
+  const coins = useCoins();
+  const statistics = useStatistics();
 
   useEffect(() => {
     return () => {
@@ -41,9 +47,13 @@ export const ContextProvider: FC<PropsWithChildren<ContextProviderProps>> = ({
         <ApiContext.Provider value={apiValue}>
           <WsContext.Provider value={wsValue}>
             <FavoritesContext.Provider value={favorites}>
-              <AmplitudeContext.Provider value={amplitudeValue}>
-                {children}
-              </AmplitudeContext.Provider>
+              <CoinsContext.Provider value={coins}>
+                <StatisticsContext.Provider value={statistics}>
+                  <AmplitudeContext.Provider value={amplitudeValue}>
+                    {children}
+                  </AmplitudeContext.Provider>
+                </StatisticsContext.Provider>
+              </CoinsContext.Provider>
             </FavoritesContext.Provider>
           </WsContext.Provider>
         </ApiContext.Provider>

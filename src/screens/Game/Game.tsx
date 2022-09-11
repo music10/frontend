@@ -6,8 +6,14 @@ import React, {
   useState,
 } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import styled from '@emotion/native';
 
-import { AmplitudeContext, GameContext, WsContext } from '../../contexts';
+import {
+  AmplitudeContext,
+  CoinsContext,
+  GameContext,
+  WsContext,
+} from '../../contexts';
 import { Bugsnag, TRACKS_PER_ROUND } from '../../utils';
 import {
   Counter,
@@ -26,7 +32,6 @@ import { Music } from './components/Music';
 import { Header } from './components/Header';
 import { Progressbar } from './components/Progressbar';
 import { PauseMenu } from './components/PauseMenu';
-import styled from '@emotion/native';
 
 const Tracks = styled.View`
   display: flex;
@@ -59,9 +64,13 @@ export const Game = () => {
   const amp = useContext(AmplitudeContext);
   const navigate = useNavigate();
   const { type, id } = useParams<{ type: Type; id: string }>();
+  const { addCoins } = useContext(CoinsContext);
+
   const [tracks, setTracks] = useState<ShortTrackDto[]>([]);
   const [mp3, setMp3] = useState('');
   const [timer, setTimer] = useState(0);
+  const startTime = useRef<number>(0);
+  const [msAfterStart, setMsAfterStart] = useState(0);
   const [isPause, setPause] = useState(false);
   const [isLoaded, setLoaded] = useState(false);
   const [selected, setSelected] = useState('');
@@ -78,6 +87,7 @@ export const Game = () => {
       setCorrect('');
       setTracks([]);
       (await ws.next()).once('nextTracks', (answer: TracksForUserDto) => {
+        setMsAfterStart(0);
         setTracks(answer.tracks);
         setMp3(answer.mp3);
         ++number.current;
@@ -109,6 +119,17 @@ export const Game = () => {
             chosen: tracks.findIndex((track) => track.id === trackId) + 1,
             right: tracks.findIndex((track) => track.id === answer.correct) + 1,
           });
+          if (trackId === answer.correct) {
+            // fixForGuess + remainingTimeInSeconds
+            addCoins(
+              5 +
+                Math.max(
+                  10 - Math.floor((Date.now() - startTime.current) / 1000),
+                  0,
+                ),
+            );
+          }
+
           setTimer(+setTimeout(getNextTracks, 1500));
           setCorrect(answer.correct);
         },
@@ -123,7 +144,16 @@ export const Game = () => {
 
   return (
     <GameContext.Provider
-      value={{ number, isPause, setPause, isLoaded, setLoaded }}
+      value={{
+        number,
+        isPause,
+        setPause,
+        isLoaded,
+        setLoaded,
+        startTime,
+        msAfterStart,
+        setMsAfterStart,
+      }}
     >
       <Music mp3={mp3}>
         <GameStyled>

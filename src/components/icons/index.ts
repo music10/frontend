@@ -9,6 +9,7 @@ export * from './Pause';
 export * from './Rewind';
 export * from './Replay';
 export * from './Share';
+export * from './Stats';
 export * from './SchevronRight';
 export * from './YaMusic';
 export * from './Rewind';
