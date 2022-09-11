@@ -1,11 +1,12 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
+import { Animated, StyleSheet } from 'react-native';
 import styled from '@emotion/native';
+import { useTheme } from '@emotion/react';
 
 import { Text } from './Text';
-import { CoinsIcon } from './icons/Coins';
 import { formatNumber } from '../utils';
-import { useTheme } from '@emotion/react';
 import { CoinsContext } from '../contexts';
+import { CoinsIcon } from './icons/Coins';
 
 const CoinsStyled = styled.View`
   margin: 0 16px;
@@ -21,14 +22,38 @@ const StyledText = styled(Text)`
   color: ${({ theme }) => theme.colors.main};
 `;
 
+const AnimatedText = Animated.createAnimatedComponent(StyledText);
+const ACoinsIcon = Animated.createAnimatedComponent(CoinsIcon);
+
 export const Coins: FC = () => {
   const { coins } = useContext(CoinsContext);
   const theme = useTheme();
+  const animationValue = useRef(new Animated.Value(0)).current;
+  const [firstRender, setFirstRender] = useState(true);
+
+  useEffect(() => {
+    setFirstRender(false);
+    if (!firstRender) {
+      Animated.timing(animationValue, {
+        isInteraction: true,
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: false,
+      }).start(() => animationValue.setValue(0));
+    }
+  }, [animationValue, coins]);
+
+  const color = animationValue.interpolate({
+    inputRange: [0, 0.1, 1],
+    outputRange: [theme.colors.main, theme.colors.accent, theme.colors.main],
+  });
 
   return (
     <CoinsStyled>
-      <StyledText>{formatNumber(coins ?? 0)}</StyledText>
-      <CoinsIcon fill={theme.colors.main} />
+      <AnimatedText style={StyleSheet.flatten({ color })}>
+        {formatNumber(coins ?? 0)}
+      </AnimatedText>
+      <ACoinsIcon fill={color} />
     </CoinsStyled>
   );
 };

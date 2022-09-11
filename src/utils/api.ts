@@ -37,9 +37,13 @@ export class Api {
       .then(({ data }) => data)
       .catch(Bugsnag.notify);
 
-  share = (playlistId: string | number, guess: number): Promise<string> =>
+  share = (
+    playlistId: string | number,
+    type: Type,
+    guess: number,
+  ): Promise<string> =>
     this.axiosInstance
-      .get('share', { params: { playlistId, guess } })
+      .get('share', { params: { playlistId, type, guess } })
       .then(({ data }) => data)
       .catch(Bugsnag.notify);
 }
