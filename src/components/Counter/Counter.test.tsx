@@ -12,6 +12,11 @@ test('Counter component', () => {
         setPause: jest.fn(),
         isLoaded: true,
         setLoaded: jest.fn(),
+        startTime: {
+          current: 0,
+        },
+        msAfterStart: 0,
+        setMsAfterStart: jest.fn(),
       }}
     >
       <Counter />

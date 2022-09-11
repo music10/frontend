@@ -6,4 +6,5 @@ export const ROUTES = {
   Search: '/search',
   Game: '/game',
   Results: '/result',
+  Statistics: '/statistics',
 };

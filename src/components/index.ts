@@ -1,4 +1,5 @@
 export * from './AppWrapper';
+export * from './BackHeader';
 export * from './BlurView';
 export * from './BottomMenu';
 export * from './Button';

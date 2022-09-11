@@ -4,13 +4,20 @@ import { useNavigate } from 'react-router';
 
 import { BottomMenu, Logo, MenuItem } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
-import { PlayIcon } from '../../components/icons';
+import { ExitIcon, PlayIcon, StatsIcon } from '../../components/icons';
 import styled from '@emotion/native';
+import { Coins } from '../../components/Coins';
+import { BackHandler, Platform } from 'react-native';
 
 const Layout = styled.View`
   display: flex;
   align-items: stretch;
   height: 100%;
+`;
+
+const Header = styled.View`
+  flex-direction: row;
+  justify-content: flex-end;
 `;
 
 const LogoStyled = styled.View`
@@ -26,6 +33,9 @@ export const Start = () => {
 
   return (
     <Layout>
+      <Header>
+        <Coins />
+      </Header>
       <LogoStyled>
         <Logo />
       </LogoStyled>
@@ -36,6 +46,18 @@ export const Start = () => {
           primary
           onPress={() => navigate(ROUTES.Playlists)}
         />
+        <MenuItem
+          text={t('Statistics')}
+          icon={StatsIcon}
+          onPress={() => navigate(ROUTES.Statistics)}
+        />
+        {Platform.OS === 'android' && (
+          <MenuItem
+            text={t('Exit')}
+            icon={ExitIcon}
+            onPress={BackHandler.exitApp}
+          />
+        )}
       </BottomMenu>
     </Layout>
   );

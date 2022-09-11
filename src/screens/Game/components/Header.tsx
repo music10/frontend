@@ -7,11 +7,13 @@ import { GameContext } from '../../../contexts';
 import { PauseIcon, PlayIcon } from '../../../components/icons';
 import { Button } from '../../../components';
 import { useTheme } from '@emotion/react';
+import { Coins } from '../../../components/Coins';
 
 const HeaderStyled = styled.View`
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 0 16px;
   height: 64px;
 `;
@@ -57,6 +59,7 @@ export const Header: FC = () => {
             )
           }
         </Button>
+        <Coins />
       </HeaderStyled>
     </>
   );
