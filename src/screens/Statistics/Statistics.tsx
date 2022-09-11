@@ -18,19 +18,28 @@ const Title = styled(Text)`
   color: ${({ theme }) => theme.colors.main};
   font-family: ${({ theme }) => theme.fontFamilyExtraBoldItalic};
   font-size: 24px;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 `;
 
 const Content = styled.View`
+  padding: 16px;
   flex-grow: 1;
 `;
 
-const Items = styled(Text)`
-  color: ${({ theme }) => theme.colors.main};
-  font-family: ${({ theme }) => theme.fontFamilyMedium};
-  margin: 15px 0;
+const Item = styled.View`
+  margin: 15px 0 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-bottom: 5px;
+  border-bottom-width: 1px;
+  border-bottom-color: ${({ theme }) => theme.colors.main50};
 `;
 
+const ItemText = styled(Text)`
+  color: ${({ theme }) => theme.colors.main};
+  font-family: ${({ theme }) => theme.fontFamilyMedium};
+`;
 export const Statistics: FC = () => {
   const navigate = useNavigate();
   const { statistics, clearStatistics } = useContext(StatisticsContext);
@@ -46,11 +55,20 @@ export const Statistics: FC = () => {
   return (
     <Layout>
       <BackHeader onPress={() => navigate(ROUTES.Start)} />
-      <Title>Статистика</Title>
       <Content>
-        <Items>Сыграно: {statistics?.games ?? 0}</Items>
-        <Items>Угадано треков: {statistics?.guess ?? 0}</Items>
-        <Items>Процент узнаваемости: {guessPercent}%</Items>
+        <Title>Статистика</Title>
+        <Item>
+          <ItemText>Сыграно:</ItemText>
+          <ItemText>{statistics?.games ?? 0}</ItemText>
+        </Item>
+        <Item>
+          <ItemText>Угадано треков:</ItemText>
+          <ItemText>{statistics?.guess ?? 0}</ItemText>
+        </Item>
+        <Item>
+          <ItemText>Процент узнаваемости:</ItemText>
+          <ItemText>{guessPercent}%</ItemText>
+        </Item>
       </Content>
       <BottomMenu>
         <MenuItem

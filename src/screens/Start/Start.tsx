@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router';
 
 import { BottomMenu, Logo, MenuItem } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
-import { PlayIcon, StatsIcon } from '../../components/icons';
+import { ExitIcon, PlayIcon, StatsIcon } from '../../components/icons';
 import styled from '@emotion/native';
 import { Coins } from '../../components/Coins';
+import { BackHandler, Platform } from 'react-native';
 
 const Layout = styled.View`
   display: flex;
@@ -50,6 +51,13 @@ export const Start = () => {
           icon={StatsIcon}
           onPress={() => navigate(ROUTES.Statistics)}
         />
+        {Platform.OS === 'android' && (
+          <MenuItem
+            text={t('Exit')}
+            icon={ExitIcon}
+            onPress={BackHandler.exitApp}
+          />
+        )}
       </BottomMenu>
     </Layout>
   );
