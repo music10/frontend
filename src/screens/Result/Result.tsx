@@ -59,9 +59,10 @@ export const Result = () => {
 
   const loadShareImage = useCallback(async () => {
     const playlistId = result.playlist?.id;
+    const type = result.playlist?.type;
     const guess = result.guessed;
     if (playlistId) {
-      setShareData(await api.share(playlistId, guess));
+      setShareData(await api.share(playlistId, type, guess));
     }
   }, [api, result]);
 
