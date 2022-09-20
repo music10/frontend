@@ -3,7 +3,7 @@ import { IStatistics } from '../types';
 
 export interface IStatisticsContext {
   statistics: IStatistics;
-  updateStatistics: (guess: number) => void;
+  updateStatistics: (guess: number, seconds: number) => void;
   clearStatistics: () => void;
 }
 

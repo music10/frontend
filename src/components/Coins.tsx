@@ -32,7 +32,6 @@ export const Coins: FC = () => {
   const [firstRender, setFirstRender] = useState(true);
 
   useEffect(() => {
-    setFirstRender(false);
     if (!firstRender) {
       Animated.timing(animationValue, {
         isInteraction: true,
@@ -41,6 +40,7 @@ export const Coins: FC = () => {
         useNativeDriver: false,
       }).start(() => animationValue.setValue(0));
     }
+    setFirstRender(false);
   }, [animationValue, coins]);
 
   const color = animationValue.interpolate({
