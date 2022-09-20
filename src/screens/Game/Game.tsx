@@ -68,6 +68,7 @@ export const Game = () => {
 
   const [tracks, setTracks] = useState<ShortTrackDto[]>([]);
   const [mp3, setMp3] = useState('');
+  const seconds = useRef(0);
   const [timer, setTimer] = useState(0);
   const startTime = useRef<number>(0);
   const [msAfterStart, setMsAfterStart] = useState(0);
@@ -93,7 +94,9 @@ export const Game = () => {
         ++number.current;
       });
     } else {
-      navigate(ROUTES.Results, { replace: true });
+      navigate(`${ROUTES.Results}?seconds=${seconds.current}`, {
+        replace: true,
+      });
     }
   }, [ws, navigate]);
 
@@ -119,16 +122,18 @@ export const Game = () => {
             chosen: tracks.findIndex((track) => track.id === trackId) + 1,
             right: tracks.findIndex((track) => track.id === answer.correct) + 1,
           });
+
+          const secondsFromStart = Math.min(
+            Math.floor((Date.now() - startTime.current) / 1000),
+            10,
+          );
+
           if (trackId === answer.correct) {
             // fixForGuess + remainingTimeInSeconds
-            addCoins(
-              5 +
-                Math.max(
-                  10 - Math.floor((Date.now() - startTime.current) / 1000),
-                  0,
-                ),
-            );
+            addCoins(5 + 10 - secondsFromStart);
           }
+
+          seconds.current += secondsFromStart;
 
           setTimer(+setTimeout(getNextTracks, 1500));
           setCorrect(answer.correct);

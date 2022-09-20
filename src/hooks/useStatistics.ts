@@ -9,6 +9,7 @@ import { IStatisticsContext } from '../contexts';
 const DEFAULT_STATISTICS: IStatistics = {
   games: 0,
   guess: 0,
+  seconds: 0,
 };
 
 export const useStatistics = (): IStatisticsContext => {
@@ -18,12 +19,13 @@ export const useStatistics = (): IStatisticsContext => {
   );
 
   const updateStatistics = useCallback(
-    (guess: number) => {
+    (guess: number, seconds: number) => {
       AsyncStorage.setItem(
         'statistics',
         JSON.stringify({
           games: (statistics?.games ?? 0) + 1,
           guess: (statistics?.guess ?? 0) + guess,
+          seconds: (statistics?.seconds ?? 0) + seconds,
         }),
       )
         .then(trigger)
@@ -35,7 +37,7 @@ export const useStatistics = (): IStatisticsContext => {
     AsyncStorage.setItem('statistics', JSON.stringify(DEFAULT_STATISTICS))
       .then(trigger)
       .catch(Bugsnag.notify);
-  }, [statistics, trigger]);
+  }, [trigger]);
 
   return {
     statistics,

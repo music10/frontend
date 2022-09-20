@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Platform } from 'react-native';
 import styled from '@emotion/native';
@@ -40,6 +40,8 @@ const ResultStyled = styled.View`
 export const Result = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { search } = useLocation();
+
   const api = useContext(ApiContext);
   const ws = useContext(WsContext);
   const amp = useContext(AmplitudeContext);
@@ -52,10 +54,11 @@ export const Result = () => {
     (await ws.getResult())
       .once('result', (resultData: ResultDto) => {
         setResult(resultData);
-        updateStatistics(resultData.guessed);
+        const seconds = new URLSearchParams(search).get('seconds') ?? 0;
+        updateStatistics(resultData.guessed, +seconds);
       })
       .once('exception', () => navigate(ROUTES.Start, { replace: true }));
-  }, [navigate, ws]);
+  }, [navigate, ws, search]);
 
   const loadShareImage = useCallback(async () => {
     const playlistId = result.playlist?.id;
