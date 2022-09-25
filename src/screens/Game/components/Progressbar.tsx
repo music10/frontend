@@ -2,17 +2,19 @@ import React, { FC, useCallback, useContext } from 'react';
 import { Animated } from 'react-native';
 
 import { Progress } from '../../../components';
-import { GameContext, MusicContext } from '../../../contexts';
-import { useAppSelector } from '../../../store/hooks';
+import { MusicContext } from '../../../contexts';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { soundEnd } from '../../../actions';
 
 export const Progressbar: FC = () => {
-  const { isLoaded } = useContext(GameContext);
-  const { state } = useAppSelector((state) => state.game);
+  const { state, mp3Loaded } = useAppSelector((state) => state.game);
+  const dispatch = useAppDispatch();
   const sound = useContext(MusicContext);
 
   const endAnimationCallback = useCallback<Animated.EndCallback>(
     (result) => {
       if (result.finished) {
+        dispatch(soundEnd());
         sound.stop();
       }
     },
@@ -22,7 +24,7 @@ export const Progressbar: FC = () => {
 
   return (
     <Progress
-      state={state !== 'pause' && isLoaded ? 'start' : 'stop'}
+      state={state === 'game' && mp3Loaded ? 'start' : 'stop'}
       callback={endAnimationCallback}
     />
   );

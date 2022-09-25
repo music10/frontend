@@ -6,23 +6,31 @@ import { HintType } from '../types';
 interface GameStore {
   number: number;
   mp3: string | null;
+  mp3Loaded: boolean;
   selected: string | null;
   correct: string | null;
   tracks: TrackDto[];
   currentHint: HintType;
   usedHints: HintType[];
   state: 'game' | 'pause' | 'hint';
+  startTime: number | null;
+  msAfterStart: number;
+  isSoundEnd: boolean;
 }
 
 const initialState: GameStore = {
   number: 0,
   mp3: null,
+  mp3Loaded: false,
   selected: null,
   correct: null,
   tracks: [],
   currentHint: null,
   usedHints: [],
   state: 'game',
+  startTime: null,
+  msAfterStart: 0,
+  isSoundEnd: false,
 };
 
 export const gameReducer: Reducer = (state = initialState, action) => {
@@ -39,10 +47,17 @@ export const gameReducer: Reducer = (state = initialState, action) => {
     case GameActions.NEW_ROUND:
       return {
         ...state,
-        msAfterStart: 0,
         tracks: action.tracks,
-        mp3: action.mp3,
         number: state.number + 1,
+        mp3: action.mp3,
+        mp3Loaded: false,
+      };
+    case GameActions.SET_MP3_LOADED:
+      return {
+        ...state,
+        mp3Loaded: true,
+        msAfterStart: 0,
+        startTime: Date.now(),
       };
     case GameActions.CHOOSE_TRACK:
       return {
@@ -55,18 +70,31 @@ export const gameReducer: Reducer = (state = initialState, action) => {
         correct: action.track,
       };
     case GameActions.SET_GAME_STATE:
+      if (action.state === 'game') {
+        return {
+          ...state,
+          startTime: Date.now(),
+          state: action.state,
+        };
+      }
       return {
         ...state,
+        msAfterStart: state.msAfterStart + Date.now() - state.startTime,
         state: action.state,
       };
     case GameActions.SET_HINT:
       return {
         ...state,
+        state: 'game',
         hint: action.hint,
         usedHints: action.hint
           ? [...state.usedHints, action.hint]
           : state.usedHints,
       };
+    case GameActions.SOUND_END:
+      return { ...state, isSoundEnd: true };
+    case GameActions.RESET_GAME:
+      return initialState;
 
     default:
       return state;

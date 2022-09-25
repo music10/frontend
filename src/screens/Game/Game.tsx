@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from '@emotion/native';
 
-import { AmplitudeContext, GameContext } from '../../contexts';
+import { AmplitudeContext } from '../../contexts';
 import {
   ButtonWithIcon,
   Counter,
@@ -17,7 +17,7 @@ import { useGame } from '../../hooks';
 import { LampIcon } from '../../components/icons';
 import { HintMenu } from './components/HintMenu';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { setGameState } from '../../actions';
+import { resetGame, setGameState } from '../../actions';
 
 const Tracks = styled.View`
   display: flex;
@@ -57,60 +57,62 @@ const TracksLoadingWrapper = () => (
 
 export const Game = () => {
   const amp = useContext(AmplitudeContext);
-  const { context, choose, getNextTracks, timer } = useGame();
+  const { choose, getNextTracks, timer } = useGame();
 
-  const { mp3, tracks, selected, correct } = useAppSelector(
+  const { mp3, tracks, selected, correct, mp3Loaded } = useAppSelector(
     (state) => state.game,
   );
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    dispatch(resetGame());
+  }, []);
+
   return (
-    <GameContext.Provider value={context}>
-      <Music>
-        <GameStyled>
-          <Header />
-          <Tracks>
-            {context.isLoaded && tracks.length ? (
-              tracks.map((track) => (
-                <TrackStyled
-                  key={track.id + selected + correct}
-                  disabled={!!selected}
-                  selected={track.id === selected}
-                  success={track.id === correct}
-                  onPress={() => {
-                    if (!selected) {
-                      choose(track.id);
-                    } else {
-                      clearTimeout(timer);
-                      getNextTracks();
-                      amp.logEvent('Result Skipped');
-                    }
-                  }}
-                  {...track}
-                />
-              ))
-            ) : (
-              <PlaceholderLoaderList
-                number={4}
-                component={TracksLoadingWrapper}
+    <Music>
+      <GameStyled>
+        <Header />
+        <Tracks>
+          {mp3Loaded && tracks.length ? (
+            tracks.map((track) => (
+              <TrackStyled
+                key={track.id + selected + correct}
+                disabled={!!selected}
+                selected={track.id === selected}
+                success={track.id === correct}
+                onPress={() => {
+                  if (!selected) {
+                    choose(track.id);
+                  } else {
+                    clearTimeout(timer);
+                    getNextTracks();
+                    amp.logEvent('Result Skipped');
+                  }
+                }}
+                {...track}
               />
-            )}
-            <HintCounterWrapper>
-              <Hint>
-                <ButtonWithIcon
-                  text="Подсказка"
-                  icon={LampIcon}
-                  onPress={() => dispatch(setGameState('hint'))}
-                />
-              </Hint>
-              <Counter />
-            </HintCounterWrapper>
-          </Tracks>
-          <Progressbar key={mp3} />
-        </GameStyled>
-        <PauseMenu />
-        <HintMenu />
-      </Music>
-    </GameContext.Provider>
+            ))
+          ) : (
+            <PlaceholderLoaderList
+              number={4}
+              component={TracksLoadingWrapper}
+            />
+          )}
+          <HintCounterWrapper>
+            <Hint>
+              <ButtonWithIcon
+                text="Подсказка"
+                icon={LampIcon}
+                onPress={() => dispatch(setGameState('hint'))}
+              />
+            </Hint>
+            <Counter />
+          </HintCounterWrapper>
+        </Tracks>
+        <Progressbar key={mp3} />
+      </GameStyled>
+      <PauseMenu />
+      <HintMenu />
+    </Music>
   );
 };

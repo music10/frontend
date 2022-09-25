@@ -13,14 +13,11 @@ export const useGame = () => {
   const ws = useContext(WsContext);
   const { addCoins } = useContext(CoinsContext);
 
-  const [isLoaded, setLoaded] = useState(false);
-  const [msAfterStart, setMsAfterStart] = useState(0);
   const [timer, setTimer] = useState(0);
 
-  const { number } = useAppSelector((state) => state.game);
+  const { number, startTime } = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
 
-  const startTime = useRef<number>(0);
   const seconds = useRef(0);
 
   const { type, id } = useParams<{ type: Type; id: string }>();
@@ -56,7 +53,7 @@ export const useGame = () => {
         'chooseResult',
         (answer: ChooseAnswerDto) => {
           const secondsFromStart = Math.min(
-            Math.floor((Date.now() - startTime.current) / 1000),
+            Math.floor((Date.now() - startTime) / 1000),
             10,
           );
 
@@ -72,7 +69,7 @@ export const useGame = () => {
         },
       );
     },
-    [getNextTracks, ws, addCoins],
+    [getNextTracks, ws, startTime, addCoins],
   );
 
   useEffect(() => {
@@ -80,13 +77,6 @@ export const useGame = () => {
   }, [setPlaylist, ws]);
 
   return {
-    context: {
-      isLoaded,
-      setLoaded,
-      startTime,
-      msAfterStart,
-      setMsAfterStart,
-    },
     choose,
     getNextTracks,
     timer,
