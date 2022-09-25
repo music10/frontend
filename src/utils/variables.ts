@@ -8,7 +8,7 @@ export const WS_HOST =
  * HTTP-url for server with protocol and port
  */
 export const API_HOST =
-  process.env.REACT_APP_API_HOST || 'https://api.musiq.dergunov.net';
+  process.env.REACT_APP_API_HOST || 'https://api.musiq.dergunov.net/';
 
 /**
  * WS-url for server with protocol and port

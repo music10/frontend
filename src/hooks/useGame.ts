@@ -25,15 +25,18 @@ export const useGame = () => {
   const getNextTracks = useCallback(async () => {
     if (number < TRACKS_PER_ROUND) {
       dispatch(endRound());
-      (await ws.next()).once('nextTracks', (answer: TracksForUserDto) => {
-        dispatch(newRound(answer.tracks, answer.mp3));
-      });
+      (await ws.next()).once(
+        'nextTracks',
+        ({ tracks, mp3 }: TracksForUserDto) => {
+          dispatch(newRound(tracks, mp3));
+        },
+      );
     } else {
       navigate(`${ROUTES.Results}?seconds=${seconds.current}`, {
         replace: true,
       });
     }
-  }, [ws, navigate]);
+  }, [ws, navigate, dispatch, number]);
 
   const setPlaylist = useCallback(
     async () =>
@@ -43,7 +46,7 @@ export const useGame = () => {
           Bugsnag.notify(error);
           navigate(ROUTES.Start, { replace: true });
         }),
-    [ws, id, type, getNextTracks, navigate],
+    [ws, id, type, navigate],
   );
 
   const choose = useCallback(
@@ -53,7 +56,7 @@ export const useGame = () => {
         'chooseResult',
         (answer: ChooseAnswerDto) => {
           const secondsFromStart = Math.min(
-            Math.floor((Date.now() - startTime) / 1000),
+            Math.floor((Date.now() - (startTime ?? Date.now())) / 1000),
             10,
           );
 

@@ -13,11 +13,12 @@ export class Api {
     });
   }
 
-  getCherryPickPlaylists = (): Promise<PlaylistDto[]> =>
-    this.axiosInstance
+  getCherryPickPlaylists = (): Promise<PlaylistDto[]> => {
+    return this.axiosInstance
       .get('playlists/cherry-pick')
       .then(({ data }) => data)
       .catch(Bugsnag.notify);
+  };
 
   getRandomPlaylist = (): Promise<PlaylistDto> =>
     this.axiosInstance

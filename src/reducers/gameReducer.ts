@@ -33,7 +33,10 @@ const initialState: GameStore = {
   isSoundEnd: false,
 };
 
-export const gameReducer: Reducer = (state = initialState, action) => {
+export const gameReducer: Reducer<GameStore> = (
+  state = initialState,
+  action,
+) => {
   switch (action.type) {
     case GameActions.END_ROUND:
       return {
@@ -55,6 +58,7 @@ export const gameReducer: Reducer = (state = initialState, action) => {
     case GameActions.SET_MP3_LOADED:
       return {
         ...state,
+        isSoundEnd: false,
         mp3Loaded: true,
         msAfterStart: 0,
         startTime: Date.now(),
@@ -79,7 +83,8 @@ export const gameReducer: Reducer = (state = initialState, action) => {
       }
       return {
         ...state,
-        msAfterStart: state.msAfterStart + Date.now() - state.startTime,
+        msAfterStart:
+          state.msAfterStart + Date.now() - (state.startTime ?? Date.now()),
         state: action.state,
       };
     case GameActions.SET_HINT:
