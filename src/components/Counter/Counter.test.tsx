@@ -7,9 +7,6 @@ test('Counter component', () => {
   const { getByText } = render(
     <GameContext.Provider
       value={{
-        number: { current: 5 },
-        isPause: false,
-        setPause: jest.fn(),
         isLoaded: true,
         setLoaded: jest.fn(),
         startTime: {

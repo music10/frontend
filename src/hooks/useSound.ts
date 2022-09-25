@@ -4,11 +4,13 @@ import Sound from 'react-native-sound';
 import { Bugsnag } from '../utils';
 import { GameContext } from '../contexts';
 import { UseSound } from './useSound.types';
+import { useAppSelector } from '../store/hooks';
 
 const defaultValue = new Sound('');
 
 export const useSound: UseSound = (mp3) => {
-  const { isPause, setLoaded } = useContext(GameContext);
+  const { setLoaded } = useContext(GameContext);
+  const { state } = useAppSelector((state) => state.game);
   const [sound, setSound] = useState<Sound>(defaultValue);
 
   useEffect(() => {
@@ -26,7 +28,7 @@ export const useSound: UseSound = (mp3) => {
       sound.setCurrentTime(
         Math.random() * (Math.max(0, sound.getDuration() - 10) + 1),
       );
-      if (!isPause) {
+      if (state === 'game') {
         sound.play((success) => {
           if (!success) {
             Bugsnag.notify('Playback error', error);

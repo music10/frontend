@@ -3,9 +3,11 @@ import { Animated } from 'react-native';
 
 import { Progress } from '../../../components';
 import { GameContext, MusicContext } from '../../../contexts';
+import { useAppSelector } from '../../../store/hooks';
 
 export const Progressbar: FC = () => {
-  const { isPause, isLoaded } = useContext(GameContext);
+  const { isLoaded } = useContext(GameContext);
+  const { state } = useAppSelector((state) => state.game);
   const sound = useContext(MusicContext);
 
   const endAnimationCallback = useCallback<Animated.EndCallback>(
@@ -20,7 +22,7 @@ export const Progressbar: FC = () => {
 
   return (
     <Progress
-      state={!isPause && isLoaded ? 'start' : 'stop'}
+      state={state !== 'pause' && isLoaded ? 'start' : 'stop'}
       callback={endAnimationCallback}
     />
   );

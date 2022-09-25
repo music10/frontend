@@ -13,8 +13,9 @@ const defaultValue = {
 };
 
 export const useSound: UseSound = (mp3) => {
-  const { isPause, setLoaded } = useContext(GameContext);
+  const { setLoaded } = useContext(GameContext);
   const [sound, setSound] = useState(defaultValue);
+
   const onLoad = useCallback(
     (sound) => {
       sound.seek(Math.random() * (Math.max(0, sound.duration() - 10) + 1));
@@ -25,7 +26,7 @@ export const useSound: UseSound = (mp3) => {
         isPlaying: sound.playing.bind(sound),
       });
     },
-    [isPause, setSound],
+    [setSound],
   );
 
   useEffect(() => {
