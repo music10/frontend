@@ -6,6 +6,7 @@ export const enum GameActions {
   SHOW_CORRECT = 'GAME/SHOW_CORRECT',
   SET_GAME_STATE = 'GAME/SET_GAME_STATE',
   SET_HINT = 'GAME/SET_HINT',
+  GET_HINT_ANSWER = 'GAME/GET_HINT_ANSWER',
   SOUND_END = 'GAME/SOUND_END',
   RESET_GAME = 'GAME/RESET_GAME',
 }
@@ -42,6 +43,18 @@ export const setGameState = (state: 'game' | 'pause' | 'hint') => ({
 export const setHint = (hint: '50-50' | 'replay' | null) => ({
   type: GameActions.SET_HINT,
   hint,
+});
+
+export const getHintAnswer = (
+  data:
+    | {
+        hint: '50-50';
+        data: string[];
+      }
+    | { hint: 'replay'; data: string },
+) => ({
+  type: GameActions.GET_HINT_ANSWER,
+  ...data,
 });
 
 export const soundEnd = () => ({

@@ -8,7 +8,7 @@ export const Music: FC<PropsWithChildren> = ({ children }) => {
   const { mp3, state, isSoundEnd } = useAppSelector((state) => state.game);
   const isGame = state === 'game' && !isSoundEnd;
 
-  const sound = useSound(mp3);
+  const sound = useSound(mp3 ?? '');
 
   useEffect(() => {
     if (isGame) {
@@ -16,7 +16,12 @@ export const Music: FC<PropsWithChildren> = ({ children }) => {
     } else {
       sound.pause();
     }
-  }, [isGame, sound]);
+  }, [isGame]);
+
+  useEffect(() => {
+    sound.play();
+    return () => sound.stop();
+  }, [sound]);
 
   return (
     <MusicContext.Provider value={sound}>{children}</MusicContext.Provider>

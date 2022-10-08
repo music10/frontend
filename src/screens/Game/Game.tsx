@@ -59,9 +59,8 @@ export const Game = () => {
   const amp = useContext(AmplitudeContext);
   const { choose, getNextTracks, timer } = useGame();
 
-  const { mp3, tracks, selected, correct, mp3Loaded } = useAppSelector(
-    (state) => state.game,
-  );
+  const { mp3, tracks, selected, correct, mp3Loaded, disabledTracks } =
+    useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -77,7 +76,7 @@ export const Game = () => {
             tracks.map((track) => (
               <TrackStyled
                 key={track.id + selected + correct}
-                disabled={!!selected}
+                disabled={!!selected || disabledTracks.includes(track.id)}
                 selected={track.id === selected}
                 success={track.id === correct}
                 onPress={() => {

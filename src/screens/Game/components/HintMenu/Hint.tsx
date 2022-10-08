@@ -49,15 +49,24 @@ interface Props extends PressableProps {
   icon: FC<IconProps>;
   name: string;
   id: HintType;
+  isDisabledHint?: boolean;
 }
 
-export const Hint: FC<Props> = ({ coins, name, id, icon: Icon, ...props }) => {
+export const Hint: FC<Props> = ({
+  coins,
+  name,
+  id,
+  icon: Icon,
+  isDisabledHint,
+  ...props
+}) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { usedHints } = useAppSelector((state) => state.game);
   const { addCoins, coins: userCoins } = useContext(CoinsContext);
 
-  const isDisabled = usedHints.includes(id) || coins > userCoins;
+  const isDisabled =
+    isDisabledHint || usedHints.includes(id) || coins > userCoins;
 
   const useHint = useCallback(() => {
     if (!isDisabled) {

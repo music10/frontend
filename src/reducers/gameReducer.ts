@@ -10,6 +10,7 @@ interface GameStore {
   selected: string | null;
   correct: string | null;
   tracks: TrackDto[];
+  disabledTracks: string[];
   currentHint: HintType;
   usedHints: HintType[];
   state: 'game' | 'pause' | 'hint';
@@ -25,6 +26,7 @@ const initialState: GameStore = {
   selected: null,
   correct: null,
   tracks: [],
+  disabledTracks: [],
   currentHint: null,
   usedHints: [],
   state: 'game',
@@ -45,6 +47,7 @@ export const gameReducer: Reducer<GameStore> = (
         selected: null,
         correct: null,
         tracks: [],
+        disabledTracks: [],
         usedHints: [],
       };
     case GameActions.NEW_ROUND:
@@ -90,12 +93,37 @@ export const gameReducer: Reducer<GameStore> = (
     case GameActions.SET_HINT:
       return {
         ...state,
-        state: 'game',
-        hint: action.hint,
+        currentHint: action.hint,
         usedHints: action.hint
           ? [...state.usedHints, action.hint]
           : state.usedHints,
       };
+
+    case GameActions.GET_HINT_ANSWER:
+      switch (action.hint) {
+        case '50-50':
+          return {
+            ...state,
+            state: 'game',
+            currentHint: null,
+            disabledTracks: action.data,
+          };
+        case 'replay':
+          return {
+            ...state,
+            state: 'game',
+            currentHint: null,
+            mp3: action.data,
+            mp3Loaded: false,
+          };
+        default:
+          return {
+            ...state,
+            state: 'game',
+            currentHint: null,
+          };
+      }
+
     case GameActions.SOUND_END:
       return { ...state, isSoundEnd: true };
     case GameActions.RESET_GAME:

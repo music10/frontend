@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Howl } from 'howler';
+import { Howl, Howler } from 'howler';
 
 import { Bugsnag } from '../utils';
 import { UseSound } from './useSound.types';
@@ -26,32 +26,31 @@ export const useSound: UseSound = (mp3) => {
         pause: sound.pause.bind(sound),
         isPlaying: sound.playing.bind(sound),
       });
+      dispatch(setMp3Loaded());
     },
     [setSound],
   );
 
   useEffect(() => {
     if (!mp3) return;
+    Howler.unload();
 
     const sound = new Howl({
       html5: true,
+      pool: 1,
       src: mp3,
       format: 'mp3',
-      preload: true,
-      onload: () => {
-        dispatch(setMp3Loaded());
-        onLoad(sound);
-      },
       onloaderror: (id, error) => Bugsnag.notify(error as Error),
       onplayerror: (id, error) => Bugsnag.notify(error as Error),
     });
+    sound.once('load', function () {
+      onLoad(sound);
+    });
 
     sound.load();
-
     return () => {
       sound.unload();
     };
-  }, [mp3, dispatch]);
-
+  }, [mp3]);
   return sound;
 };

@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import styled from '@emotion/native';
 
 import { BlurView, MenuItem, Text } from '../../../../components';
@@ -9,7 +9,8 @@ import {
 } from '../../../../components/icons';
 import { Hint } from './Hint';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { setGameState, setHint } from '../../../../actions';
+import { getHintAnswer, setGameState } from '../../../../actions';
+import { WsContext } from '../../../../contexts';
 
 const Overlay = styled.View`
   margin: 0 auto;
@@ -53,16 +54,28 @@ const Hints = styled.View`
 `;
 
 export const HintMenu: FC = () => {
-  const { state, currentHint } = useAppSelector((state) => state.game);
+  const ws = useContext(WsContext);
+  const { state, currentHint, tracks, isSoundEnd } = useAppSelector(
+    (state) => state.game,
+  );
   const dispatch = useAppDispatch();
 
-  // const { mp3 } = useAppSelector((state) => state.game);
-
   useEffect(() => {
-    if (currentHint === 'replay') {
-      // TODO
-      // setMp3(`${mp3}#`);
-      dispatch(setHint(null));
+    switch (currentHint) {
+      case 'replay':
+        ws.hintReplay().then((res) =>
+          res.once('hint/replay/answer', (mp3: string) => {
+            dispatch(getHintAnswer({ hint: 'replay', data: mp3 }));
+          }),
+        );
+        break;
+      case '50-50':
+        ws.hint50(tracks.map(({ id }) => id)).then((res) =>
+          res.once('hint/50-50/answer', (wrongTracks: string[]) => {
+            dispatch(getHintAnswer({ hint: '50-50', data: wrongTracks }));
+          }),
+        );
+        break;
     }
   }, [currentHint]);
 
@@ -74,7 +87,13 @@ export const HintMenu: FC = () => {
           <Total>Выберите подсказку</Total>
           <Hints>
             <Hint icon={FiftyFiftyIcon} name="50 / 50" coins={200} id="50-50" />
-            <Hint icon={ReplayIcon} name="Ещё раз" coins={200} id="replay" />
+            <Hint
+              icon={ReplayIcon}
+              name="Ещё раз"
+              coins={200}
+              id="replay"
+              isDisabledHint={!isSoundEnd}
+            />
           </Hints>
 
           <MenuItem
