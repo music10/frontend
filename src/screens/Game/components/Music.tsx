@@ -1,31 +1,29 @@
-import React, { Dispatch, useContext, useEffect, useState } from 'react';
+import React, { FC, PropsWithChildren, useEffect } from 'react';
 
-import { usePlaying } from '../../../hooks';
-import { GameContext, MusicContext } from '../../../contexts';
+import { MusicContext } from '../../../contexts';
+import { useSound } from '../../../hooks';
+import { useAppSelector } from '../../../store/hooks';
 
-export interface Props {
-  mp3: string;
-  setMp3Loading: Dispatch<React.SetStateAction<boolean>>;
-}
+export const Music: FC<PropsWithChildren> = ({ children }) => {
+  const { mp3, state, isSoundEnd } = useAppSelector((state) => state.game);
+  const isGame = state === 'game' && !isSoundEnd;
 
-export const Music: React.FC<Props> = ({ mp3, setMp3Loading, children }) => {
-  const { play, stop, pause, ...rest } = usePlaying(mp3, setMp3Loading);
-  const [allowPlay, setAllowPlay] = useState(true);
-  const { isPause } = useContext(GameContext);
+  const sound = useSound(mp3 ?? '');
 
   useEffect(() => {
-    if (!isPause) {
-      play();
+    if (isGame) {
+      sound.play();
+    } else {
+      sound.pause();
     }
-    return () => stop();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [play, stop]);
+  }, [isGame]);
+
+  useEffect(() => {
+    sound.play();
+    return () => sound.stop();
+  }, [sound]);
 
   return (
-    <MusicContext.Provider
-      value={{ play, stop, pause, allowPlay, setAllowPlay, ...rest }}
-    >
-      {children}
-    </MusicContext.Provider>
+    <MusicContext.Provider value={sound}>{children}</MusicContext.Provider>
   );
 };

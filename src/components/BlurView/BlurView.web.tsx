@@ -1,20 +1,18 @@
 import React, { FC } from 'react';
-import { Platform, ViewProps } from 'react-native';
-import { BlurViewProperties } from '@react-native-community/blur';
+import { Platform } from 'react-native';
+import { BlurViewProps } from '@react-native-community/blur';
 
-interface Props extends BlurViewProperties, ViewProps {}
-
-export const BlurView: FC<Props> = ({
+export const BlurView: FC<BlurViewProps & { blurRadius?: number }> = ({
   children,
-  blurRadius = 5,
   style,
+  blurRadius,
   ...props
 }) => (
   <div
     // @ts-ignore
     style={Platform.select({
       web: {
-        backdropFilter: `blur(${blurRadius}px)`,
+        backdropFilter: `blur(${blurRadius ?? 5}px)`,
         ...(typeof style === 'object' ? style : {}),
       },
       default: style,

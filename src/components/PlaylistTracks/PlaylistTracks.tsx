@@ -1,69 +1,28 @@
 import React, { FC } from 'react';
+import { ScrollView } from 'react-native';
+
+import { PlaylistDto } from '../../api/api.types';
 import {
-  ScrollView,
-  StyleProp,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native';
+  Artist,
+  Description,
+  Name,
+  Number,
+  Track,
+  Wrapper,
+} from './PlaylistTracks.styled';
 
-import { Text } from '../Text';
-import { theme } from '../../themes';
-import { TrackDto } from '../../api/api.types';
-
-const wrapperStyle: StyleProp<ViewStyle> = {
-  marginVertical: 16,
-  marginHorizontal: 8,
-  flexGrow: 0,
-};
-
-const trackStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flexDirection: 'row',
-  padding: 8,
-};
-const numberStyle: StyleProp<TextStyle> = {
-  alignSelf: 'center',
-  flexGrow: 0,
-  flexShrink: 0,
-  flexBasis: 40,
-  fontFamily: theme.fontFamilyMedium,
-  fontSize: 14,
-  color: theme.colors.main50,
-};
-const descriptionStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flexGrow: 0,
-  flexShrink: 1,
-  flexBasis: 'auto',
-};
-const artistStyle: StyleProp<TextStyle> = {
-  fontFamily: theme.fontFamilyMedium,
-  fontSize: 14,
-  color: theme.colors.main50,
-};
-const nameStyle: StyleProp<TextStyle> = {
-  fontFamily: theme.fontFamilySemiBold,
-  fontSize: 14,
-  color: theme.colors.main,
-};
-
-interface Props {
-  tracks: TrackDto[];
-}
-
-export const PlaylistTracks: FC<Props> = ({ tracks }) => (
+export const PlaylistTracks: FC<Pick<PlaylistDto, 'tracks'>> = ({ tracks }) => (
   <ScrollView>
-    <View style={wrapperStyle}>
+    <Wrapper>
       {tracks?.map((track, index) => (
-        <View style={trackStyle} key={track.id}>
-          <Text style={numberStyle}>{index + 1}</Text>
-          <View style={descriptionStyle}>
-            <Text style={nameStyle}>{track.name}</Text>
-            <Text style={artistStyle}>{track.artist}</Text>
-          </View>
-        </View>
+        <Track key={`${index}.${track.id}`}>
+          <Number>{index + 1}</Number>
+          <Description>
+            <Name>{track.name}</Name>
+            <Artist>{track.artist}</Artist>
+          </Description>
+        </Track>
       ))}
-    </View>
+    </Wrapper>
   </ScrollView>
 );

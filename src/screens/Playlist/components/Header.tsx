@@ -1,34 +1,38 @@
 import React, { FC } from 'react';
-import { Pressable, StyleProp, TextStyle, ViewStyle } from 'react-native';
+import { useNavigate } from 'react-router';
+import styled from '@emotion/native';
+import { useTheme } from '@emotion/react';
 
-import { Link, Text } from '../../../components';
+import { Text } from '../../../components';
 import { RewindIcon } from '../../../components/icons';
 import { ROUTES } from '../../../routes/Routes.types';
-import { theme } from '../../../themes';
 
-const backStyle: StyleProp<ViewStyle> = {
-  marginVertical: 0,
-  marginHorizontal: 16,
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  height: 64,
+const Back = styled.Pressable`
+  margin: 0 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 64px;
+`;
+
+const TextStyled = styled(Text)`
+  margin-left: 8px;
+  text-decoration-line: none;
+  color: ${({ theme }) => theme.colors.main50};
+`;
+
+const RewindIconStyled = styled(RewindIcon)`
+  padding: 0 8px;
+`;
+
+export const Header: FC = () => {
+  const navigate = useNavigate();
+  const theme = useTheme();
+
+  return (
+    <Back onPress={() => navigate(ROUTES.Playlists)}>
+      <RewindIconStyled fill={theme.colors.main50} width={24} height={24} />
+      <TextStyled>назад</TextStyled>
+    </Back>
+  );
 };
-
-const textStyle: StyleProp<TextStyle> = {
-  marginLeft: 8,
-  textDecorationLine: 'none',
-  color: theme.colors.main50,
-};
-
-export const Header: FC = () => (
-  <Link to={ROUTES.Playlists} component={Pressable} style={backStyle}>
-    <RewindIcon
-      fill={theme.colors.main50}
-      width={24}
-      height={24}
-      style={{ paddingHorizontal: 8 }}
-    />
-    <Text style={textStyle}>назад</Text>
-  </Link>
-);

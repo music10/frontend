@@ -1,17 +1,27 @@
-import React, { useMemo } from 'react';
+import React, { FC, PropsWithChildren, useEffect, useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { I18nextProvider } from 'react-i18next';
 
-import { AmplitudeContext, ApiContext, WsContext } from '../contexts';
+import {
+  AmplitudeContext,
+  ApiContext,
+  CoinsContext,
+  FavoritesContext,
+  WsContext,
+} from '../contexts';
 import { AmplitudeInstance, Api, WS } from '../utils';
 import i18n from '../i18n';
+import { useFavorites } from '../hooks/useFavorites';
+import { useCoins } from '../hooks';
+import { useStatistics } from '../hooks/useStatistics';
+import { StatisticsContext } from '../contexts/statistics.context';
 
 interface ContextProviderProps {
   api?: Api;
   ws?: WS;
 }
 
-export const ContextProvider: React.FC<ContextProviderProps> = ({
+export const ContextProvider: FC<PropsWithChildren<ContextProviderProps>> = ({
   children,
   api,
   ws,
@@ -20,15 +30,32 @@ export const ContextProvider: React.FC<ContextProviderProps> = ({
   const apiValue = useMemo(() => api || new Api(), [api]);
   const wsValue = useMemo(() => ws || new WS(), [ws]);
   const queryClient = useMemo(() => new QueryClient(), []);
+  const favorites = useFavorites();
+  const coins = useCoins();
+  const statistics = useStatistics();
+
+  useEffect(
+    () => () => {
+      wsValue.destructor();
+      queryClient.clear();
+    },
+    [wsValue, queryClient],
+  );
 
   return (
     <I18nextProvider i18n={i18n}>
       <QueryClientProvider client={queryClient}>
         <ApiContext.Provider value={apiValue}>
           <WsContext.Provider value={wsValue}>
-            <AmplitudeContext.Provider value={amplitudeValue}>
-              {children}
-            </AmplitudeContext.Provider>
+            <FavoritesContext.Provider value={favorites}>
+              <CoinsContext.Provider value={coins}>
+                <StatisticsContext.Provider value={statistics}>
+                  <AmplitudeContext.Provider value={amplitudeValue}>
+                    {children}
+                  </AmplitudeContext.Provider>
+                </StatisticsContext.Provider>
+              </CoinsContext.Provider>
+            </FavoritesContext.Provider>
           </WsContext.Provider>
         </ApiContext.Provider>
       </QueryClientProvider>

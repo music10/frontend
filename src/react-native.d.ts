@@ -22,15 +22,18 @@ declare module 'react-native' {
   interface AccessibilityProps {
     accessibilityActiveDescendant?: string;
   }
+
   interface ClickProps {
     onClick?: (event: MouseEvent) => void;
     onClickCapture?: (event: MouseEvent) => void;
     onContextMenu?: (event: MouseEvent) => void;
   }
+
   interface FocusProps {
     onBlur?: (event: FocusEvent) => void;
     onFocus?: (event: FocusEvent) => void;
   }
+
   interface KeyboardProps {
     onKeyDown?: (event: KeyboardEvent) => void;
     onKeyDownCapture?: (event: KeyboardEvent) => void;

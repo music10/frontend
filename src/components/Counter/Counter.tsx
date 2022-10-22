@@ -1,25 +1,25 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
+import styled from '@emotion/native';
 
 import { Text } from '../Text';
-import { GameContext } from '../../contexts';
-import { theme } from '../../themes';
 import { TRACKS_PER_ROUND } from '../../utils';
+import { useAppSelector } from '../../store/hooks';
+
+const CounterStyled = styled(Text)`
+  flex: 0 0 50%;
+  font-size: 16px;
+  font-family: ${(props) => props.theme.fontFamilyMedium};
+  padding: 16px;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.main};
+`;
 
 export const Counter: FC = () => {
-  const { number } = useContext(GameContext);
+  const { number } = useAppSelector((store) => store.game);
 
   return (
-    <Text
-      style={{
-        fontSize: 16,
-        fontFamily: theme.fontFamilyMedium,
-        padding: 16,
-        marginBottom: 24,
-        textAlign: 'center',
-        color: theme.colors.main,
-      }}
-    >
-      {number.current} / {TRACKS_PER_ROUND}
-    </Text>
+    <CounterStyled>
+      {number} / {TRACKS_PER_ROUND}
+    </CounterStyled>
   );
 };

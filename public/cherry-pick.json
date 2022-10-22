@@ -1,32 +1,38 @@
 [
   {
-    "cover": "https://msq.app/images/world.svg",
-    "id": "5SHptL6bzOG1PmWgJxx2Ps",
-    "name": "Топ по миру"
+    "id": "7d5ba0bc-729e-1dd8-2df7-5da309b17c16",
+    "name": "Мировые поп-хиты",
+    "type": "playlist",
+    "cover": "https://musiq.dergunov.net/images/world.svg"
   },
   {
-    "cover": "https://msq.app/images/russia.svg",
-    "id": "5I4WLaJYpw1pPcRXwUQ9XV",
-    "name": "Топ по России"
+    "id": "e3e7e09a-f0d3-056a-8108-31f0a27368e8",
+    "name": "Хиты русской поп-музыки",
+    "type": "playlist",
+    "cover": "https://musiq.dergunov.net/images/russia.svg"
   },
   {
-    "cover": "https://msq.app/images/new.svg",
-    "id": "37i9dQZF1DWYc8GECSzPrb",
-    "name": "Новинки недели"
+    "id": "2111e2b6-587d-a600-2fea-54df7c314477",
+    "name": "Новинки месяца",
+    "type": "playlist",
+    "cover": "https://musiq.dergunov.net/images/new.svg"
   },
   {
-    "cover": "https://msq.app/images/tiktok.svg",
-    "id": "56ra24CW6btsEQEA3UEzqD",
-    "name": "Топ тик-тока"
+    "id": "c8c03392-31ee-730c-a8a6-c24a5a30e911",
+    "name": "Топ тик-тока",
+    "type": "playlist",
+    "cover": "https://musiq.dergunov.net/images/tiktok.svg"
   },
   {
-    "cover": "https://msq.app/images/hiphop.svg",
-    "id": "37i9dQZF1DX93L1kSOomqn",
-    "name": "Русский хип-хоп"
+    "id": "479652a7-a86f-6770-3cbd-e1e0ac9600f1",
+    "name": "Русский хип-хоп",
+    "type": "playlist",
+    "cover": "https://musiq.dergunov.net/images/hiphop.svg"
   },
   {
-    "cover": "https://msq.app/images/rock.svg",
-    "id": "37i9dQZF1DX4uWsCu3SlsH",
-    "name": "Рок сегодня"
+    "id": "b0a55e85-65c6-ce15-1478-6c693d6c525c",
+    "name": "Вечный рок",
+    "type": "playlist",
+    "cover": "https://musiq.dergunov.net/images/rock.svg"
   }
 ]

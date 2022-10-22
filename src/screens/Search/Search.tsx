@@ -8,11 +8,11 @@ import React, {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { useNavigate } from 'react-router';
+import styled from '@emotion/native';
 
 import {
   BottomMenu,
-  Link,
   MenuItem,
   NotFound,
   PlaylistList,
@@ -22,41 +22,43 @@ import {
 import { RewindIcon } from '../../components/icons';
 import { AmplitudeContext, ApiContext } from '../../contexts';
 import { ROUTES } from '../../routes/Routes.types';
-import { theme } from '../../themes';
-import { PlaylistDto } from '../../api/api.types';
+import { PlaylistDto, Type } from '../../api/api.types';
+import { useTheme } from '@emotion/react';
+import { InteractionState } from 'react-native';
 
-const layoutStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  paddingVertical: 12,
-  paddingHorizontal: 16,
-};
-const backStyle: StyleProp<ViewStyle> = {
-  marginVertical: 0,
-  marginHorizontal: 16,
-};
+const Layout = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 16px;
+`;
 
-const searchFieldStyle: StyleProp<ViewStyle> = {
-  marginLeft: 16,
-  flexGrow: 1,
-  flexShrink: 1,
-  flexBasis: 'auto',
-};
-const byArtistStyle: StyleProp<ViewStyle> = {
-  paddingVertical: 16,
-  paddingHorizontal: 8,
-  marginBottom: 16,
-};
+const Back = styled.Pressable`
+  margin: 0 16px;
+`;
+
+const SearchFieldStyled = styled.View`
+  margin-left: 16px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+`;
+
+const ByArtist = styled.View`
+  padding: 16px 8px;
+  margin-bottom: 16px;
+`;
 
 export const Search: FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const api = useContext(ApiContext);
   const amp = useContext(AmplitudeContext);
   const [query, setQuery] = useState('');
   const [allowRequest, setAllowRequest] = useState(false);
   const [byArtist, setByArtist] = useState(false);
   const timeout = useRef(0);
+  const theme = useTheme();
 
   useEffect(() => {
     amp.logEvent('Search Opened');
@@ -71,7 +73,7 @@ export const Search: FC = () => {
     clearTimeout(timeout.current);
     timeout.current = +setTimeout(() => {
       setAllowRequest(true);
-    }, 500);
+    }, 1000);
   }, []);
 
   const onChangeByArtistHandler = useCallback((value: boolean) => {
@@ -81,8 +83,7 @@ export const Search: FC = () => {
 
   const request = useQuery<PlaylistDto[], Error>(
     ['searchPlaylists', query, byArtist],
-    () =>
-      byArtist ? api.getPlaylistsByArtist(query) : api.getPlaylists(query),
+    () => api.getPlaylists(byArtist ? Type.artist : Type.playlist, query),
     {
       enabled: !!query && allowRequest,
       onSettled: () => setAllowRequest(false),
@@ -91,41 +92,48 @@ export const Search: FC = () => {
 
   return (
     <>
-      <View style={layoutStyle}>
-        <Link to={ROUTES.Playlists} style={backStyle}>
-          <RewindIcon fill={theme.colors.main50} height={24} width={24} />
-        </Link>
-        <View style={searchFieldStyle}>
+      <Layout>
+        <Back onPress={() => navigate(ROUTES.Playlists)}>
+          {({ hovered, pressed }: InteractionState) => (
+            <RewindIcon
+              fill={
+                hovered || pressed ? theme.colors.main80 : theme.colors.main50
+              }
+              height={24}
+              width={24}
+            />
+          )}
+        </Back>
+        <SearchFieldStyled>
           <SearchField
             onChangeText={onChangeHandler}
             autoFocus
             spellCheck={false}
             placeholderTextColor={theme.colors.main50}
           />
-        </View>
-      </View>
-      <View style={byArtistStyle}>
+        </SearchFieldStyled>
+      </Layout>
+      <ByArtist>
         <SwitchWithLabel
           text={t('FindByArtist')}
           value={byArtist}
           setValue={onChangeByArtistHandler}
         />
-      </View>
+      </ByArtist>
       {query ? (
         request.isSuccess && !request.data?.length ? (
           <>
             <NotFound byArtist={byArtist} />
             <BottomMenu>
-              <Link
-                to={ROUTES.Playlists}
-                component={MenuItem}
+              <MenuItem
                 icon={RewindIcon}
                 text={t('ToPlaylists')}
+                onPress={() => navigate(ROUTES.Playlists)}
               />
             </BottomMenu>
           </>
         ) : (
-          <PlaylistList {...request} />
+          <PlaylistList request={request} />
         )
       ) : null}
     </>

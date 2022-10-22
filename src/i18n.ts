@@ -6,6 +6,7 @@ import ru from './locales/ru/translation.json';
 const resources = { en: { translation: en }, ru: { translation: ru } };
 
 i18n.use(initReactI18next).init({
+  compatibilityJSON: 'v3',
   resources,
   debug: true,
   defaultNS: 'translation',

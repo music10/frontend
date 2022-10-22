@@ -16,11 +16,8 @@ Hybrid application (Web and Android) for Musiq
 * _android:release_ - run Android in Release mode
 * _build:android:apk_ - build APK
 * _build:android:aab_ - build AAB
-* _storybook_ - Run Storybook
-* _build-storybook_ - Build Storybook
 * _i18nextParser_ - i18next validate locales
 * _deploy_ - Deploy web build
-* _deploy:doc_ - Deploy Storybook
 * _deploy:apk_ - Deploy APK file
 * _deploy:coverage_ - Deploy test coverage report
 

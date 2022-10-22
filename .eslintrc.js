@@ -1,27 +1,19 @@
 module.exports = {
-  parser: "@typescript-eslint/parser",
-  parserOptions: {
-    project: "tsconfig.json",
-    sourceType: "module",
-  },
-  plugins: [
-    "@typescript-eslint/eslint-plugin",
-    "prettier",
-    "react-hooks",
-    "import",
-  ],
-  extends: ["@react-native-community"],
   root: true,
-  env: {
-    browser: true,
-    jest: true,
-  },
-  rules: {
-    "@typescript-eslint/interface-name-prefix": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-explicit-any": "off",
-    "import/order": "error",
-    "prettier/prettier": "warn",
-  },
+  extends: '@react-native-community',
+  parser: '@typescript-eslint/parser',
+  plugins: ['prettier', 'react-hooks'],
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        '@typescript-eslint/no-shadow': 'warn',
+        '@typescript-eslint/no-unused-vars': 'warn',
+        'no-shadow': 'off',
+        'no-undef': 'off',
+        'prettier/prettier': 'warn',
+        'react-hooks/exhaustive-deps': 'warn',
+      },
+    },
+  ],
 };

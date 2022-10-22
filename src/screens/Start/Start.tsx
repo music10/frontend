@@ -1,41 +1,64 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { useNavigate } from 'react-router';
 
-import { BottomMenu, Link, Logo, MenuItem } from '../../components';
+import { BottomMenu, Logo, MenuItem } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
-import { PlayIcon } from '../../components/icons';
+import { ExitIcon, PlayIcon, StatsIcon } from '../../components/icons';
+import styled from '@emotion/native';
+import { Coins } from '../../components/Coins';
+import { BackHandler, Platform } from 'react-native';
 
-const layoutStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  alignItems: 'stretch',
-  height: '100%',
-};
+const Layout = styled.View`
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+`;
 
-const logoStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flexGrow: 1,
-  alignSelf: 'center',
-  justifyContent: 'center',
-};
+const Header = styled.View`
+  flex-direction: row;
+  justify-content: flex-end;
+`;
+
+const LogoStyled = styled.View`
+  display: flex;
+  flex-grow: 1;
+  align-self: center;
+  justify-content: center;
+`;
 
 export const Start = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
-    <View style={layoutStyle}>
-      <View style={logoStyle}>
+    <Layout>
+      <Header>
+        <Coins />
+      </Header>
+      <LogoStyled>
         <Logo />
-      </View>
+      </LogoStyled>
       <BottomMenu>
-        <Link
-          to={ROUTES.Playlists}
-          component={MenuItem}
-          primary
-          icon={PlayIcon}
+        <MenuItem
           text={t('Play')}
+          icon={PlayIcon}
+          primary
+          onPress={() => navigate(ROUTES.Playlists)}
         />
+        <MenuItem
+          text={t('Statistics')}
+          icon={StatsIcon}
+          onPress={() => navigate(ROUTES.Statistics)}
+        />
+        {Platform.OS === 'android' && (
+          <MenuItem
+            text={t('Exit')}
+            icon={ExitIcon}
+            onPress={BackHandler.exitApp}
+          />
+        )}
       </BottomMenu>
-    </View>
+    </Layout>
   );
 };

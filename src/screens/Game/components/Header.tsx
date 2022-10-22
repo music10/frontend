@@ -1,61 +1,49 @@
-import React, { FC, useCallback, useContext, useEffect } from 'react';
-import {
-  InteractionState,
-  Platform,
-  StyleProp,
-  View,
-  ViewStyle,
-} from 'react-native';
+import React, { FC, useCallback, useEffect } from 'react';
+import { InteractionState, Platform } from 'react-native';
+import styled from '@emotion/native';
+import { useTheme } from '@emotion/react';
 
 import usePageVisibility from '../../../utils/usePageVisibility';
-import { GameContext, MusicContext } from '../../../contexts';
 import { PauseIcon, PlayIcon } from '../../../components/icons';
 import { Button } from '../../../components';
-import { theme } from '../../../themes';
+import { Coins } from '../../../components/Coins';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { setGameState } from '../../../actions';
 
-const headerStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  paddingVertical: 0,
-  paddingHorizontal: 16,
-  height: 64,
-};
+const HeaderStyled = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+`;
 
 export const Header: FC = () => {
-  const { isPause, setPause } = useContext(GameContext);
-  const { play, pause, allowPlay } = useContext(MusicContext);
+  const theme = useTheme();
 
-  const playFunc = useCallback(() => {
-    if (allowPlay) {
-      play();
-    }
-  }, [allowPlay, play]);
-
-  const pauseFunc = useCallback(() => {
-    pause();
-  }, [pause]);
+  const dispatch = useAppDispatch();
+  const { state } = useAppSelector((state) => state.game);
 
   const togglePause = useCallback(() => {
-    setPause((state) => !state);
-  }, [setPause]);
-
-  useEffect(() => {
-    isPause ? pauseFunc() : playFunc();
-  }, [isPause, pauseFunc, playFunc]);
+    state === 'game'
+      ? dispatch(setGameState('pause'))
+      : dispatch(setGameState('game'));
+  }, [state]);
 
   const isVisible = usePageVisibility();
   useEffect(() => {
-    !isVisible && Platform.OS === 'web' && setPause(!isVisible);
-  }, [isVisible, setPause]);
+    !isVisible &&
+      Platform.OS === 'web' &&
+      dispatch(setGameState(isVisible ? 'game' : 'pause'));
+  }, [isVisible]);
 
   return (
     <>
-      <View style={headerStyle}>
+      <HeaderStyled>
         <Button onPress={togglePause}>
           {({ hovered, focused }: InteractionState) =>
-            isPause ? (
-              <PlayIcon
+            state === 'game' ? (
+              <PauseIcon
                 fill={
                   focused
                     ? theme.colors.main
@@ -65,7 +53,7 @@ export const Header: FC = () => {
                 }
               />
             ) : (
-              <PauseIcon
+              <PlayIcon
                 fill={
                   focused
                     ? theme.colors.main
@@ -77,7 +65,8 @@ export const Header: FC = () => {
             )
           }
         </Button>
-      </View>
+        <Coins />
+      </HeaderStyled>
     </>
   );
 };

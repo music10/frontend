@@ -1,62 +1,71 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { Platform, StyleProp, View, ViewStyle } from 'react-native';
+import { Platform } from 'react-native';
+import styled from '@emotion/native';
 
 import {
-  Link,
-  Result as ResultComponent,
+  BackHeader,
+  BottomMenu,
   MenuItem,
   PlaylistInfo,
-  BottomMenu,
+  PlaylistInfoLoading,
+  Result as ResultComponent,
 } from '../../components';
 import { ROUTES } from '../../routes/Routes.types';
 import { ReplayIcon, ShareIcon } from '../../components/icons';
-import { AmplitudeContext, ApiContext, WsContext } from '../../contexts';
+import {
+  AmplitudeContext,
+  ApiContext,
+  StatisticsContext,
+  WsContext,
+} from '../../contexts';
 import { useShare } from '../../hooks';
 import { ResultDto } from '../../api/api.types';
+import { Coins } from '../../components/Coins';
 
-const layoutStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  alignItems: 'stretch',
-  height: '100%',
-};
+const Layout = styled.View`
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+`;
 
-const resultStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flexGrow: 1,
-  alignSelf: 'center',
-  justifyContent: 'center',
-};
+const ResultStyled = styled.View`
+  display: flex;
+  flex-grow: 1;
+  align-self: center;
+  justify-content: center;
+`;
 
 export const Result = () => {
   const { t } = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
+  const { search } = useLocation();
+
   const api = useContext(ApiContext);
   const ws = useContext(WsContext);
   const amp = useContext(AmplitudeContext);
   const [result, setResult] = useState<ResultDto>({} as ResultDto);
   const [shareData, setShareData] = useState('');
   const shareFunction = useShare();
-
-  useEffect(
-    () => () => {
-      ws.reconnect();
-    },
-    [ws],
-  );
+  const { updateStatistics } = useContext(StatisticsContext);
 
   const getResults = useCallback(async () => {
     (await ws.getResult())
-      .once('result', setResult)
-      .once('exception', () => history.replace(ROUTES.Start));
-  }, [history, ws]);
+      .once('result', (resultData: ResultDto) => {
+        setResult(resultData);
+        const seconds = new URLSearchParams(search).get('seconds') ?? 0;
+        updateStatistics(resultData.guessed, +seconds);
+      })
+      .once('exception', () => navigate(ROUTES.Start, { replace: true }));
+  }, [navigate, ws, search]);
 
   const loadShareImage = useCallback(async () => {
     const playlistId = result.playlist?.id;
+    const type = result.playlist?.type;
     const guess = result.guessed;
     if (playlistId) {
-      setShareData(await api.share(playlistId, guess));
+      setShareData(await api.share(playlistId, type, guess));
     }
   }, [api, result]);
 
@@ -78,26 +87,32 @@ export const Result = () => {
   }, [loadShareImage, result]);
 
   return (
-    <View style={layoutStyle}>
-      <PlaylistInfo {...result.playlist} />
-      <View style={resultStyle}>
+    <Layout>
+      <BackHeader onPress={() => navigate(ROUTES.Start)} text="меню">
+        <Coins />
+      </BackHeader>
+      {result.playlist ? (
+        <PlaylistInfo {...result.playlist} />
+      ) : (
+        <PlaylistInfoLoading />
+      )}
+      <ResultStyled>
         <ResultComponent guess={result.guessed} text={result.text} />
-      </View>
+      </ResultStyled>
       <BottomMenu>
-        <Link
-          to={ROUTES.Playlists}
-          component={MenuItem}
+        <MenuItem
           primary
           icon={ReplayIcon}
           text={t('ToPlaylists')}
-          onClick={() => {
+          onPress={() => {
             amp.logEvent('Restarted');
+            navigate(ROUTES.Playlists);
           }}
         />
         {Platform.OS !== 'web' && (
           <MenuItem icon={ShareIcon} text={t('Share')} onPress={share} />
         )}
       </BottomMenu>
-    </View>
+    </Layout>
   );
 };

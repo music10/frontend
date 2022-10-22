@@ -1,60 +1,91 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useMemo } from 'react';
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import styled from '@emotion/native';
 
 import {
   BottomMenu,
-  Link,
-  Loader,
   MenuItem,
   PlaylistHeader,
+  PlaylistHeaderLoading,
   PlaylistTracks,
+  PlaylistTracksLoading,
 } from '../../components';
-import { PlayIcon } from '../../components/icons';
+import {
+  HeartBrokenIcon,
+  HeartOutlinedIcon,
+  PlayIcon,
+} from '../../components/icons';
 import { ROUTES } from '../../routes/Routes.types';
-import { ApiContext } from '../../contexts';
+import { ApiContext, FavoritesContext } from '../../contexts';
+import { PlaylistDto, Type } from '../../api/api.types';
 import { Header } from './components/Header';
-import { OpenInSpotify } from './components/OpenInSpotify';
+import { OpenInYaMusic } from './components/OpenInYaMusic';
 
-const layoutStyle: StyleProp<ViewStyle> = {
-  display: 'flex',
-  flex: 1,
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-};
+const Layout = styled.View`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+`;
 
 export const Playlist: FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { isFavorite, remove, add } = useContext(FavoritesContext);
+
   const api = useContext(ApiContext);
-  const { playlistId } = useParams<{ playlistId: string }>();
-  const { data: playlist } = useQuery(['getPlaylist', playlistId], () =>
-    api.getPlaylist(playlistId),
+  const { id, type } = useParams<{
+    id: string;
+    type: Type;
+  }>();
+  const { data: playlist } = useQuery<PlaylistDto>(
+    ['getPlaylist', type, id],
+    () => api.getPlaylist(type ?? Type.playlist, id ?? ''),
   );
 
-  const { data: tracks } = useQuery(
-    ['findTracksByPlaylistId', playlistId],
-    () => api.findTracksByPlaylistId(playlistId),
+  const isFavoritePlaylist = useMemo(
+    () => isFavorite(playlist?.id ?? ''),
+    [playlist?.id, isFavorite],
   );
 
-  return playlist && tracks ? (
-    <View style={layoutStyle}>
+  return (
+    <Layout>
       <Header />
-      <PlaylistHeader {...playlist} />
-      <PlaylistTracks tracks={tracks} />
+      {playlist ? <PlaylistHeader {...playlist} /> : <PlaylistHeaderLoading />}
+      {playlist ? (
+        <PlaylistTracks tracks={playlist.tracks} />
+      ) : (
+        <PlaylistTracksLoading />
+      )}
       <BottomMenu>
-        <Link
-          to={`${ROUTES.Game}/${playlist.id}`}
-          component={MenuItem}
+        <MenuItem
           primary
           icon={PlayIcon}
           text={t('Play')}
+          onPress={() =>
+            playlist &&
+            navigate(`${ROUTES.Game}/${playlist.type}/${playlist.id}`)
+          }
         />
-        <OpenInSpotify id={playlist.id} />
+        <MenuItem
+          icon={isFavoritePlaylist ? HeartBrokenIcon : HeartOutlinedIcon}
+          text={isFavoritePlaylist ? 'Удалить из сохраненного' : 'Сохранить'}
+          onPress={() =>
+            playlist &&
+            (isFavoritePlaylist && id
+              ? remove(id)
+              : add({
+                  id: playlist.id,
+                  name: playlist.name,
+                  cover: playlist.cover,
+                  type: playlist.type,
+                }))
+          }
+        />
+        <OpenInYaMusic url={playlist?.url} />
       </BottomMenu>
-    </View>
-  ) : (
-    <Loader />
+    </Layout>
   );
 };
