@@ -2,21 +2,23 @@ import { useContext, useEffect, useState } from 'react';
 import Sound from 'react-native-sound';
 
 import { Bugsnag } from '../utils';
-import { GameContext } from '../contexts';
 import { UseSound } from './useSound.types';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setMp3Loaded } from '../actions';
 
 const defaultValue = new Sound('');
 
 export const useSound: UseSound = (mp3) => {
-  const { isPause, setLoaded } = useContext(GameContext);
+  const { state } = useAppSelector((state) => state.game);
+  const dispatch = useAppDispatch();
+
   const [sound, setSound] = useState<Sound>(defaultValue);
 
   useEffect(() => {
     if (!mp3) return;
 
-    setLoaded(false);
     const sound = new Sound(`${mp3}.mp3`, '', (error) => {
-      setLoaded(true);
+      dispatch(setMp3Loaded());
       if (error) {
         Bugsnag.notify('Failed to load the sound', error);
         return;
@@ -26,7 +28,7 @@ export const useSound: UseSound = (mp3) => {
       sound.setCurrentTime(
         Math.random() * (Math.max(0, sound.getDuration() - 10) + 1),
       );
-      if (!isPause) {
+      if (state === 'game') {
         sound.play((success) => {
           if (!success) {
             Bugsnag.notify('Playback error', error);
@@ -38,7 +40,7 @@ export const useSound: UseSound = (mp3) => {
     return () => {
       sound.release();
     };
-  }, [mp3, setLoaded]);
+  }, [mp3, dispatch]);
 
   return sound;
 };

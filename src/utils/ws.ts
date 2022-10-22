@@ -22,8 +22,12 @@ export class WS {
 
   next = async () => this.socket.emit('next');
 
-  choose = async (trackId: string | number) =>
-    this.socket.emit('choose', trackId);
+  choose = async (trackId: string) => this.socket.emit('choose', trackId);
+
+  hint50 = async (trackIds: string[]) =>
+    this.socket.emit('hint/50-50', trackIds);
+
+  hintReplay = async () => this.socket.emit('hint/replay');
 
   getResult = async () => this.socket.emit('getResult');
 

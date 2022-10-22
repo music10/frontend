@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import styled from '@emotion/native';
@@ -7,7 +7,8 @@ import { BlurView, MenuItem, Text } from '../../../components';
 import { ExitIcon, PlayIcon } from '../../../components/icons';
 import { ROUTES } from '../../../routes/Routes.types';
 import { TRACKS_PER_ROUND } from '../../../utils';
-import { GameContext } from '../../../contexts';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { setGameState } from '../../../actions';
 
 const Overlay = styled.View`
   margin: 0 auto;
@@ -50,21 +51,22 @@ export const PauseMenu: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { number, isPause, setPause } = useContext(GameContext);
+  const { number, state } = useAppSelector((state) => state.game);
+  const dispatch = useAppDispatch();
 
-  return isPause ? (
+  return state === 'pause' ? (
     <Overlay>
       <BlurView blurRadius={15} overlayColor="transparent">
         <Layout>
           <Dragline />
           <Total>
-            {t('Completed')}: {number.current} / {TRACKS_PER_ROUND}
+            {t('Completed')}: {number} / {TRACKS_PER_ROUND}
           </Total>
           <MenuItem
             text={t('Play')}
             icon={PlayIcon}
             primary
-            onPress={() => setPause(false)}
+            onPress={() => dispatch(setGameState('game'))}
           />
           <MenuItem
             icon={ExitIcon}

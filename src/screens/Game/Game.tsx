@@ -1,43 +1,30 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { useNavigate, useParams } from 'react-router';
+import React, { useContext, useEffect } from 'react';
 import styled from '@emotion/native';
 
+import { AmplitudeContext } from '../../contexts';
 import {
-  AmplitudeContext,
-  CoinsContext,
-  GameContext,
-  WsContext,
-} from '../../contexts';
-import { Bugsnag, TRACKS_PER_ROUND } from '../../utils';
-import {
+  ButtonWithIcon,
   Counter,
   PlaceholderLoaderList,
   Track,
   TrackLoading,
 } from '../../components';
-import { ROUTES } from '../../routes/Routes.types';
-import {
-  ChooseAnswerDto,
-  ShortTrackDto,
-  TracksForUserDto,
-  Type,
-} from '../../api/api.types';
 import { Music } from './components/Music';
 import { Header } from './components/Header';
 import { Progressbar } from './components/Progressbar';
 import { PauseMenu } from './components/PauseMenu';
+import { useGame } from '../../hooks';
+import { LampIcon } from '../../components/icons';
+import { HintMenu } from './components/HintMenu';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { resetGame, setGameState } from '../../actions';
 
 const Tracks = styled.View`
   display: flex;
   flex-direction: column;
   padding: 16px;
 `;
+
 const TrackStyled = styled(Track)`
   margin-bottom: 16px;
 `;
@@ -53,6 +40,15 @@ const TracksLoadingStyled = styled.View`
   margin-bottom: 16px;
 `;
 
+const HintCounterWrapper = styled.View`
+  display: flex;
+  flex-direction: row;
+`;
+
+const Hint = styled.View`
+  flex: 0 0 50%;
+`;
+
 const TracksLoadingWrapper = () => (
   <TracksLoadingStyled>
     <TrackLoading />
@@ -60,145 +56,62 @@ const TracksLoadingWrapper = () => (
 );
 
 export const Game = () => {
-  const ws = useContext(WsContext);
   const amp = useContext(AmplitudeContext);
-  const navigate = useNavigate();
-  const { type, id } = useParams<{ type: Type; id: string }>();
-  const { addCoins } = useContext(CoinsContext);
+  const { choose, getNextTracks, timer } = useGame();
 
-  const [tracks, setTracks] = useState<ShortTrackDto[]>([]);
-  const [mp3, setMp3] = useState('');
-  const seconds = useRef(0);
-  const [timer, setTimer] = useState(0);
-  const startTime = useRef<number>(0);
-  const [msAfterStart, setMsAfterStart] = useState(0);
-  const [isPause, setPause] = useState(false);
-  const [isLoaded, setLoaded] = useState(false);
-  const [selected, setSelected] = useState('');
-  const [correct, setCorrect] = useState('');
-  const number = useRef(0);
+  const { mp3, tracks, selected, correct, mp3Loaded, disabledTracks } =
+    useAppSelector((state) => state.game);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    amp.logEvent('Playlist Opened', { type, id });
-  }, [amp, type, id]);
-
-  const getNextTracks = useCallback(async () => {
-    if (number.current < TRACKS_PER_ROUND) {
-      setSelected('');
-      setCorrect('');
-      setTracks([]);
-      (await ws.next()).once('nextTracks', (answer: TracksForUserDto) => {
-        setMsAfterStart(0);
-        setTracks(answer.tracks);
-        setMp3(answer.mp3);
-        ++number.current;
-      });
-    } else {
-      navigate(`${ROUTES.Results}?seconds=${seconds.current}`, {
-        replace: true,
-      });
-    }
-  }, [ws, navigate]);
-
-  const setPlaylist = useCallback(
-    async () =>
-      (await ws.setPlaylist(id ?? '', type))
-        .once('playlist', getNextTracks)
-        .once('exception', (error) => {
-          Bugsnag.notify(error);
-          navigate(ROUTES.Start, { replace: true });
-        }),
-    [ws, id, type, getNextTracks, navigate],
-  );
-
-  const choose = useCallback(
-    async (trackId: string) => {
-      setSelected(trackId);
-      (await ws.choose(trackId)).once(
-        'chooseResult',
-        (answer: ChooseAnswerDto) => {
-          amp.logEvent('Track Chosen', {
-            variants: tracks.map(({ artist, name }) => ({ artist, name })),
-            chosen: tracks.findIndex((track) => track.id === trackId) + 1,
-            right: tracks.findIndex((track) => track.id === answer.correct) + 1,
-          });
-
-          const secondsFromStart = Math.min(
-            Math.floor((Date.now() - startTime.current) / 1000),
-            10,
-          );
-
-          if (trackId === answer.correct) {
-            // fixForGuess + remainingTimeInSeconds
-            addCoins(5 + 10 - secondsFromStart);
-          }
-
-          seconds.current += secondsFromStart;
-
-          setTimer(+setTimeout(getNextTracks, 1500));
-          setCorrect(answer.correct);
-        },
-      );
-    },
-    [amp, getNextTracks, tracks, ws],
-  );
-
-  useEffect(() => {
-    ws.reconnect().then(setPlaylist);
-  }, [setPlaylist, ws]);
+    dispatch(resetGame());
+  }, []);
 
   return (
-    <GameContext.Provider
-      value={{
-        number,
-        isPause,
-        setPause,
-        isLoaded,
-        setLoaded,
-        startTime,
-        msAfterStart,
-        setMsAfterStart,
-      }}
-    >
-      <Music mp3={mp3}>
-        <GameStyled>
-          <Header />
-          <Tracks
-            onClick={() => {
-              if (selected) {
-                clearTimeout(timer);
-                getNextTracks();
-                amp.logEvent('Result Skipped');
-              }
-            }}
-          >
-            <Counter />
-            {isLoaded && tracks.length ? (
-              tracks.map((track) => (
-                <TrackStyled
-                  key={track.id + selected + correct}
-                  disabled={!!selected}
-                  selected={track.id === selected}
-                  success={track.id === correct}
-                  onPress={() => {
-                    if (!selected) {
-                      choose(track.id);
-                    }
-                  }}
-                  {...track}
-                />
-              ))
-            ) : (
-              <PlaceholderLoaderList
-                number={4}
-                component={TracksLoadingWrapper}
+    <Music>
+      <GameStyled>
+        <Header />
+        <Tracks>
+          {mp3Loaded && tracks.length ? (
+            tracks.map((track) => (
+              <TrackStyled
+                key={track.id + selected + correct}
+                disabled={!!selected || disabledTracks.includes(track.id)}
+                selected={track.id === selected}
+                success={track.id === correct}
+                onPress={() => {
+                  if (!selected) {
+                    choose(track.id);
+                  } else {
+                    clearTimeout(timer);
+                    getNextTracks();
+                    amp.logEvent('Result Skipped');
+                  }
+                }}
+                {...track}
               />
-            )}
-          </Tracks>
-          <Progressbar key={mp3} />
-        </GameStyled>
-        <PauseMenu />
-      </Music>
-    </GameContext.Provider>
+            ))
+          ) : (
+            <PlaceholderLoaderList
+              number={4}
+              component={TracksLoadingWrapper}
+            />
+          )}
+          <HintCounterWrapper>
+            <Hint>
+              <ButtonWithIcon
+                text="Подсказка"
+                icon={LampIcon}
+                onPress={() => dispatch(setGameState('hint'))}
+              />
+            </Hint>
+            <Counter />
+          </HintCounterWrapper>
+        </Tracks>
+        <Progressbar key={mp3} />
+      </GameStyled>
+      <PauseMenu />
+      <HintMenu />
+    </Music>
   );
 };

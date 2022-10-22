@@ -14,8 +14,8 @@ export class CoinsIcon extends PureComponent<IconProps> {
       >
         <Circle cx="13.5" cy="18.5" r="5.5" fill={this.props.fill} />
         <Path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M20.8462 15.9104C22.6491 15.5223 24.0004 13.9189 24.0004 12C24.0004 9.79086 22.2095 8 20.0004 8C18.0815 8 16.4781 9.35125 16.09 11.1542C18.291 11.9619 20.0385 13.7094 20.8462 15.9104Z"
           fill={this.props.fill}
         />

@@ -141,8 +141,8 @@ android {
         applicationId "net.dergunov.musiq"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 11
-        versionName "2.1.0"
+        versionCode 12
+        versionName "2.1.1"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
         manifestPlaceholders = [BUGSNAG_API_KEY: "$System.env.REACT_APP_BUGSNAG_KEY"]
 

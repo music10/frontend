@@ -1,26 +1,27 @@
-import React, { FC, PropsWithChildren, useContext, useEffect } from 'react';
+import React, { FC, PropsWithChildren, useEffect } from 'react';
 
-import { GameContext, MusicContext } from '../../../contexts';
+import { MusicContext } from '../../../contexts';
 import { useSound } from '../../../hooks';
+import { useAppSelector } from '../../../store/hooks';
 
-export interface Props {
-  mp3: string;
-}
+export const Music: FC<PropsWithChildren> = ({ children }) => {
+  const { mp3, state, isSoundEnd } = useAppSelector((state) => state.game);
+  const isGame = state === 'game' && !isSoundEnd;
 
-export const Music: FC<PropsWithChildren<Props>> = ({ mp3, children }) => {
-  const { isPause, setMsAfterStart, startTime } = useContext(GameContext);
-
-  const sound = useSound(mp3);
+  const sound = useSound(mp3 ?? '');
 
   useEffect(() => {
-    if (!isPause) {
-      startTime.current = Date.now();
+    if (isGame) {
       sound.play();
     } else {
-      setMsAfterStart((prev) => prev + Date.now() - startTime.current);
       sound.pause();
     }
-  }, [isPause, sound, startTime]);
+  }, [isGame]);
+
+  useEffect(() => {
+    sound.play();
+    return () => sound.stop();
+  }, [sound]);
 
   return (
     <MusicContext.Provider value={sound}>{children}</MusicContext.Provider>

@@ -34,12 +34,13 @@ export const ContextProvider: FC<PropsWithChildren<ContextProviderProps>> = ({
   const coins = useCoins();
   const statistics = useStatistics();
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       wsValue.destructor();
       queryClient.clear();
-    };
-  }, [wsValue, queryClient]);
+    },
+    [wsValue, queryClient],
+  );
 
   return (
     <I18nextProvider i18n={i18n}>

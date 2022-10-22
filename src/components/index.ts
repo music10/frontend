@@ -3,6 +3,7 @@ export * from './BackHeader';
 export * from './BlurView';
 export * from './BottomMenu';
 export * from './Button';
+export * from './ButtonWithIcon';
 export * from './ContextProvider';
 export * from './Counter';
 export * from './ErrorMessage';
